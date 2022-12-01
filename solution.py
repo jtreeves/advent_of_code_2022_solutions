@@ -1,0 +1,5 @@
+file = open("data.txt", "r")
+print("BEGINNING FILE")
+print(file.read())
+file.close()
+print("ENDING FILE")
