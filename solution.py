@@ -1,43 +1,45 @@
-file = open("data.txt", "r")
-read_file = file.read()
-calorie_chunks = []
-total_calories = []
+def solve_problem():
+    file = open("data.txt", "r")
+    read_file = file.read()
+    file.close()
+    chunks = create_chunks_of_numbers(read_file)
+    totals = sum_totals_of_each_chunk(chunks)
+    largest = find_largest_total(totals)
+    return largest
 
-def create_strings_for_each_elf(data):
+def create_chunks_of_numbers(data):
+    chunks = []
     while len(data):
         first_empty_line = data.find("\n\n")
         if first_empty_line != -1:
-            file_before = data[0:first_empty_line]
-            calorie_chunks.append(file_before)
+            data_before = data[0:first_empty_line]
+            chunks.append(data_before)
             data = data[first_empty_line+2:]
         else:
-            calorie_chunks.append(data)
+            chunks.append(data)
             data = ''
+    return chunks
 
-create_strings_for_each_elf(read_file)
-
-def count_total_calories_for_each_elf(chunks):
+def sum_totals_of_each_chunk(chunks):
+    total_values = []
     for chunk in chunks:
-        calories = []
+        values = []
         while len(chunk):
             first_line_break = chunk.find("\n")
             if first_line_break != -1:
                 content_before = chunk[0:first_line_break]
-                calories.append(int(content_before))
+                values.append(int(content_before))
                 chunk = chunk[first_line_break+1:]
             else:
-                calories.append(int(chunk))
+                values.append(int(chunk))
                 chunk = ''
-        total = sum(calories)
-        total_calories.append(total)
+        total = sum(values)
+        total_values.append(total)
+    return total_values
 
-count_total_calories_for_each_elf(calorie_chunks)
-print(total_calories)
+def find_largest_total(totals):
+    totals.sort()
+    return totals[-1]
 
-total_calories.sort()
-print(total_calories)
-first_total = total_calories[0]
-last_total = total_calories[-1]
-print(first_total)
-print(last_total)
-file.close()
+result = solve_problem()
+print(result)
