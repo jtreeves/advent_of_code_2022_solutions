@@ -1,14 +1,24 @@
 file = open("data.txt", "r")
 read_file = file.read()
-blocks = []
+calorie_chunks = []
+total_calories = []
 
-def create_strings_for_each_elf(current_file):
-    while len(current_file) > 4:
-        find_first = current_file.find("\n\n")
-        file_before = current_file[0:find_first]
-        blocks.append(file_before)
-        current_file = current_file[find_first+2:]
+def create_strings_for_each_elf(data):
+    while len(data):
+        first_line_break = data.find("\n\n")
+        if first_line_break != -1:
+            file_before = data[0:first_line_break]
+            calorie_chunks.append(file_before)
+            data = data[first_line_break+2:]
+        else:
+            calorie_chunks.append(data)
+            data = []
+    print(f"FINAL DATA: {data}")
 
 create_strings_for_each_elf(read_file)
-print(blocks)
+
+# def count_total_calories_for_each_elf(chunks):
+#     return
+
+print(calorie_chunks)
 file.close()
