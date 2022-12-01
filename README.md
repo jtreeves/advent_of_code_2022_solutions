@@ -1,3 +1,4 @@
-# Advent of Code - 2022 - Day 1 - First Challenge
+# Advent of Code - 2022 - Day 1
 
-71471
+Part One: 71471
+Part Two: 211189
