@@ -4,8 +4,13 @@ def solve_problem():
     file.close()
     chunks = create_chunks_of_numbers(read_file)
     totals = sum_totals_of_each_chunk(chunks)
-    largest = find_largest_total(totals)
-    return largest
+    three_largest = find_three_largest_totals(totals)
+    largest = three_largest[0]
+    sum_largest = sum(three_largest)
+    return {
+        "largest": largest,
+        "sum of three largest": sum_largest
+    }
 
 def create_chunks_of_numbers(data):
     chunks = []
@@ -37,9 +42,12 @@ def sum_totals_of_each_chunk(chunks):
         total_values.append(total)
     return total_values
 
-def find_largest_total(totals):
+def find_three_largest_totals(totals):
     totals.sort()
-    return totals[-1]
+    largest = totals[-1]
+    second_largest = totals[-2]
+    third_largest = totals[-3]
+    return [largest, second_largest, third_largest]
 
 result = solve_problem()
 print(result)
