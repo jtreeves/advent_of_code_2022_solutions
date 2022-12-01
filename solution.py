@@ -22,7 +22,7 @@ def create_chunks_of_numbers(data):
             data = data[first_empty_line+2:]
         else:
             chunks.append(data)
-            data = ''
+            data = ""
     return chunks
 
 def sum_totals_of_each_chunk(chunks):
@@ -37,7 +37,7 @@ def sum_totals_of_each_chunk(chunks):
                 chunk = chunk[first_line_break+1:]
             else:
                 values.append(int(chunk))
-                chunk = ''
+                chunk = ""
         total = sum(values)
         total_values.append(total)
     return total_values
