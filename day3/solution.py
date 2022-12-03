@@ -1,10 +1,16 @@
 def solve_problem():
     data = extract_data_from_file(3)
     sacks = convert_multiline_string_to_array(data)
-    threes = partition_array_by_threes(sacks)
-    return threes
-    # total = calculate_total_across_all_sacks(sacks)
-    # return total
+    groups = partition_array_by_threes(sacks)
+    total = calculate_total_across_all_groups(groups)
+    return total
+
+def calculate_total_across_all_groups(groups):
+    total = 0
+    for group in groups:
+        priority = get_priority_of_group(group)
+        total += priority
+    return total
 
 def calculate_total_across_all_sacks(sacks):
     total = 0
@@ -82,6 +88,5 @@ def convert_multiline_string_to_array(multiline_string):
             multiline_string = ""
     return rows
 
-# result = solve_problem()
-# print(result)
-print(get_priority_of_group(["vJrwpWtwJgWrhcsFMMfFFhFp", "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL", "PmmdzqPrVvPwwTWBwg"]))
+result = solve_problem()
+print(result)
