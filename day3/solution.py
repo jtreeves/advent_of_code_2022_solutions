@@ -19,6 +19,19 @@ def get_priority_of_sack(sack):
     priority = convert_letter_to_priority(common_character)
     return priority
 
+def get_priority_of_group(group):
+    common_character = find_common_character_across_threes(group)
+    priority = convert_letter_to_priority(common_character)
+    return priority
+
+def find_common_character_across_threes(threes):
+    first_sack = set(threes[0])
+    second_sack = set(threes[1])
+    third_sack = set(threes[2])
+    overlap = list(first_sack.intersection(second_sack).intersection(third_sack))
+    common_character = overlap[0]
+    return common_character
+
 def find_common_character_across_halves(halves):
     first_half = set(halves[0])
     second_half = set(halves[1])
@@ -69,5 +82,6 @@ def convert_multiline_string_to_array(multiline_string):
             multiline_string = ""
     return rows
 
-result = solve_problem()
-print(result)
+# result = solve_problem()
+# print(result)
+print(get_priority_of_group(["vJrwpWtwJgWrhcsFMMfFFhFp", "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL", "PmmdzqPrVvPwwTWBwg"]))
