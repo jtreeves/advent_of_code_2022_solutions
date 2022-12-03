@@ -1,8 +1,10 @@
 def solve_problem():
     data = extract_data_from_file(3)
     sacks = convert_multiline_string_to_array(data)
-    total = calculate_total_across_all_sacks(sacks)
-    return total
+    threes = partition_array_by_threes(sacks)
+    return threes
+    # total = calculate_total_across_all_sacks(sacks)
+    # return total
 
 def calculate_total_across_all_sacks(sacks):
     total = 0
@@ -42,6 +44,17 @@ def extract_data_from_file(day_number):
     data = file.read()
     file.close()
     return data
+
+def partition_array_by_threes(original_array):
+    new_array = []
+    while len(original_array):
+        sub_array = []
+        sub_array.append(original_array[0])
+        sub_array.append(original_array[1])
+        sub_array.append(original_array[2])
+        new_array.append(sub_array)
+        original_array = original_array[3:]
+    return new_array
 
 def convert_multiline_string_to_array(multiline_string):
     rows = []
