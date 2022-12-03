@@ -1,4 +1,10 @@
-def find_common_character_in_halves(halves):
+def get_priority_of_sack(sack):
+    halves = split_items_in_half(sack)
+    common_character = find_common_character_across_halves(halves)
+    priority = convert_letter_to_priority(common_character)
+    return priority
+
+def find_common_character_across_halves(halves):
     first_half = set(halves[0])
     second_half = set(halves[1])
     overlap = list(first_half.intersection(second_half))
@@ -20,4 +26,5 @@ def convert_letter_to_priority(letter):
 
 # print(convert_letter_to_priority("A"))
 # print(split_items_in_half("uxjeYYednJ"))
-print(find_common_character_in_halves(["auiop", "qwear"]))
+# print(find_common_character_across_halves(["auiop", "qwear"]))
+print(get_priority_of_sack("vJrwpWtwJgWrhcsFMMfFFhFp"))
