@@ -1,9 +1,23 @@
-# Advent of Code - 2022 - Day 1
+# Advent of Code - 2022
 
-## Part One
+## Day 1
+
+### Part One
 
 71471
 
-## Part Two
+### Part Two
 
 211189
+
+## Day 2
+
+### Part One
+
+12740
+
+### Part Two
+
+## Day 3
+
+11980
