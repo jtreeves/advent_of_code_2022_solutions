@@ -1,3 +1,9 @@
+def solve_problem():
+    data = extract_data_from_file(3)
+    sacks = convert_multiline_string_to_array(data)
+    total = calculate_total_across_all_sacks(sacks)
+    return total
+
 def calculate_total_across_all_sacks(sacks):
     total = 0
     for sack in sacks:
@@ -31,8 +37,24 @@ def convert_letter_to_priority(letter):
     priority = index + 1
     return priority
 
-# print(convert_letter_to_priority("A"))
-# print(split_items_in_half("uxjeYYednJ"))
-# print(find_common_character_across_halves(["auiop", "qwear"]))
-# print(get_priority_of_sack("vJrwpWtwJgWrhcsFMMfFFhFp"))
-print(calculate_total_across_all_sacks(["vJrwpWtwJgWrhcsFMMfFFhFp", "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL", "PmmdzqPrVvPwwTWBwg", "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn", "ttgJtRGJQctTZtZT", "CrZsJsPPZsGzwwsLwLmpwMDw"]))
+def extract_data_from_file(day_number):
+    file = open(f"day{day_number}/data.txt", "r")
+    data = file.read()
+    file.close()
+    return data
+
+def convert_multiline_string_to_array(multiline_string):
+    rows = []
+    while len(multiline_string):
+        first_line_break = multiline_string.find("\n")
+        if first_line_break != -1:
+            content_before = multiline_string[0:first_line_break]
+            rows.append(content_before)
+            multiline_string = multiline_string[first_line_break+1:]
+        else:
+            rows.append(multiline_string)
+            multiline_string = ""
+    return rows
+
+result = solve_problem()
+print(result)
