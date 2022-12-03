@@ -1,3 +1,10 @@
+def calculate_total_across_all_sacks(sacks):
+    total = 0
+    for sack in sacks:
+        priority = get_priority_of_sack(sack)
+        total += priority
+    return total
+
 def get_priority_of_sack(sack):
     halves = split_items_in_half(sack)
     common_character = find_common_character_across_halves(halves)
@@ -27,4 +34,5 @@ def convert_letter_to_priority(letter):
 # print(convert_letter_to_priority("A"))
 # print(split_items_in_half("uxjeYYednJ"))
 # print(find_common_character_across_halves(["auiop", "qwear"]))
-print(get_priority_of_sack("vJrwpWtwJgWrhcsFMMfFFhFp"))
+# print(get_priority_of_sack("vJrwpWtwJgWrhcsFMMfFFhFp"))
+print(calculate_total_across_all_sacks(["vJrwpWtwJgWrhcsFMMfFFhFp", "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL", "PmmdzqPrVvPwwTWBwg", "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn", "ttgJtRGJQctTZtZT", "CrZsJsPPZsGzwwsLwLmpwMDw"]))
