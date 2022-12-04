@@ -18,7 +18,11 @@ def calculate_total_of_all_complete_overlaps(pairs):
     return total
 
 def determine_if_one_interval_overlaps_with_other_interval(first_interval, second_interval):
-    if (first_interval[0] <= second_interval[0] and first_interval[1] >= second_interval[1]) or (second_interval[0] <= first_interval[0] and second_interval[1] >= first_interval[1]):
+    first_set = create_set_of_integers_over_range(first_interval[0], first_interval[1])
+    second_set = create_set_of_integers_over_range(second_interval[0], second_interval[1])
+    overlap = first_set.intersection(second_set)
+    overlapped_list = list(overlap)
+    if len(overlapped_list):
         return True
     else:
         return False
@@ -66,4 +70,6 @@ def convert_multiline_string_to_array(multiline_string):
 
 # result = solve_problem()
 # print(result)
-print(create_set_of_integers_over_range(2,2))
+# print(create_set_of_integers_over_range(2,2))
+print(determine_if_one_interval_overlaps_with_other_interval([5,7],[7,9]))
+print(determine_if_one_interval_overlaps_with_other_interval([2,4],[6,8]))
