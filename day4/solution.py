@@ -4,6 +4,19 @@ def solve_problem():
     total = calculate_total_of_all_complete_overlaps(pairs)
     return total
 
+def calculate_total_of_all_partial_overlaps(pairs):
+    total = 0
+    for pair in pairs:
+        assignments = split_apart_assignments_from_pair(pair)
+        first_assignment = assignments[0]
+        second_assignment = assignments[1]
+        first_interval = find_endpoints_of_assignment_range(first_assignment)
+        second_interval = find_endpoints_of_assignment_range(second_assignment)
+        overlap = determine_if_one_interval_overlaps_with_other_interval(first_interval, second_interval)
+        if overlap:
+            total += 1
+    return total
+
 def calculate_total_of_all_complete_overlaps(pairs):
     total = 0
     for pair in pairs:
@@ -71,5 +84,6 @@ def convert_multiline_string_to_array(multiline_string):
 # result = solve_problem()
 # print(result)
 # print(create_set_of_integers_over_range(2,2))
-print(determine_if_one_interval_overlaps_with_other_interval([5,7],[7,9]))
-print(determine_if_one_interval_overlaps_with_other_interval([2,4],[6,8]))
+# print(determine_if_one_interval_overlaps_with_other_interval([5,7],[7,9]))
+# print(determine_if_one_interval_overlaps_with_other_interval([2,4],[6,8]))
+print(calculate_total_of_all_partial_overlaps(["2-4,6-8","2-3,4-5","5-7,7-9","2-8,3-7","6-6,4-6","2-6,4-8"]))
