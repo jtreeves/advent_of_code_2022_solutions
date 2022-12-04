@@ -11,12 +11,8 @@ def solve_problem():
 def calculate_total_of_all_partial_overlaps(pairs):
     total = 0
     for pair in pairs:
-        assignments = split_apart_assignments_from_pair(pair)
-        first_assignment = assignments[0]
-        second_assignment = assignments[1]
-        first_interval = find_endpoints_of_assignment_range(first_assignment)
-        second_interval = find_endpoints_of_assignment_range(second_assignment)
-        overlap = determine_if_one_interval_overlaps_with_other_interval(first_interval, second_interval)
+        intervals = extract_intervals_from_pair(pair)
+        overlap = determine_if_one_interval_overlaps_with_other_interval(intervals[0], intervals[1])
         if overlap:
             total += 1
     return total
@@ -24,12 +20,8 @@ def calculate_total_of_all_partial_overlaps(pairs):
 def calculate_total_of_all_complete_overlaps(pairs):
     total = 0
     for pair in pairs:
-        assignments = split_apart_assignments_from_pair(pair)
-        first_assignment = assignments[0]
-        second_assignment = assignments[1]
-        first_interval = find_endpoints_of_assignment_range(first_assignment)
-        second_interval = find_endpoints_of_assignment_range(second_assignment)
-        overlap = determine_if_one_interval_contains_other_interval(first_interval, second_interval)
+        intervals = extract_intervals_from_pair(pair)
+        overlap = determine_if_one_interval_contains_other_interval(intervals[0], intervals[1])
         if overlap:
             total += 1
     return total
@@ -49,6 +41,14 @@ def determine_if_one_interval_contains_other_interval(first_interval, second_int
         return True
     else:
         return False
+
+def extract_intervals_from_pair(pair):
+    assignments = split_apart_assignments_from_pair(pair)
+    first_assignment = assignments[0]
+    second_assignment = assignments[1]
+    first_interval = find_endpoints_of_assignment_range(first_assignment)
+    second_interval = find_endpoints_of_assignment_range(second_assignment)
+    return [first_interval, second_interval]
 
 def split_apart_assignments_from_pair(pair):
     assignments = pair.split(",")
