@@ -1,3 +1,9 @@
+def solve_problem():
+    data = extract_data_from_file(4)
+    pairs = convert_multiline_string_to_array(data)
+    total = calculate_total_of_all_complete_overlaps(pairs)
+    return total
+
 def calculate_total_of_all_complete_overlaps(pairs):
     total = 0
     for pair in pairs:
@@ -28,9 +34,24 @@ def find_endpoints_of_assignment_range(assignment):
         endpoints.append(int(value))
     return endpoints
 
-# print(determine_if_one_interval_contains_other_interval([2, 4], [6, 8]))
-# print(determine_if_one_interval_contains_other_interval([2, 8], [3, 7]))
-# print(determine_if_one_interval_contains_other_interval([6, 6], [4, 6]))
-# print(find_endpoints_of_assignment_range("2-8"))
-# print(find_endpoints_of_assignment_range("172-893"))
-print(calculate_total_of_all_complete_overlaps(["2-4,6-8","2-3,4-5","5-7,7-9","2-8,3-7","6-6,4-6","2-6,4-8"]))
+def extract_data_from_file(day_number):
+    file = open(f"day{day_number}/data.txt", "r")
+    data = file.read()
+    file.close()
+    return data
+
+def convert_multiline_string_to_array(multiline_string):
+    rows = []
+    while len(multiline_string):
+        first_line_break = multiline_string.find("\n")
+        if first_line_break != -1:
+            content_before = multiline_string[0:first_line_break]
+            rows.append(content_before)
+            multiline_string = multiline_string[first_line_break+1:]
+        else:
+            rows.append(multiline_string)
+            multiline_string = ""
+    return rows
+
+result = solve_problem()
+print(result)
