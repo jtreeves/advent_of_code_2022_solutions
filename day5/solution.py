@@ -17,4 +17,15 @@ def extract_destination_stack(direction):
     destination_stack = int(destination_slice)
     return destination_stack
 
-print(extract_destination_stack("move 3 from 28 to 19"))
+def determine_original_stacks(description):
+    return
+
+def determine_how_many_stacks(line):
+    line_length = len(line)
+    how_many_stacks = int((line_length + 1) / 4)
+    return how_many_stacks
+
+# print(extract_destination_stack("move 3 from 28 to 19"))
+print(determine_how_many_stacks(" 1   2   3 "))
+print(determine_how_many_stacks(" 1   2   3   4 "))
+print(determine_how_many_stacks(" 1   2   3   4   5 "))
