@@ -14,7 +14,7 @@ def find_first_message_marker_after_uniques(characters):
     while not checked_characters:
         marker += 1
         characters = characters[1:]
-        first_fourteen_characters = extract_first_four_characters(characters)
+        first_fourteen_characters = extract_first_fourteen_characters(characters)
         checked_characters = check_no_characters_repeat(first_fourteen_characters)
     return marker
 
@@ -48,5 +48,11 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-result = solve_problem()
-print(result)
+# result = solve_problem()
+# print(result)
+
+print(find_first_message_marker_after_uniques("mjqjpqmgbljsphdztnvjfqwrcgsmlb"))
+print(find_first_message_marker_after_uniques("bvwbjplbgvbhsrlpgdmjqwftvncz"))
+print(find_first_message_marker_after_uniques("nppdvjthqldpwncqszvftbrmjlhg"))
+print(find_first_message_marker_after_uniques("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg"))
+print(find_first_message_marker_after_uniques("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw"))
