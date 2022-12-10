@@ -48,11 +48,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-# result = solve_problem()
-# print(result)
-
-print(find_first_message_marker_after_uniques("mjqjpqmgbljsphdztnvjfqwrcgsmlb"))
-print(find_first_message_marker_after_uniques("bvwbjplbgvbhsrlpgdmjqwftvncz"))
-print(find_first_message_marker_after_uniques("nppdvjthqldpwncqszvftbrmjlhg"))
-print(find_first_message_marker_after_uniques("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg"))
-print(find_first_message_marker_after_uniques("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw"))
+result = solve_problem()
+print(result)
