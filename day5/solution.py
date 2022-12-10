@@ -5,7 +5,8 @@ def solve_problem(data):
     original_stacks = determine_original_stacks(description)
     listed_directions = list_all_directions(directions)
     updated_stacks = move_all_crates(original_stacks, listed_directions)
-    return updated_stacks
+    top_crates = determine_top_crates_from_stacks(updated_stacks)
+    return top_crates
 
 def separate_description_from_directions(data):
     sections = data.split("\n\n")
@@ -15,6 +16,13 @@ def separate_description_from_directions(data):
         "description": description,
         "directions": directions
     }
+
+def determine_top_crates_from_stacks(stacks):
+    result = ""
+    for stack in stacks:
+        top_crate = stack.pop()
+        result += top_crate
+    return result
 
 def move_all_crates(original_stacks, directions):
     updated_stacks = original_stacks
@@ -122,3 +130,4 @@ def extract_data_from_file(day_number):
 # print(move_crate([['Z', 'N', 'D'], ['M', 'C'], ['P']], 'move 3 from 1 to 3'))
 # print(separate_description_from_directions("    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"))
 print(solve_problem("    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"))
+# print(determine_top_crates_from_stacks([['C'], ['M'], ['P', 'D', 'N', 'Z']]))
