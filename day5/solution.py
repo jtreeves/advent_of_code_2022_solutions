@@ -1,3 +1,12 @@
+def separate_description_from_directions(data):
+    sections = data.split("\n\n")
+    description = sections[0]
+    directions = sections[1]
+    return {
+        "description": description,
+        "directions": directions
+    }
+
 def move_crate(current_stacks, direction):
     boxes_to_move = extract_how_many_boxes_to_move(direction)
     source_number = extract_source_stack(direction)
@@ -33,6 +42,7 @@ def extract_destination_stack(direction):
 
 def determine_original_stacks(description):
     array_description = convert_multiline_string_to_array(description)
+    array_description.pop()
     height = determine_tallest_original_stack(array_description)
     width = determine_how_many_stacks(array_description[0])
     list_stacks = list(range(1, width + 1))
@@ -83,4 +93,6 @@ def convert_multiline_string_to_array(multiline_string):
 # print(determine_how_many_stacks(" 1   2   3   4 "))
 # print(determine_how_many_stacks(" 1   2   3   4   5 "))
 # print(determine_original_stacks("    [D]    \n[N] [C]    \n[Z] [M] [P]"))
-print(move_crate([['Z', 'N'], ['M', 'C', 'D'], ['P']], 'move 1 from 2 to 1'))
+# print(move_crate([['Z', 'N'], ['M', 'C', 'D'], ['P']], 'move 1 from 2 to 1'))
+# print(move_crate([['Z', 'N', 'D'], ['M', 'C'], ['P']], 'move 3 from 1 to 3'))
+print(separate_description_from_directions("    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"))
