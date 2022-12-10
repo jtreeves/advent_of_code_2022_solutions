@@ -1,5 +1,5 @@
-def solve_problem(step):
-    data = extract_data_from_file(5)
+def solve_problem(step, data):
+    # data = extract_data_from_file(5)
     separated = separate_description_from_directions(data)
     description = separated["description"]
     directions = separated["directions"]
@@ -51,9 +51,9 @@ def move_crates_at_once(current_stacks, direction):
     source_stack = current_stacks[source_index]
     destination_stack = current_stacks[destination_index]
     updated_stacks = current_stacks
-    for _ in range(boxes_to_move):
-        crate_to_move = source_stack.pop()
-        destination_stack.append(crate_to_move)
+    crates_to_move = source_stack[len(source_stack) - boxes_to_move:]
+    source_stack = source_stack[:-boxes_to_move]
+    destination_stack += crates_to_move
     return updated_stacks
 
 def move_crates_one_at_time(current_stacks, direction):
@@ -147,5 +147,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-result = solve_problem(2)
+result = solve_problem(2, "    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2")
 print(result)
