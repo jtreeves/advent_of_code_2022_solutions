@@ -1,3 +1,17 @@
+def move_crate(current_stacks, direction):
+    boxes_to_move = extract_how_many_boxes_to_move(direction)
+    source_number = extract_source_stack(direction)
+    destinaton_number = extract_destination_stack(direction)
+    source_index = source_number - 1
+    destination_index = destinaton_number - 1
+    source_stack = current_stacks[source_index]
+    destination_stack = current_stacks[destination_index]
+    updated_stacks = current_stacks
+    for i in range(boxes_to_move):
+        crate_to_move = source_stack.pop()
+        destination_stack.append(crate_to_move)
+    return updated_stacks
+
 def extract_how_many_boxes_to_move(direction):
     from_location = direction.find("from")
     boxes_slice = direction[5:from_location-1]
@@ -68,4 +82,5 @@ def convert_multiline_string_to_array(multiline_string):
 # print(determine_how_many_stacks(" 1   2   3 "))
 # print(determine_how_many_stacks(" 1   2   3   4 "))
 # print(determine_how_many_stacks(" 1   2   3   4   5 "))
-print(determine_original_stacks("    [D]    \n[N] [C]    \n[Z] [M] [P]\n[A] [B] [C]"))
+# print(determine_original_stacks("    [D]    \n[N] [C]    \n[Z] [M] [P]"))
+print(move_crate([['Z', 'N'], ['M', 'C', 'D'], ['P']], 'move 1 from 2 to 1'))
