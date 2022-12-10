@@ -54,6 +54,7 @@ def move_crates_at_once(current_stacks, direction):
     crates_to_move = source_stack[len(source_stack) - boxes_to_move:]
     source_stack = source_stack[:-boxes_to_move]
     destination_stack += crates_to_move
+    updated_stacks[source_index] = source_stack
     return updated_stacks
 
 def move_crates_one_at_time(current_stacks, direction):
