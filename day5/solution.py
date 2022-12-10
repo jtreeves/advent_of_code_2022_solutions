@@ -1,13 +1,18 @@
-def solve_problem():
+def solve_problem(step):
     data = extract_data_from_file(5)
     separated = separate_description_from_directions(data)
     description = separated["description"]
     directions = separated["directions"]
     original_stacks = determine_original_stacks(description)
     listed_directions = list_all_directions(directions)
-    updated_stacks = move_all_crates(original_stacks, listed_directions)
-    top_crates = determine_top_crates_from_stacks(updated_stacks)
-    return top_crates
+    if step == 1:
+        updated_stacks_one_at_a_time = move_all_crates_one_at_a_time(original_stacks, listed_directions)
+        top_crates_one_at_a_time = determine_top_crates_from_stacks(updated_stacks_one_at_a_time)
+        return top_crates_one_at_a_time
+    else:
+        updated_stacks_at_once = move_all_crates_at_once(original_stacks, listed_directions)
+        top_crates_at_once = determine_top_crates_from_stacks(updated_stacks_at_once)
+        return top_crates_at_once
 
 def separate_description_from_directions(data):
     sections = data.split("\n\n")
@@ -25,13 +30,19 @@ def determine_top_crates_from_stacks(stacks):
         result += top_crate
     return result
 
-def move_all_crates(original_stacks, directions):
+def move_all_crates_at_once(original_stacks, directions):
     updated_stacks = original_stacks
     for direction in directions:
-        updated_stacks = move_crate(original_stacks, direction)
+        updated_stacks = move_crates_at_once(original_stacks, direction)
     return updated_stacks
 
-def move_crate(current_stacks, direction):
+def move_all_crates_one_at_a_time(original_stacks, directions):
+    updated_stacks = original_stacks
+    for direction in directions:
+        updated_stacks = move_crates_one_at_time(original_stacks, direction)
+    return updated_stacks
+
+def move_crates_at_once(current_stacks, direction):
     boxes_to_move = extract_how_many_boxes_to_move(direction)
     source_number = extract_source_stack(direction)
     destinaton_number = extract_destination_stack(direction)
@@ -40,7 +51,21 @@ def move_crate(current_stacks, direction):
     source_stack = current_stacks[source_index]
     destination_stack = current_stacks[destination_index]
     updated_stacks = current_stacks
-    for i in range(boxes_to_move):
+    for _ in range(boxes_to_move):
+        crate_to_move = source_stack.pop()
+        destination_stack.append(crate_to_move)
+    return updated_stacks
+
+def move_crates_one_at_time(current_stacks, direction):
+    boxes_to_move = extract_how_many_boxes_to_move(direction)
+    source_number = extract_source_stack(direction)
+    destinaton_number = extract_destination_stack(direction)
+    source_index = source_number - 1
+    destination_index = destinaton_number - 1
+    source_stack = current_stacks[source_index]
+    destination_stack = current_stacks[destination_index]
+    updated_stacks = current_stacks
+    for _ in range(boxes_to_move):
         crate_to_move = source_stack.pop()
         destination_stack.append(crate_to_move)
     return updated_stacks
@@ -122,5 +147,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-result = solve_problem()
+result = solve_problem(2)
 print(result)
