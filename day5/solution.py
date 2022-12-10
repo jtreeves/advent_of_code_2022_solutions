@@ -22,13 +22,21 @@ def determine_original_stacks(description):
     height = determine_tallest_original_stack(array_description)
     width = determine_how_many_stacks(array_description[0])
     list_stacks = list(range(1, width + 1))
-    print(list_stacks)
     indices_for_stacks = []
     for stack in list_stacks:
         index = determine_index_for_stack(stack)
         indices_for_stacks.append(index)
-    print(indices_for_stacks)
-    return [height, width]
+    original_stacks = []
+    for index in indices_for_stacks:
+        stack = []
+        reverse_rows = range(height - 1, -1, -1)
+        for row in reverse_rows:
+            current_row = array_description[row]
+            current_stack_element = current_row[index]
+            if current_stack_element != " ":
+                stack.append(current_stack_element)
+        original_stacks.append(stack)
+    return original_stacks
 
 def determine_how_many_stacks(line):
     line_length = len(line)
