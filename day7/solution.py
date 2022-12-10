@@ -8,7 +8,15 @@ def extract_contents_of_directories(lines):
     for content in contents:
         directory = convert_directory_array_to_object(content)
         directories.append(directory)
-    return directories
+    folders = []
+    for i in range(len(directories)-1):
+        next_directory_name = directories[i]["NEXT"]
+        next_directory_contents = directories[i+1]
+        folders.append({
+            "name": next_directory_name,
+            "contents": next_directory_contents
+        })
+    return folders
 
 def convert_directory_array_to_object(directory_array):
     directory_object = {}
