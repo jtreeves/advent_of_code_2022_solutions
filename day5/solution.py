@@ -1,3 +1,12 @@
+def solve_problem(data):
+    separated = separate_description_from_directions(data)
+    description = separated["description"]
+    directions = separated["directions"]
+    original_stacks = determine_original_stacks(description)
+    listed_directions = list_all_directions(directions)
+    updated_stacks = move_all_crates(original_stacks, listed_directions)
+    return updated_stacks
+
 def separate_description_from_directions(data):
     sections = data.split("\n\n")
     description = sections[0]
@@ -6,6 +15,12 @@ def separate_description_from_directions(data):
         "description": description,
         "directions": directions
     }
+
+def move_all_crates(original_stacks, directions):
+    updated_stacks = original_stacks
+    for direction in directions:
+        updated_stacks = move_crate(original_stacks, direction)
+    return updated_stacks
 
 def move_crate(current_stacks, direction):
     boxes_to_move = extract_how_many_boxes_to_move(direction)
@@ -105,4 +120,5 @@ def extract_data_from_file(day_number):
 # print(determine_original_stacks("    [D]    \n[N] [C]    \n[Z] [M] [P]"))
 # print(move_crate([['Z', 'N'], ['M', 'C', 'D'], ['P']], 'move 1 from 2 to 1'))
 # print(move_crate([['Z', 'N', 'D'], ['M', 'C'], ['P']], 'move 3 from 1 to 3'))
-print(separate_description_from_directions("    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"))
+# print(separate_description_from_directions("    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"))
+print(solve_problem("    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"))
