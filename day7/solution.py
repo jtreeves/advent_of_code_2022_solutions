@@ -30,7 +30,7 @@ def get_directory_name(line):
 def get_file_name_and_size(line):
     partition = line.split(" ")
     name = partition[1]
-    size = partition[0]
+    size = int(partition[0])
     return {
         "name": name,
         "size": size
