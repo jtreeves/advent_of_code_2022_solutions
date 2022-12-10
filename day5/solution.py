@@ -40,6 +40,10 @@ def extract_destination_stack(direction):
     destination_stack = int(destination_slice)
     return destination_stack
 
+def list_all_directions(directions):
+    array_directions = convert_multiline_string_to_array(directions)
+    return array_directions
+
 def determine_original_stacks(description):
     array_description = convert_multiline_string_to_array(description)
     array_description.pop()
@@ -87,6 +91,12 @@ def convert_multiline_string_to_array(multiline_string):
             rows.append(multiline_string)
             multiline_string = ""
     return rows
+
+def extract_data_from_file(day_number):
+    file = open(f"day{day_number}/data.txt", "r")
+    data = file.read()
+    file.close()
+    return data
 
 # print(extract_destination_stack("move 3 from 28 to 19"))
 # print(determine_how_many_stacks(" 1   2   3 "))
