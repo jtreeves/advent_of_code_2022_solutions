@@ -1,4 +1,5 @@
-def solve_problem(data):
+def solve_problem():
+    data = extract_data_from_file(5)
     separated = separate_description_from_directions(data)
     description = separated["description"]
     directions = separated["directions"]
@@ -121,13 +122,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-# print(extract_destination_stack("move 3 from 28 to 19"))
-# print(determine_how_many_stacks(" 1   2   3 "))
-# print(determine_how_many_stacks(" 1   2   3   4 "))
-# print(determine_how_many_stacks(" 1   2   3   4   5 "))
-# print(determine_original_stacks("    [D]    \n[N] [C]    \n[Z] [M] [P]"))
-# print(move_crate([['Z', 'N'], ['M', 'C', 'D'], ['P']], 'move 1 from 2 to 1'))
-# print(move_crate([['Z', 'N', 'D'], ['M', 'C'], ['P']], 'move 3 from 1 to 3'))
-# print(separate_description_from_directions("    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"))
-print(solve_problem("    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2"))
-# print(determine_top_crates_from_stacks([['C'], ['M'], ['P', 'D', 'N', 'Z']]))
+result = solve_problem()
+print(result)
