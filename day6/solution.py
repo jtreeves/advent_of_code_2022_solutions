@@ -1,4 +1,7 @@
-def determine_no_characters_repeat(characters):
+def extract_first_four_characters(characters):
+    return characters[0:4]
+
+def check_no_characters_repeat(characters):
     for character in characters:
         character_count = characters.count(character)
         if character_count != 1:
@@ -11,4 +14,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-print(determine_no_characters_repeat("abcb"))
+# print(check_no_characters_repeat("abcb"))
+print(extract_first_four_characters("mjqjpqmgbljsphdztnvjfqwrcgsmlb"))
