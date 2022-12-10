@@ -1,3 +1,8 @@
+def solve_problem():
+    data = extract_data_from_file(6)
+    marker = find_first_marker_after_uniques(data)
+    return marker
+
 def find_first_marker_after_uniques(characters):
     marker = 4
     first_four_characters = extract_first_four_characters(characters)
@@ -25,10 +30,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-# print(check_no_characters_repeat("abcb"))
-# print(extract_first_four_characters("mjqjpqmgbljsphdztnvjfqwrcgsmlb"))
-print(find_first_marker_after_uniques("mjqjpqmgbljsphdztnvjfqwrcgsmlb"))
-print(find_first_marker_after_uniques("bvwbjplbgvbhsrlpgdmjqwftvncz"))
-print(find_first_marker_after_uniques("nppdvjthqldpwncqszvftbrmjlhg"))
-print(find_first_marker_after_uniques("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg"))
-print(find_first_marker_after_uniques("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw"))
+result = solve_problem()
+print(result)
