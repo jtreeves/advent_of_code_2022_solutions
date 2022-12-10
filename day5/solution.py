@@ -18,14 +18,46 @@ def extract_destination_stack(direction):
     return destination_stack
 
 def determine_original_stacks(description):
-    return
+    array_description = convert_multiline_string_to_array(description)
+    height = determine_tallest_original_stack(array_description)
+    width = determine_how_many_stacks(array_description[0])
+    list_stacks = list(range(1, width + 1))
+    print(list_stacks)
+    indices_for_stacks = []
+    for stack in list_stacks:
+        index = determine_index_for_stack(stack)
+        indices_for_stacks.append(index)
+    print(indices_for_stacks)
+    return [height, width]
 
 def determine_how_many_stacks(line):
     line_length = len(line)
     how_many_stacks = int((line_length + 1) / 4)
     return how_many_stacks
 
+def determine_tallest_original_stack(raw_array):
+    height = len(raw_array)
+    return height
+
+def determine_index_for_stack(stack):
+    index = 4 * stack - 3
+    return index
+
+def convert_multiline_string_to_array(multiline_string):
+    rows = []
+    while len(multiline_string):
+        first_line_break = multiline_string.find("\n")
+        if first_line_break != -1:
+            content_before = multiline_string[0:first_line_break]
+            rows.append(content_before)
+            multiline_string = multiline_string[first_line_break+1:]
+        else:
+            rows.append(multiline_string)
+            multiline_string = ""
+    return rows
+
 # print(extract_destination_stack("move 3 from 28 to 19"))
-print(determine_how_many_stacks(" 1   2   3 "))
-print(determine_how_many_stacks(" 1   2   3   4 "))
-print(determine_how_many_stacks(" 1   2   3   4   5 "))
+# print(determine_how_many_stacks(" 1   2   3 "))
+# print(determine_how_many_stacks(" 1   2   3   4 "))
+# print(determine_how_many_stacks(" 1   2   3   4   5 "))
+print(determine_original_stacks("    [D]    \n[N] [C]    \n[Z] [M] [P]\n[A] [B] [C]"))
