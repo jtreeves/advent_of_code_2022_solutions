@@ -1,5 +1,5 @@
-def solve_problem(step, data):
-    # data = extract_data_from_file(5)
+def solve_problem(step):
+    data = extract_data_from_file(5)
     separated = separate_description_from_directions(data)
     description = separated["description"]
     directions = separated["directions"]
@@ -148,5 +148,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-result = solve_problem(2, "    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2")
+result = solve_problem(2)
 print(result)
