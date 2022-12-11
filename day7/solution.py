@@ -13,10 +13,33 @@ def extract_contents_of_directories(lines):
         next_directory_name = directories[i]["NEXT"]
         next_directory_contents = directories[i+1]
         folders.append({
-            "name": next_directory_name,
-            "contents": next_directory_contents
+            next_directory_name: next_directory_contents
         })
-    return folders
+    result = {}
+    for folder in folders:
+        folder_name = list(folder.keys())[0]
+        result_keys = result.keys()
+        if len(result_keys) == 0:
+            result[folder_name] = folder[folder_name]
+    return result
+
+def find_key_in_nested_objects(nest, key):
+    path = ""
+    nest_keys = nest.keys()
+    if key in nest_keys:
+        path += key
+    else:
+        for property in nest_keys:
+            is_integer = check_if_object_property_is_integer(nest, property)
+            if not is_integer:
+                path += find_key_in_nested_objects(nest[property], key)
+    return path
+
+def check_if_object_property_is_integer(object, property):
+    property_value = object[property]
+    property_type = type(property_value)
+    is_integer = property_type is int
+    return is_integer
 
 def convert_directory_array_to_object(directory_array):
     directory_object = {}
@@ -82,5 +105,6 @@ def extract_data_from_file(day_number):
 
 # print(check_if_command("$ ls"))
 # print(check_if_directory("234 a"))
-print(extract_contents_of_directories("$ cd /\n$ ls\ndir a\n14848514 b.txt\n8504156 c.dat\ndir d\n$ cd a\n$ ls\ndir e\n29116 f\n2557 g\n62596 h.lst\n$ cd e\n$ ls\n584 i\n$ cd ..\n$ cd ..\n$ cd d\n$ ls\n4060174 j\n8033020 d.log\n5626152 d.ext\n7214296 k"))
+# print(extract_contents_of_directories("$ cd /\n$ ls\ndir a\n14848514 b.txt\n8504156 c.dat\ndir d\n$ cd a\n$ ls\ndir e\n29116 f\n2557 g\n62596 h.lst\n$ cd e\n$ ls\n584 i\n$ cd ..\n$ cd ..\n$ cd d\n$ ls\n4060174 j\n8033020 d.log\n5626152 d.ext\n7214296 k"))
 # print(convert_directory_array_to_object(['dir e', '29116 f', '2557 g', '62596 h.lst', '$ cd e']))
+print(find_key_in_nested_objects({'a': 1}, 'a'))
