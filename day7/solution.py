@@ -21,10 +21,11 @@ def extract_contents_of_directories(lines):
         trimmed_folders.append(trimmed_folder)
     result = trimmed_folders[0]
     updated_result = replace_empty_directories(result, trimmed_folders)
-    return updated_result
+    second_update = replace_empty_directories(updated_result, trimmed_folders)
+    return second_update
 
 def replace_empty_directories(structure, directories):
-    if type(structure) != int and type(structure) != str:
+    if type(structure) != int:
         for key, value in structure.items():
             if not bool(value):
                 correct_directory = find_correct_directory_in_array(directories, key)
