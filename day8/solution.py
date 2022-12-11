@@ -69,6 +69,19 @@ def find_viewing_distance_to_bottom(column_list, row_index):
     distance = find_viewing_distance_in_direction(tree_height, bottom_trees)
     return distance
 
+def find_viewing_distance_to_left(row_list, column_index):
+    tree_height = row_list[column_index]
+    left_trees = row_list[:column_index]
+    left_trees.reverse()
+    distance = find_viewing_distance_in_direction(tree_height, left_trees)
+    return distance
+
+def find_viewing_distance_to_right(row_list, column_index):
+    tree_height = row_list[column_index]
+    right_trees = row_list[column_index+1:]
+    distance = find_viewing_distance_in_direction(tree_height, right_trees)
+    return distance
+
 def find_viewing_distance_in_direction(current_tree, extending_trees):
     distance = 0
     blocked = False
@@ -128,3 +141,5 @@ def extract_data_from_file(day_number):
 
 print(find_viewing_distance_to_top([3,5,3,5,3], 1))
 print(find_viewing_distance_to_bottom([3,5,3,5,3], 1))
+print(find_viewing_distance_to_left([3,5,3,5,3], 1))
+print(find_viewing_distance_to_right([3,5,3,5,3], 1))
