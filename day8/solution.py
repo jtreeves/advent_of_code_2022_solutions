@@ -1,3 +1,11 @@
+def check_if_visible_from_left(row_list, column_index):
+    tree_height = row_list[column_index]
+    left_trees = row_list[0:column_index]
+    for tree in left_trees:
+        if tree >= tree_height:
+            return True
+    return False
+
 def calculate_forest_perimeter(length, width):
     perimeter = 2 * (length + width)
     overlap = 4
@@ -35,7 +43,8 @@ def create_columns_of_trees(forest):
         columns.append(column)
     return columns
 
-print(create_rows_of_trees("30373\n25512\n65332\n33549\n35390"))
-print(create_columns_of_trees("30373\n25512\n65332\n33549\n35390"))
+# print(create_rows_of_trees("30373\n25512\n65332\n33549\n35390"))
+# print(create_columns_of_trees("30373\n25512\n65332\n33549\n35390"))
 # print(determine_forest_width("30373\n25512\n65332\n33549\n35390"))
-print(calculate_forest_perimeter(5, 7))
+# print(calculate_forest_perimeter(5, 7))
+print(check_if_visible_from_left([2, 5, 5, 1, 2], 2))
