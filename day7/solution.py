@@ -16,11 +16,18 @@ def extract_contents_of_directories(lines):
             next_directory_name: next_directory_contents
         })
     result = folders[0]
-    result_keys = result.keys()
-    for key in result_keys:
-        key_values = result[key]
-        is_integer = check_if_object_property_is_integer(result, key)
-    return result
+    updated_result = replace_empty_directories(result, folders)
+    return updated_result
+
+def replace_empty_directories(structure, directories):
+    if type(structure) != int and type(structure) != str:
+        for key, value in structure.items():
+            if not bool(value):
+                correct_directory = find_correct_directory_in_array(directories, key)
+                structure[key] = correct_directory[key]
+            else:
+                structure[key] = replace_empty_directories(value, directories)
+    return structure
 
 def find_correct_directory_in_array(directories, name):
     for directory in directories:
@@ -110,7 +117,7 @@ def extract_data_from_file(day_number):
 
 # print(check_if_command("$ ls"))
 # print(check_if_directory("234 a"))
-# print(extract_contents_of_directories("$ cd /\n$ ls\ndir a\n14848514 b.txt\n8504156 c.dat\ndir d\n$ cd a\n$ ls\ndir e\n29116 f\n2557 g\n62596 h.lst\n$ cd e\n$ ls\n584 i\n$ cd ..\n$ cd ..\n$ cd d\n$ ls\n4060174 j\n8033020 d.log\n5626152 d.ext\n7214296 k"))
+print(extract_contents_of_directories("$ cd /\n$ ls\ndir a\n14848514 b.txt\n8504156 c.dat\ndir d\n$ cd a\n$ ls\ndir e\n29116 f\n2557 g\n62596 h.lst\n$ cd e\n$ ls\n584 i\n$ cd ..\n$ cd ..\n$ cd d\n$ ls\n4060174 j\n8033020 d.log\n5626152 d.ext\n7214296 k"))
 # print(convert_directory_array_to_object(['dir e', '29116 f', '2557 g', '62596 h.lst', '$ cd e']))
 # print(find_key_in_nested_objects({'a': 1}, 'a'))
-print(find_correct_directory_in_array([{'a': {}}, {'b': {}}], 'a'))
+# print(find_correct_directory_in_array([{'a': {}}, {'b': {}}], 'a'))
