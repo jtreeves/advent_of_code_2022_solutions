@@ -19,8 +19,16 @@ def create_rows_of_trees(forest):
     return list_rows
 
 def create_columns_of_trees(forest):
+    width = determine_forest_width(forest)
+    rows = forest.split("\n")
     columns = []
+    for i in range(width):
+        column = []
+        for row in rows:
+            column.append(int(row[i]))
+        columns.append(column)
     return columns
 
-# print(create_rows_of_trees("30373\n25512\n65332\n33549\n35390"))
-print(determine_forest_width("30373\n25512\n65332\n33549\n35390"))
+print(create_rows_of_trees("30373\n25512\n65332\n33549\n35390"))
+print(create_columns_of_trees("30373\n25512\n65332\n33549\n35390"))
+# print(determine_forest_width("30373\n25512\n65332\n33549\n35390"))
