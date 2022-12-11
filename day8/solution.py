@@ -1,3 +1,9 @@
+def calculate_forest_perimeter(length, width):
+    perimeter = 2 * (length + width)
+    overlap = 4
+    perimeter_without_overlap = perimeter - overlap
+    return perimeter_without_overlap
+
 def determine_forest_length(forest):
     rows = forest.split("\n")
     length = len(rows)
@@ -32,3 +38,4 @@ def create_columns_of_trees(forest):
 print(create_rows_of_trees("30373\n25512\n65332\n33549\n35390"))
 print(create_columns_of_trees("30373\n25512\n65332\n33549\n35390"))
 # print(determine_forest_width("30373\n25512\n65332\n33549\n35390"))
+print(calculate_forest_perimeter(5, 7))
