@@ -56,6 +56,19 @@ def check_if_visible_from_bottom(column_list, row_index):
             return False
     return True
 
+def find_viewing_distance_to_top(column_list, row_index):
+    tree_height = column_list[row_index]
+    top_trees = column_list[:row_index]
+    distance = find_viewing_distance_in_direction(tree_height, top_trees)
+    return distance
+
+def find_viewing_distance_in_direction(current_tree, extending_trees):
+    distance = 0
+    for tree in extending_trees:
+        if tree <= current_tree:
+            distance += 1
+    return distance
+
 def calculate_forest_perimeter(length, width):
     perimeter = 2 * (length + width)
     overlap = 4
@@ -99,5 +112,7 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-result = solve_problem()
-print(result)
+# result = solve_problem()
+# print(result)
+
+print(find_viewing_distance_to_top([3,5,3,5,3], 1))
