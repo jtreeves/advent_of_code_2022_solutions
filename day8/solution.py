@@ -1,3 +1,18 @@
+def count_all_visible_trees(forest):
+    length = determine_forest_length(forest)
+    width = determine_forest_width(forest)
+    rows = create_rows_of_trees(forest)
+    columns = create_columns_of_trees(forest)
+    total = calculate_forest_perimeter(length, width)
+    print(f"STARTING TOTAL WITH PERIMETER: {total}")
+    for row_index in range(1, len(rows) - 1):
+        for column_index in range(1, len(columns) - 1):
+            visible = check_if_visible_at_all(rows[row_index], columns[column_index], row_index, column_index)
+            if visible:
+                print(f"VISIBLE TREE ROW {row_index}, COLUMN {column_index}")
+                total += 1
+    return total
+
 def check_if_visible_at_all(row_list, column_list, row_index, column_index):
     top = check_if_visible_from_top(column_list, row_index)
     bottom = check_if_visible_from_bottom(column_list, row_index)
@@ -83,4 +98,6 @@ def create_columns_of_trees(forest):
 # print(check_if_visible_from_right([2, 5, 5, 1, 2], 1))
 # print(check_if_visible_from_top([0, 5, 5, 3, 5], 1))
 # print(check_if_visible_from_bottom([0, 5, 5, 3, 5], 1))
-print(check_if_visible_at_all([2, 5, 5, 1, 2], [0, 5, 5, 3, 5], 1, 1))
+# print(check_if_visible_at_all([2, 5, 5, 1, 2], [0, 5, 5, 3, 5], 1, 1))
+# print(check_if_visible_at_all([3, 3, 5, 4, 9], [0, 5, 5, 3, 5], 3, 1))
+print(count_all_visible_trees("30373\n25512\n65332\n33549\n35390"))
