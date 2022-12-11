@@ -1,3 +1,8 @@
+def solve_problem():
+    data = extract_data_from_file(8)
+    total = count_all_visible_trees(data)
+    return total
+
 def count_all_visible_trees(forest):
     length = determine_forest_length(forest)
     width = determine_forest_width(forest)
@@ -88,15 +93,11 @@ def create_columns_of_trees(forest):
         columns.append(column)
     return columns
 
-# print(create_rows_of_trees("30373\n25512\n65332\n33549\n35390"))
-# print(create_columns_of_trees("30373\n25512\n65332\n33549\n35390"))
-# print(determine_forest_width("30373\n25512\n65332\n33549\n35390"))
-# print(calculate_forest_perimeter(5, 7))
-# print(check_if_visible_from_left([2, 5, 5, 1, 2], 1))
-# print(check_if_visible_from_right([2, 5, 5, 1, 2], 1))
-# print(check_if_visible_from_top([0, 5, 5, 3, 5], 1))
-# print(check_if_visible_from_bottom([0, 5, 5, 3, 5], 1))
-# print(check_if_visible_at_all([2, 5, 5, 1, 2], [0, 5, 5, 3, 5], 1, 1))
-# print(check_if_visible_at_all([3, 3, 5, 4, 9], [0, 5, 5, 3, 5], 3, 1))
-# print(check_if_visible_at_all([6, 5, 3, 3, 2], [0, 5, 5, 3, 5], 2, 1))
-print(count_all_visible_trees("30373\n25512\n65332\n33549\n35390"))
+def extract_data_from_file(day_number):
+    file = open(f"day{day_number}/data.txt", "r")
+    data = file.read()
+    file.close()
+    return data
+
+result = solve_problem()
+print(result)
