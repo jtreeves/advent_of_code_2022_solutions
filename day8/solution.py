@@ -16,6 +16,18 @@ def count_all_visible_trees(forest):
                 total += 1
     return total
 
+def find_highest_scenic_score(forest):
+    rows = create_rows_of_trees(forest)
+    columns = create_columns_of_trees(forest)
+    scores = []
+    for row_index in range(1, len(rows) - 1):
+        for column_index in range(1, len(columns) - 1):
+            score = calculate_scenic_score_for_tree(rows[row_index], columns[column_index], row_index, column_index)
+            scores.append(score)
+    scores.sort()
+    highest_score = scores.pop()
+    return highest_score
+
 def check_if_visible_at_all(row_list, column_list, row_index, column_index):
     top = check_if_visible_from_top(column_list, row_index)
     bottom = check_if_visible_from_bottom(column_list, row_index)
@@ -151,4 +163,5 @@ def extract_data_from_file(day_number):
 # print(find_viewing_distance_to_bottom([3,5,3,5,3], 1))
 # print(find_viewing_distance_to_left([2,5,5,1,2], 2))
 # print(find_viewing_distance_to_right([2,5,5,1,2], 2))
-print(calculate_scenic_score_for_tree([2,5,5,1,2], [3,5,3,5,3], 1, 2))
+# print(calculate_scenic_score_for_tree([2,5,5,1,2], [3,5,3,5,3], 1, 2))
+print(find_highest_scenic_score("30373\n25512\n65332\n33549\n35390"))
