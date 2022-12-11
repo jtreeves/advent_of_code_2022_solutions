@@ -20,9 +20,11 @@ def extract_contents_of_directories(lines):
         trimmed_folder = remove_next_flag(folder)
         trimmed_folders.append(trimmed_folder)
     result = trimmed_folders[0]
-    updated_result = replace_empty_directories(result, trimmed_folders)
-    second_update = replace_empty_directories(updated_result, trimmed_folders)
-    return second_update
+    no_empties = confirm_no_empty_subdirectories(result)
+    while not no_empties:
+        result = replace_empty_directories(result, trimmed_folders)
+        no_empties = confirm_no_empty_subdirectories(result)
+    return result
 
 def replace_empty_directories(structure, directories):
     if type(structure) != int:
@@ -135,8 +137,8 @@ def extract_data_from_file(day_number):
 
 # print(check_if_command("$ ls"))
 # print(check_if_directory("234 a"))
-# print(extract_contents_of_directories("$ cd /\n$ ls\ndir a\n14848514 b.txt\n8504156 c.dat\ndir d\n$ cd a\n$ ls\ndir e\n29116 f\n2557 g\n62596 h.lst\n$ cd e\n$ ls\n584 i\n$ cd ..\n$ cd ..\n$ cd d\n$ ls\n4060174 j\n8033020 d.log\n5626152 d.ext\n7214296 k"))
+print(extract_contents_of_directories("$ cd /\n$ ls\ndir a\n14848514 b.txt\n8504156 c.dat\ndir d\n$ cd a\n$ ls\ndir e\n29116 f\n2557 g\n62596 h.lst\n$ cd e\n$ ls\n584 i\n$ cd ..\n$ cd ..\n$ cd d\n$ ls\n4060174 j\n8033020 d.log\n5626152 d.ext\n7214296 k"))
 # print(convert_directory_array_to_object(['dir e', '29116 f', '2557 g', '62596 h.lst', '$ cd e']))
 # print(find_key_in_nested_objects({'a': 1}, 'a'))
 # print(find_correct_directory_in_array([{'a': {}}, {'b': {}}], 'a'))
-print(confirm_no_empty_subdirectories({'a': {}}))
+# print(confirm_no_empty_subdirectories({'a': {}}))
