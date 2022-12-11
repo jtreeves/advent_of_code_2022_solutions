@@ -5,6 +5,23 @@ def determine_total_sizes_of_all_directories(structure):
             sizes[key] = calculate_directory_size(value)
     return sizes
 
+def find_nested_directory_by_name(structure, name):
+    # if type(structure) != int:
+    print(f"STRUCTURE: {structure}")
+    items = structure.items()
+    length = len(items)
+    iterations = 0
+    inner_directories = []
+    for key, value in items:
+        iterations += 1
+        print(f"KEY: {key}")
+        if key == name:
+            return value
+        elif type(value) != int and iterations >= length:
+            return find_nested_directory_by_name(value, name)
+        else:
+            continue
+
 def list_all_directories(structure):
     directories = []
     for key, value in structure.items():
@@ -81,24 +98,6 @@ def find_correct_directory_in_array(directories, name):
         if directory_name == name:
             return directory
 
-def find_key_in_nested_objects(nest, key):
-    path = ""
-    nest_keys = nest.keys()
-    if key in nest_keys:
-        path += key
-    else:
-        for property in nest_keys:
-            is_integer = check_if_object_property_is_integer(nest, property)
-            if not is_integer:
-                path += find_key_in_nested_objects(nest[property], key)
-    return path
-
-def check_if_object_property_is_integer(object, property):
-    property_value = object[property]
-    property_type = type(property_value)
-    is_integer = property_type is int
-    return is_integer
-
 def convert_directory_array_to_object(directory_array):
     directory_object = {}
     for element in directory_array:
@@ -169,4 +168,5 @@ def extract_data_from_file(day_number):
 # print(find_correct_directory_in_array([{'a': {}}, {'b': {}}], 'a'))
 # print(confirm_no_empty_subdirectories({'a': {}}))
 # print(calculate_directory_size({'a': 2, 'b': {'d': 7, 'e': 8}, 'c': 5}))
-print(list_all_directories({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}))
+# print(list_all_directories({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}))
+print(find_nested_directory_by_name({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}, 'e'))
