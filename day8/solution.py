@@ -56,6 +56,14 @@ def check_if_visible_from_bottom(column_list, row_index):
             return False
     return True
 
+def calculate_scenic_score_for_tree(row_list, column_list, row_index, column_index):
+    top = find_viewing_distance_to_top(column_list, row_index)
+    bottom = find_viewing_distance_to_bottom(column_list, row_index)
+    left = find_viewing_distance_to_left(row_list, column_index)
+    right = find_viewing_distance_to_right(row_list, column_index)
+    score = top * bottom * left * right
+    return score
+
 def find_viewing_distance_to_top(column_list, row_index):
     tree_height = column_list[row_index]
     top_trees = column_list[:row_index]
@@ -139,7 +147,8 @@ def extract_data_from_file(day_number):
 # result = solve_problem()
 # print(result)
 
-print(find_viewing_distance_to_top([3,5,3,5,3], 1))
-print(find_viewing_distance_to_bottom([3,5,3,5,3], 1))
-print(find_viewing_distance_to_left([3,5,3,5,3], 1))
-print(find_viewing_distance_to_right([3,5,3,5,3], 1))
+# print(find_viewing_distance_to_top([3,5,3,5,3], 1))
+# print(find_viewing_distance_to_bottom([3,5,3,5,3], 1))
+# print(find_viewing_distance_to_left([2,5,5,1,2], 2))
+# print(find_viewing_distance_to_right([2,5,5,1,2], 2))
+print(calculate_scenic_score_for_tree([2,5,5,1,2], [3,5,3,5,3], 1, 2))
