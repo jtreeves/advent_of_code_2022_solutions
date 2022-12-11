@@ -59,13 +59,24 @@ def check_if_visible_from_bottom(column_list, row_index):
 def find_viewing_distance_to_top(column_list, row_index):
     tree_height = column_list[row_index]
     top_trees = column_list[:row_index]
+    top_trees.reverse()
     distance = find_viewing_distance_in_direction(tree_height, top_trees)
+    return distance
+
+def find_viewing_distance_to_bottom(column_list, row_index):
+    tree_height = column_list[row_index]
+    bottom_trees = column_list[row_index+1:]
+    distance = find_viewing_distance_in_direction(tree_height, bottom_trees)
     return distance
 
 def find_viewing_distance_in_direction(current_tree, extending_trees):
     distance = 0
+    blocked = False
     for tree in extending_trees:
-        if tree <= current_tree:
+        if tree >= current_tree:
+            blocked = True
+            distance += 1
+        if tree <= current_tree and not blocked:
             distance += 1
     return distance
 
@@ -116,3 +127,4 @@ def extract_data_from_file(day_number):
 # print(result)
 
 print(find_viewing_distance_to_top([3,5,3,5,3], 1))
+print(find_viewing_distance_to_bottom([3,5,3,5,3], 1))
