@@ -15,8 +15,12 @@ def extract_contents_of_directories(lines):
         folders.append({
             next_directory_name: next_directory_contents
         })
-    result = folders[0]
-    updated_result = replace_empty_directories(result, folders)
+    trimmed_folders = []
+    for folder in folders:
+        trimmed_folder = remove_next_flag(folder)
+        trimmed_folders.append(trimmed_folder)
+    result = trimmed_folders[0]
+    updated_result = replace_empty_directories(result, trimmed_folders)
     return updated_result
 
 def replace_empty_directories(structure, directories):
@@ -28,6 +32,11 @@ def replace_empty_directories(structure, directories):
             else:
                 structure[key] = replace_empty_directories(value, directories)
     return structure
+
+def remove_next_flag(contents):
+    contents_name = list(contents.keys())[0]
+    contents[contents_name].pop("NEXT", None)
+    return contents
 
 def find_correct_directory_in_array(directories, name):
     for directory in directories:
