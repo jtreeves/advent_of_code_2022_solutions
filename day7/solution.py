@@ -1,3 +1,20 @@
+def determine_total_sizes_of_all_directories(structure):
+    sizes = {}
+    for key, value in structure.items():
+        if type(value) != int:
+            sizes[key] = calculate_directory_size(value)
+    return sizes
+
+def list_all_directories(structure):
+    directories = []
+    for key, value in structure.items():
+        if isinstance(value, dict):
+            directories.append(key)
+            directories += list_all_directories(value)
+        else:
+            continue
+    return directories
+
 def calculate_directory_size(directory):
     total = 0
     for value in directory.values():
@@ -151,4 +168,5 @@ def extract_data_from_file(day_number):
 # print(find_key_in_nested_objects({'a': 1}, 'a'))
 # print(find_correct_directory_in_array([{'a': {}}, {'b': {}}], 'a'))
 # print(confirm_no_empty_subdirectories({'a': {}}))
-print(calculate_directory_size({'a': 2, 'b': {'d': 7, 'e': 8}, 'c': 5}))
+# print(calculate_directory_size({'a': 2, 'b': {'d': 7, 'e': 8}, 'c': 5}))
+print(list_all_directories({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}))
