@@ -1,3 +1,5 @@
+import copy
+
 def determine_total_sizes_of_all_directories(structure):
     sizes = {}
     for key, value in structure.items():
@@ -6,21 +8,17 @@ def determine_total_sizes_of_all_directories(structure):
     return sizes
 
 def find_nested_directory_by_name(structure, name):
-    # if type(structure) != int:
-    print(f"STRUCTURE: {structure}")
-    items = structure.items()
-    length = len(items)
-    iterations = 0
-    inner_directories = []
-    for key, value in items:
-        iterations += 1
-        print(f"KEY: {key}")
+    this_copy = copy.deepcopy(structure)
+    keys = []
+    keys.extend(this_copy.keys())
+    while len(keys) > 0:
+        key = keys.pop(0)
         if key == name:
-            return value
-        elif type(value) != int and iterations >= length:
-            return find_nested_directory_by_name(value, name)
-        else:
-            continue
+            return this_copy[key]
+        if isinstance(this_copy[key], dict):
+            nested = this_copy.pop(key)
+            keys.extend(nested.keys())
+            this_copy.update(nested)
 
 def list_all_directories(structure):
     directories = []
@@ -169,4 +167,4 @@ def extract_data_from_file(day_number):
 # print(confirm_no_empty_subdirectories({'a': {}}))
 # print(calculate_directory_size({'a': 2, 'b': {'d': 7, 'e': 8}, 'c': 5}))
 # print(list_all_directories({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}))
-print(find_nested_directory_by_name({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}, 'e'))
+print(find_nested_directory_by_name({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}, '/'))
