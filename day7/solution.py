@@ -1,5 +1,18 @@
 import copy
 
+def sum_all_directories(directories):
+    total = 0
+    for value in directories.values():
+        total += value
+    return total
+
+def filter_out_too_large_directories(sizes):
+    filtered_sizes = {}
+    for key, value in sizes.items():
+        if value <= 100000:
+            filtered_sizes[key] = value
+    return filtered_sizes
+
 def determine_total_sizes_of_all_directories(structure):
     directory_names = list_all_directories(structure)
     sizes = {}
@@ -170,4 +183,6 @@ def extract_data_from_file(day_number):
 # print(calculate_directory_size({'a': 2, 'b': {'d': 7, 'e': 8}, 'c': 5}))
 # print(list_all_directories({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}))
 # print(find_nested_directory_by_name({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}, '/'))
-print(determine_total_sizes_of_all_directories({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}))
+# print(determine_total_sizes_of_all_directories({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}))
+# print(filter_out_too_large_directories({'/': 48381165, 'a': 94853, 'e': 584, 'd': 24933642}))
+print(sum_all_directories({'a': 94853, 'e': 584}))
