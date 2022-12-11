@@ -1,5 +1,13 @@
 import copy
 
+def solve_problem():
+    data = extract_data_from_file(7)
+    contents = extract_contents_of_directories(data)
+    sizes = determine_total_sizes_of_all_directories(contents)
+    filtered_sizes = filter_out_too_large_directories(sizes)
+    total = sum_all_directories(filtered_sizes)
+    return total
+
 def sum_all_directories(directories):
     total = 0
     for value in directories.values():
@@ -173,16 +181,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-# print(check_if_command("$ ls"))
-# print(check_if_directory("234 a"))
-# print(extract_contents_of_directories("$ cd /\n$ ls\ndir a\n14848514 b.txt\n8504156 c.dat\ndir d\n$ cd a\n$ ls\ndir e\n29116 f\n2557 g\n62596 h.lst\n$ cd e\n$ ls\n584 i\n$ cd ..\n$ cd ..\n$ cd d\n$ ls\n4060174 j\n8033020 d.log\n5626152 d.ext\n7214296 k"))
-# print(convert_directory_array_to_object(['dir e', '29116 f', '2557 g', '62596 h.lst', '$ cd e']))
-# print(find_key_in_nested_objects({'a': 1}, 'a'))
-# print(find_correct_directory_in_array([{'a': {}}, {'b': {}}], 'a'))
-# print(confirm_no_empty_subdirectories({'a': {}}))
-# print(calculate_directory_size({'a': 2, 'b': {'d': 7, 'e': 8}, 'c': 5}))
-# print(list_all_directories({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}))
-# print(find_nested_directory_by_name({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}, '/'))
-# print(determine_total_sizes_of_all_directories({'/': {'a': {'e': {'i': 584}, 'f': 29116, 'g': 2557, 'h.lst': 62596}, 'b.txt': 14848514, 'c.dat': 8504156, 'd': {'j': 4060174, 'd.log': 8033020, 'd.ext': 5626152, 'k': 7214296}}}))
-# print(filter_out_too_large_directories({'/': 48381165, 'a': 94853, 'e': 584, 'd': 24933642}))
-print(sum_all_directories({'a': 94853, 'e': 584}))
+result = solve_problem()
+print(result)
