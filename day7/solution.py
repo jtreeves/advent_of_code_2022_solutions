@@ -34,6 +34,14 @@ def replace_empty_directories(structure, directories):
                 structure[key] = replace_empty_directories(value, directories)
     return structure
 
+def confirm_no_empty_subdirectories(structure):
+    stringed_structure = str(structure)
+    found_empty = stringed_structure.find("{}")
+    if found_empty == -1:
+        return True
+    else:
+        return False
+
 def remove_next_flag(contents):
     contents_name = list(contents.keys())[0]
     contents[contents_name].pop("NEXT", None)
@@ -127,7 +135,8 @@ def extract_data_from_file(day_number):
 
 # print(check_if_command("$ ls"))
 # print(check_if_directory("234 a"))
-print(extract_contents_of_directories("$ cd /\n$ ls\ndir a\n14848514 b.txt\n8504156 c.dat\ndir d\n$ cd a\n$ ls\ndir e\n29116 f\n2557 g\n62596 h.lst\n$ cd e\n$ ls\n584 i\n$ cd ..\n$ cd ..\n$ cd d\n$ ls\n4060174 j\n8033020 d.log\n5626152 d.ext\n7214296 k"))
+# print(extract_contents_of_directories("$ cd /\n$ ls\ndir a\n14848514 b.txt\n8504156 c.dat\ndir d\n$ cd a\n$ ls\ndir e\n29116 f\n2557 g\n62596 h.lst\n$ cd e\n$ ls\n584 i\n$ cd ..\n$ cd ..\n$ cd d\n$ ls\n4060174 j\n8033020 d.log\n5626152 d.ext\n7214296 k"))
 # print(convert_directory_array_to_object(['dir e', '29116 f', '2557 g', '62596 h.lst', '$ cd e']))
 # print(find_key_in_nested_objects({'a': 1}, 'a'))
 # print(find_correct_directory_in_array([{'a': {}}, {'b': {}}], 'a'))
+print(confirm_no_empty_subdirectories({'a': {}}))
