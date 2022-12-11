@@ -1,7 +1,14 @@
+def check_if_visible_at_all(row_list, column_list, row_index, column_index):
+    top = check_if_visible_from_top(column_list, row_index)
+    bottom = check_if_visible_from_bottom(column_list, row_index)
+    left = check_if_visible_from_left(row_list, column_index)
+    right = check_if_visible_from_right(row_list, column_index)
+    visible = top or bottom or left or right
+    return visible
+
 def check_if_visible_from_left(row_list, column_index):
     tree_height = row_list[column_index]
     left_trees = row_list[:column_index]
-    print(left_trees)
     for tree in left_trees:
         if tree >= tree_height:
             return False
@@ -74,5 +81,6 @@ def create_columns_of_trees(forest):
 # print(calculate_forest_perimeter(5, 7))
 # print(check_if_visible_from_left([2, 5, 5, 1, 2], 1))
 # print(check_if_visible_from_right([2, 5, 5, 1, 2], 1))
-# print(check_if_visible_from_top([2, 5, 5, 1, 2], 1))
-print(check_if_visible_from_bottom([2, 5, 5, 1, 2], 1))
+# print(check_if_visible_from_top([0, 5, 5, 3, 5], 1))
+# print(check_if_visible_from_bottom([0, 5, 5, 3, 5], 1))
+print(check_if_visible_at_all([2, 5, 5, 1, 2], [0, 5, 5, 3, 5], 1, 1))
