@@ -1,3 +1,13 @@
+def sum_key_signal_strengths(statuses):
+    pairs = find_main_register_cycle_pairs(statuses)
+    total = 0
+    for pair in pairs:
+        register = pair["register"]
+        cycles = pair["cycles"]
+        strength = calculate_signal_strength(register, cycles)
+        total += strength
+    return total
+
 def find_main_register_cycle_pairs(statuses):
     key_cycles = [20, 60, 100, 140, 180, 220]
     pairs = []
@@ -93,4 +103,5 @@ moves = list_all_moves(data)
 statuses = determine_register_statuses_at_key_cycles(moves)
 # print(find_register_at_cycle_from_statuses(statuses, 220))
 # print(calculate_signal_strength(21, 20))
-print(find_main_register_cycle_pairs(statuses))
+# print(find_main_register_cycle_pairs(statuses))
+print(sum_key_signal_strengths(statuses))
