@@ -2,6 +2,19 @@ def calculate_signal_strength(register, cycle):
     strength = register * cycle
     return strength
 
+def find_register_at_cycle_from_statuses(statuses, cycle_number):
+    register_before = None
+    register_at = None
+    for status in statuses:
+        if status["cycles"] == cycle_number - 1:
+            register_before = status["register"]
+        if status["cycles"] == cycle_number:
+            register_at = status["register"]
+    if register_at != None:
+        return register_at
+    else:
+        return register_before
+
 def determine_register_statuses_at_key_cycles(moves):
     increments = list_all_cycle_and_register_increments(moves)
     starting_values = {
