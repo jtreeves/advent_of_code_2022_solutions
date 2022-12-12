@@ -1,7 +1,11 @@
 def solve_problem():
     data = extract_data_from_file(8)
-    total = count_all_visible_trees(data)
-    return total
+    visible = count_all_visible_trees(data)
+    score = find_highest_scenic_score(data)
+    return {
+        "visible": visible,
+        "score": score
+    }
 
 def count_all_visible_trees(forest):
     length = determine_forest_length(forest)
@@ -156,12 +160,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-# result = solve_problem()
-# print(result)
-
-# print(find_viewing_distance_to_top([3,5,3,5,3], 1))
-# print(find_viewing_distance_to_bottom([3,5,3,5,3], 1))
-# print(find_viewing_distance_to_left([2,5,5,1,2], 2))
-# print(find_viewing_distance_to_right([2,5,5,1,2], 2))
-print(calculate_scenic_score_for_tree([2,5,5,1,2], [7,1,3,4,9], 1, 3))
-# print(find_highest_scenic_score("30373\n25512\n65332\n33549\n35390"))
+result = solve_problem()
+print(result)
