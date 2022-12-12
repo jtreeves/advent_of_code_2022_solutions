@@ -1,3 +1,7 @@
+def calculate_signal_strength(register, cycle):
+    strength = register * cycle
+    return strength
+
 def determine_register_statuses_at_key_cycles(moves):
     increments = list_all_cycle_and_register_increments(moves)
     starting_values = {
@@ -49,6 +53,18 @@ def list_all_moves(instructions):
     moves = instructions.split("\n")
     return moves
 
+def extract_data_from_file(day_number):
+    file = open(f"day{day_number}/data.txt", "r")
+    data = file.read()
+    file.close()
+    return data
+
 # print(determine_cycle_increment("noop"))
 # print(determine_cycle_increment("addx -6"))
-print(determine_register_statuses_at_key_cycles(['noop', 'addx 5', 'noop', 'addx 1', 'addx -2']))
+# print(determine_register_statuses_at_key_cycles(['noop', 'addx 5', 'noop', 'addx 1', 'addx -2']))
+# print(determine_register_statuses_at_key_cycles(['noop', 'addx 3', 'addx -5']))
+
+# data = extract_data_from_file(10)
+# moves = list_all_moves(data)
+# print(determine_register_statuses_at_key_cycles(moves))
+print(calculate_signal_strength(21, 20))
