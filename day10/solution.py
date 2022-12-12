@@ -1,3 +1,10 @@
+def solve_problem():
+    data = extract_data_from_file(10)
+    moves = list_all_moves(data)
+    statuses = determine_register_statuses_at_key_cycles(moves)
+    total = sum_key_signal_strengths(statuses)
+    return total
+
 def sum_key_signal_strengths(statuses):
     pairs = find_main_register_cycle_pairs(statuses)
     total = 0
@@ -93,15 +100,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-# print(determine_cycle_increment("noop"))
-# print(determine_cycle_increment("addx -6"))
-# print(determine_register_statuses_at_key_cycles(['noop', 'addx 5', 'noop', 'addx 1', 'addx -2']))
-# print(determine_register_statuses_at_key_cycles(['noop', 'addx 3', 'addx -5']))
-
-data = extract_data_from_file(10)
-moves = list_all_moves(data)
-statuses = determine_register_statuses_at_key_cycles(moves)
-# print(find_register_at_cycle_from_statuses(statuses, 220))
-# print(calculate_signal_strength(21, 20))
-# print(find_main_register_cycle_pairs(statuses))
-print(sum_key_signal_strengths(statuses))
+result = solve_problem()
+print(result)
