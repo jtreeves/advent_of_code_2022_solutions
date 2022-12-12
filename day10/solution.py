@@ -1,19 +1,33 @@
 def determine_register_statuses_at_key_cycles(moves):
-    cycles = list_all_cycle_increments(moves)
+    increments = list_all_cycle_and_register_increments(moves)
     starting_values = {
-        "status": 1,
         "cycles": 1,
+        "register": 1
     }
     key_values = [starting_values]
-    for index in range(len(cycles)):
-        new_status = key_values[index]
+    for index in range(len(increments)):
+        old_cycles = key_values[index]["cycles"]
+        old_register = key_values[index]["register"]
+        cycles_increment = increments[index]["cycles"]
+        register_increment = increments[index]["register"]
+        new_cycles = old_cycles + cycles_increment
+        new_register = old_register + register_increment
+        key_values.append({
+            "cycles": new_cycles,
+            "register": new_register
+        })
+    return key_values
 
-def list_all_cycle_increments(moves):
-    cylces = []
+def list_all_cycle_and_register_increments(moves):
+    increments = []
     for move in moves:
-        cycle = determine_cycles_to_wait(move)
-        cylces.append(cycle)
-    return cylces
+        cycles = determine_cycles_increment(move)
+        register = determine_register_increment(move)
+        increments.append({
+            "cycles": cycles,
+            "register": register
+        })
+    return increments
 
 def determine_register_increment(move):
     is_noop = move == "noop"
@@ -24,7 +38,7 @@ def determine_register_increment(move):
         increment = int(partitioned[1])
         return increment
 
-def determine_cycles_to_wait(move):
+def determine_cycles_increment(move):
     is_noop = move == "noop"
     if is_noop:
         return 1
@@ -35,6 +49,6 @@ def list_all_moves(instructions):
     moves = instructions.split("\n")
     return moves
 
-# print(determine_cycles_to_wait("noop"))
-# print(determine_cycles_to_wait("addx -6"))
-print(list_all_cycle_increments(['noop', 'addx 5', 'noop', 'addx 1', 'addx -2']))
+# print(determine_cycle_increment("noop"))
+# print(determine_cycle_increment("addx -6"))
+print(determine_register_statuses_at_key_cycles(['noop', 'addx 5', 'noop', 'addx 1', 'addx -2']))
