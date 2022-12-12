@@ -106,7 +106,7 @@ def find_viewing_distance_in_direction(current_tree, extending_trees):
     distance = 0
     blocked = False
     for tree in extending_trees:
-        if tree >= current_tree:
+        if tree >= current_tree and not blocked:
             blocked = True
             distance += 1
         if tree <= current_tree and not blocked:
@@ -163,5 +163,5 @@ def extract_data_from_file(day_number):
 # print(find_viewing_distance_to_bottom([3,5,3,5,3], 1))
 # print(find_viewing_distance_to_left([2,5,5,1,2], 2))
 # print(find_viewing_distance_to_right([2,5,5,1,2], 2))
-# print(calculate_scenic_score_for_tree([2,5,5,1,2], [3,5,3,5,3], 1, 2))
-print(find_highest_scenic_score("30373\n25512\n65332\n33549\n35390"))
+print(calculate_scenic_score_for_tree([2,5,5,1,2], [7,1,3,4,9], 1, 3))
+# print(find_highest_scenic_score("30373\n25512\n65332\n33549\n35390"))
