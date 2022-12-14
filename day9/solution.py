@@ -133,6 +133,15 @@ class Move:
         self.distance = distance
         self.direction = direction
 
+def solve_problem():
+    data = extract_data_from_file(9)
+    moves = list_all_moves(data)
+    head = Head()
+    tail = Tail()
+    execute_all_moves(moves, head, tail)
+    total_tail_positions = tail.count_all_positions()
+    return total_tail_positions
+
 def execute_all_moves(moves, head, tail):
     for move in moves:
         adjust_head_then_tail_for_move(move, head, tail)
