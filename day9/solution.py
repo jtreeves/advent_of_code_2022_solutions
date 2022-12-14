@@ -47,6 +47,18 @@ class Tail(RopeEnd):
         same_column = tail_y == head_y
         return same_column
 
+    def is_before_head(self, head):
+        tail_x = self.current_position[0]
+        head_x = head.current_position[0]
+        before_head = tail_x < head_x
+        return before_head
+
+    def is_below_head(self, head):
+        tail_y = self.current_position[1]
+        head_y = head.current_position[1]
+        below_head = tail_y < head_y
+        return below_head
+
     def catch_up_to_head(self, head):
         tail_x = self.current_position[0]
         tail_y = self.current_position[1]
