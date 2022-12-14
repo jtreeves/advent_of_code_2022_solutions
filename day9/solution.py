@@ -1,28 +1,31 @@
-class RopePart:
-    current_position = [1, 1]
+class RopeEnd:
+    def __init__(self):
+        self.current_position = [1, 1]
 
     def change_current_position(self, new_position):
         self.current_position = new_position
 
-class Tail(RopePart):
-    all_positions = set()
-
+class Tail(RopeEnd):
     def __init__(self):
+        super().__init__()
+        self.all_positions = set()
         self.all_positions.add(tuple(self.current_position))
 
     def change_current_position(self, new_position):
         super().change_current_position(new_position)
         self.all_positions.add(tuple(self.current_position))
 
+class Move:
+    def __init__(self, distance, direction):
+        self.distance = distance
+        self.direction = direction
+
 def list_all_moves(instructions):
     lines = instructions.split("\n")
     moves = []
     for line in lines:
         command = line.split(" ")
-        move = {
-            "direction": command[0],
-            "distance": command[1]
-        }
+        move = Move(command[1], command[0])
         moves.append(move)
     return moves
 
@@ -40,3 +43,7 @@ t.change_current_position([1, 1])
 t.change_current_position([7, 7])
 print(t.current_position)
 print(t.all_positions)
+h = RopeEnd()
+print(h.current_position)
+h.change_current_position([4, 5])
+print(h.current_position)
