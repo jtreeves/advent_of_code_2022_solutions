@@ -15,6 +15,10 @@ class Tail(RopeEnd):
         super().change_current_position(new_position)
         self.all_positions.add(tuple(self.current_position))
 
+    def count_all_positions(self):
+        total = len(self.all_positions)
+        return total
+
     def is_touching_head(self, head):
         tail_x = self.current_position[0]
         tail_y = self.current_position[1]
