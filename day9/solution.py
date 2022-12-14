@@ -9,7 +9,15 @@ def change_tail_current_position(new_position):
     add_new_tail_position(tail_current_position)
 
 def list_all_moves(instructions):
-    moves = instructions.split("\n")
+    lines = instructions.split("\n")
+    moves = []
+    for line in lines:
+        command = line.split(" ")
+        move = {
+            "direction": command[0],
+            "distance": command[1]
+        }
+        moves.append(move)
     return moves
 
 def extract_data_from_file(day_number):
