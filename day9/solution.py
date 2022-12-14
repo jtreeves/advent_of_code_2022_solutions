@@ -15,6 +15,20 @@ class Tail(RopeEnd):
         super().change_current_position(new_position)
         self.all_positions.add(tuple(self.current_position))
 
+class Head(RopeEnd):
+    def adjust_position_in_direction(self, direction):
+        x = self.current_position[0]
+        y = self.current_position[1]
+        if direction == "R":
+            x += 1
+        if direction == "L":
+            x -= 1
+        if direction == "U":
+            y += 1
+        if direction == "D":
+            y -= 1
+        self.change_current_position([x, y])
+
 class Move:
     def __init__(self, distance, direction):
         self.distance = distance
