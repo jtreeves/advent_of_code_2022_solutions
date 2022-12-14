@@ -15,8 +15,22 @@ class Tail(RopeEnd):
         super().change_current_position(new_position)
         self.all_positions.add(tuple(self.current_position))
 
-    def overlaps_head(self, head):
-        if self.current_position[0] == head.current_position[0] and self.current_position[1] == head.current_position[1]:
+    def touching_head(self, head):
+        tail_x = self.current_position[0]
+        tail_y = self.current_position[1]
+        head_x = head.current_position[0]
+        head_y = head.current_position[1]
+        overlapping_head = tail_x == head_x and tail_y == head_y
+        after_head = tail_x == head_x + 1 and tail_y == head_y
+        before_head = tail_x == head_x - 1 and tail_y == head_y + 1
+        above_head = tail_x == head_x and tail_y == head_y + 1
+        under_head = tail_x == head_x and tail_y == head_y - 1
+        diagonally_bl_head = tail_x == head_x - 1 and tail_y == head_y - 1
+        diagonally_br_head = tail_x == head_x + 1 and tail_y == head_y - 1
+        diagonally_tl_head = tail_x == head_x - 1 and tail_y == head_y + 1
+        diagonally_tr_head = tail_x == head_x + 1 and tail_y == head_y + 1
+        touching = overlapping_head or after_head or before_head or above_head or under_head or diagonally_br_head or diagonally_bl_head or diagonally_tl_head or diagonally_tr_head
+        if touching:
             return True
         else:
             return False
