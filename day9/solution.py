@@ -1,12 +1,18 @@
-tail_current_position = tuple()
-tail_positions = set()
+class RopePart:
+    current_position = [1, 1]
 
-def add_new_tail_position(position):
-    tail_positions.add(position)
+    def change_current_position(self, new_position):
+        self.current_position = new_position
 
-def change_tail_current_position(new_position):
-    tail_current_position = new_position
-    add_new_tail_position(tail_current_position)
+class Tail(RopePart):
+    all_positions = set()
+
+    def __init__(self):
+        self.all_positions.add(tuple(self.current_position))
+
+    def change_current_position(self, new_position):
+        super().change_current_position(new_position)
+        self.all_positions.add(tuple(self.current_position))
 
 def list_all_moves(instructions):
     lines = instructions.split("\n")
@@ -26,9 +32,11 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-change_tail_current_position((1, 1))
-change_tail_current_position((2, 3))
-change_tail_current_position((5, 10))
-change_tail_current_position((7, 7))
-change_tail_current_position((5, 10))
-print(tail_positions)
+t = Tail()
+print(t.current_position)
+t.change_current_position([5, 7])
+t.change_current_position([2, 3])
+t.change_current_position([1, 1])
+t.change_current_position([7, 7])
+print(t.current_position)
+print(t.all_positions)
