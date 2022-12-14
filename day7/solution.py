@@ -45,15 +45,13 @@ def find_nested_directory_by_name(structure, name):
             keys.extend(nested.keys())
             this_copy.update(nested)
 
-def determine_unique_name_for_directory(name_to_validate):
-    validated_name = name_to_validate
-    for name in directory_names:
-        if name == name_to_validate:
-            print(name_to_validate)
-            validated_name = name_to_validate + '0'
-            determine_unique_name_for_directory(validated_name)
-    # directory_names.append(validated_name)
-    return validated_name
+def generate_unique_directory_name(name_to_validate):
+    duplicate = check_names_for_duplicate(name_to_validate)
+    if duplicate:
+        incremented_name = name_to_validate + '0'
+        return generate_unique_directory_name(incremented_name)
+    else:
+        return name_to_validate
 
 def check_names_for_duplicate(name_to_check):
     for name in directory_names:
@@ -204,4 +202,5 @@ def extract_data_from_file(day_number):
 # print(result)
 # print(determine_unique_name_for_directory('a'))
 # print(directory_names)
-print(check_names_for_duplicate('a0000'))
+# print(check_names_for_duplicate('a0000'))
+print(generate_unique_directory_name('a'))
