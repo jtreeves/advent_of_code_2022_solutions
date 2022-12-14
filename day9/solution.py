@@ -59,16 +59,56 @@ class Tail(RopeEnd):
         below_head = tail_y < head_y
         return below_head
 
-    def catch_up_to_head(self, head):
+    def move_diagonally_to_head(self, head):
         tail_x = self.current_position[0]
         tail_y = self.current_position[1]
-        head_x = head.current_position[0]
-        head_y = head.current_position[1]
+        is_before = self.is_before_head(self, head)
+        is_below = self.is_below_head(self, head)
+        if is_before and is_below:
+            tail_x += 1
+            tail_y += 1
+        elif is_before and not is_below:
+            tail_x += 1
+            tail_y -= 1
+        elif not is_before and is_below:
+            tail_x -= 1
+            tail_y += 1
+        elif not is_before and not is_below:
+            tail_x -= 1
+            tail_y -= 1
+        self.change_current_position([tail_x, tail_y])
+
+    def move_horizontally_to_head(self, head):
+        tail_x = self.current_position[0]
+        tail_y = self.current_position[1]
+        is_before = self.is_before_head(self, head)
+        if is_before:
+            tail_x += 1
+        else:
+            tail_x -= 1
+        self.change_current_position([tail_x, tail_y])
+
+    def move_vertically_to_head(self, head):
+        tail_x = self.current_position[0]
+        tail_y = self.current_position[1]
+        is_below = self.is_below_head(self, head)
+        if is_below:
+            tail_y += 1
+        else:
+            tail_y -= 1
         self.change_current_position([tail_x, tail_y])
 
     def adjust_position_based_on_head(self, head):
+        same_row = self.is_in_same_row_as_head(self, head)
+        same_column = self.is_in_same_column_as_head(self, head)
         if not self.is_touching_head(self, head):
-            self.catch_up_to_head(self, head)
+            if not same_row and not same_column:
+                self.move_diagonally_to_head(self, head)
+            else:
+                if same_row:
+                    self.move_horizontally_to_head(self, head)
+                else:
+                    self.move_vertically_to_head(self, head)
 
 class Head(RopeEnd):
     def adjust_position_in_direction(self, direction):
