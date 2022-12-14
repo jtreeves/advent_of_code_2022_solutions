@@ -15,6 +15,19 @@ class Tail(RopeEnd):
         super().change_current_position(new_position)
         self.all_positions.add(tuple(self.current_position))
 
+    def overlaps_head(self, head):
+        if self.current_position[0] == head.current_position[0] and self.current_position[1] == head.current_position[1]:
+            return True
+        else:
+            return False
+
+    def adjust_position_based_on_head(self, head):
+        tail_x = self.current_position[0]
+        tail_y = self.current_position[1]
+        head_x = head.current_position[0]
+        head_y = head.current_position[1]
+        self.change_current_position([tail_x, tail_y])
+
 class Head(RopeEnd):
     def adjust_position_in_direction(self, direction):
         x = self.current_position[0]
