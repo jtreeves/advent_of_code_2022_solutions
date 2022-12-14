@@ -1,6 +1,6 @@
 import copy
 
-directory_names = ['a', 'b', 'a0', 'a00']
+directory_names = []
 
 def solve_problem():
     data = extract_data_from_file(7)
@@ -91,9 +91,11 @@ def extract_contents_of_directories(lines):
     folders = []
     for i in range(len(directories)-1):
         next_directory_name = directories[i]["NEXT"]
+        unique_next_name = generate_unique_directory_name(next_directory_name)
+        directory_names.append(unique_next_name)
         next_directory_contents = directories[i+1]
         folders.append({
-            next_directory_name: next_directory_contents
+            unique_next_name: next_directory_contents
         })
     trimmed_folders = []
     for folder in folders:
@@ -144,7 +146,9 @@ def convert_directory_array_to_object(directory_array):
                 directory_object[file["name"]] = file["size"]
             else:
                 new_directory = get_directory_name(element)
-                directory_object[new_directory] = {}
+                unique_directory_name = generate_unique_directory_name(new_directory)
+                directory_object[unique_directory_name] = {}
+                directory_names.append(unique_directory_name)
         else:
             next_directory = determine_current_directory_under_analysis(element)
             if next_directory != "..":
@@ -198,9 +202,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-# result = solve_problem()
-# print(result)
-# print(determine_unique_name_for_directory('a'))
-# print(directory_names)
-# print(check_names_for_duplicate('a0000'))
-print(generate_unique_directory_name('a'))
+result = solve_problem()
+print(result)
