@@ -15,7 +15,7 @@ class Tail(RopeEnd):
         super().change_current_position(new_position)
         self.all_positions.add(tuple(self.current_position))
 
-    def touching_head(self, head):
+    def is_touching_head(self, head):
         tail_x = self.current_position[0]
         tail_y = self.current_position[1]
         head_x = head.current_position[0]
@@ -35,12 +35,28 @@ class Tail(RopeEnd):
         else:
             return False
 
-    def adjust_position_based_on_head(self, head):
+    def is_in_same_row_as_head(self, head):
+        tail_x = self.current_position[0]
+        head_x = head.current_position[0]
+        same_row = tail_x == head_x
+        return same_row
+
+    def is_in_same_column_as_head(self, head):
+        tail_y = self.current_position[1]
+        head_y = head.current_position[1]
+        same_column = tail_y == head_y
+        return same_column
+
+    def catch_up_to_head(self, head):
         tail_x = self.current_position[0]
         tail_y = self.current_position[1]
         head_x = head.current_position[0]
         head_y = head.current_position[1]
         self.change_current_position([tail_x, tail_y])
+
+    def adjust_position_based_on_head(self, head):
+        if not self.is_touching_head(self, head):
+            self.catch_up_to_head(self, head)
 
 class Head(RopeEnd):
     def adjust_position_in_direction(self, direction):
