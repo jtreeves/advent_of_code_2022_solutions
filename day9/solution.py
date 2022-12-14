@@ -66,8 +66,8 @@ class Tail(RopeEnd):
     def move_diagonally_to_head(self, head):
         tail_x = self.current_position[0]
         tail_y = self.current_position[1]
-        is_before = self.is_before_head(self, head)
-        is_below = self.is_below_head(self, head)
+        is_before = self.is_before_head(head)
+        is_below = self.is_below_head(head)
         if is_before and is_below:
             tail_x += 1
             tail_y += 1
@@ -85,7 +85,7 @@ class Tail(RopeEnd):
     def move_horizontally_to_head(self, head):
         tail_x = self.current_position[0]
         tail_y = self.current_position[1]
-        is_before = self.is_before_head(self, head)
+        is_before = self.is_before_head(head)
         if is_before:
             tail_x += 1
         else:
@@ -95,7 +95,7 @@ class Tail(RopeEnd):
     def move_vertically_to_head(self, head):
         tail_x = self.current_position[0]
         tail_y = self.current_position[1]
-        is_below = self.is_below_head(self, head)
+        is_below = self.is_below_head(head)
         if is_below:
             tail_y += 1
         else:
@@ -103,16 +103,16 @@ class Tail(RopeEnd):
         self.change_current_position([tail_x, tail_y])
 
     def adjust_position_based_on_head(self, head):
-        same_row = self.is_in_same_row_as_head(self, head)
-        same_column = self.is_in_same_column_as_head(self, head)
-        if not self.is_touching_head(self, head):
+        same_row = self.is_in_same_row_as_head(head)
+        same_column = self.is_in_same_column_as_head(head)
+        if not self.is_touching_head(head):
             if not same_row and not same_column:
-                self.move_diagonally_to_head(self, head)
+                self.move_diagonally_to_head(head)
             else:
                 if same_row:
-                    self.move_horizontally_to_head(self, head)
+                    self.move_horizontally_to_head(head)
                 else:
-                    self.move_vertically_to_head(self, head)
+                    self.move_vertically_to_head(head)
 
 class Head(RopeEnd):
     def adjust_position_in_direction(self, direction):
@@ -130,7 +130,7 @@ class Head(RopeEnd):
 
 class Move:
     def __init__(self, distance, direction):
-        self.distance = distance
+        self.distance = int(distance)
         self.direction = direction
 
 def solve_problem():
@@ -168,15 +168,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-t = Tail()
-print(t.current_position)
-t.change_current_position([5, 7])
-t.change_current_position([2, 3])
-t.change_current_position([1, 1])
-t.change_current_position([7, 7])
-print(t.current_position)
-print(t.all_positions)
-h = RopeEnd()
-print(h.current_position)
-h.change_current_position([4, 5])
-print(h.current_position)
+result = solve_problem()
+print(result)
