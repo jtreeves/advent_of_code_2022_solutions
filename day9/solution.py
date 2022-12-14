@@ -133,6 +133,13 @@ class Move:
         self.distance = distance
         self.direction = direction
 
+def adjust_head_then_tail(move, head, tail):
+    distance = move.distance
+    direction = move.direction
+    for _ in range(distance):
+        head.adjust_position_in_direction(direction)
+        tail.adjust_position_based_on_head(head)
+
 def list_all_moves(instructions):
     lines = instructions.split("\n")
     moves = []
