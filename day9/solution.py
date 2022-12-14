@@ -133,7 +133,11 @@ class Move:
         self.distance = distance
         self.direction = direction
 
-def adjust_head_then_tail(move, head, tail):
+def execute_all_moves(moves, head, tail):
+    for move in moves:
+        adjust_head_then_tail_for_move(move, head, tail)
+
+def adjust_head_then_tail_for_move(move, head, tail):
     distance = move.distance
     direction = move.direction
     for _ in range(distance):
