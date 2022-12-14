@@ -8,6 +8,10 @@ def change_tail_current_position(new_position):
     tail_current_position = new_position
     add_new_tail_position(tail_current_position)
 
+def list_all_moves(instructions):
+    moves = instructions.split("\n")
+    return moves
+
 def extract_data_from_file(day_number):
     file = open(f"day{day_number}/data.txt", "r")
     data = file.read()
