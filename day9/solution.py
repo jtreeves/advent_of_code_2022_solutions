@@ -26,7 +26,7 @@ class Tail(RopeEnd):
         head_y = head.current_position[1]
         overlapping_head = tail_x == head_x and tail_y == head_y
         after_head = tail_x == head_x + 1 and tail_y == head_y
-        before_head = tail_x == head_x - 1 and tail_y == head_y + 1
+        before_head = tail_x == head_x - 1 and tail_y == head_y
         above_head = tail_x == head_x and tail_y == head_y + 1
         under_head = tail_x == head_x and tail_y == head_y - 1
         diagonally_bl_head = tail_x == head_x - 1 and tail_y == head_y - 1
@@ -40,15 +40,15 @@ class Tail(RopeEnd):
             return False
 
     def is_in_same_row_as_head(self, head):
-        tail_x = self.current_position[0]
-        head_x = head.current_position[0]
-        same_row = tail_x == head_x
+        tail_y = self.current_position[1]
+        head_y = head.current_position[1]
+        same_row = tail_y == head_y
         return same_row
 
     def is_in_same_column_as_head(self, head):
-        tail_y = self.current_position[1]
-        head_y = head.current_position[1]
-        same_column = tail_y == head_y
+        tail_x = self.current_position[0]
+        head_x = head.current_position[0]
+        same_column = tail_x == head_x
         return same_column
 
     def is_before_head(self, head):
