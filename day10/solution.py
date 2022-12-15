@@ -2,6 +2,9 @@ def solve_problem():
     data = extract_data_from_file(10)
     moves = list_all_moves(data)
     statuses = determine_register_statuses_at_key_cycles(moves)
+    # print(statuses)
+    all_statuses = fill_in_all_statuses(statuses)
+    print(all_statuses)
     total = sum_key_signal_strengths(statuses)
     return total
 
@@ -90,6 +93,31 @@ def determine_cycles_increment(move):
     else:
         return 2
 
+# def draw_pixels(statuses):
+#     lit = "#"
+#     dark = "."
+#     pixels = ""
+#     for i in range(len(statuses)):
+
+#     return pixels
+
+def fill_in_all_statuses(key_statuses):
+    full_statuses = []
+    for i in range(len(key_statuses)):
+        if key_statuses[i]["cycles"] == 1:
+            full_statuses.append(key_statuses[i])
+        else:
+            if key_statuses[i]["cycles"] == key_statuses[i-1]["cycles"] + 1:
+                full_statuses.append(key_statuses[i])
+            else:
+                intermediary_status = {
+                    "cycles": key_statuses[i-1]["cycles"] + 1,
+                    "register": key_statuses[i-1]["register"]
+                }
+                full_statuses.append(intermediary_status)
+                full_statuses.append(key_statuses[i])
+    return full_statuses
+
 def convert_string_to_screen(data):
     first_line = data[0:40]
     second_line = data[40:80]
@@ -110,7 +138,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-# result = solve_problem()
-# print(result)
-
-print(convert_string_to_screen("##..##..##..##..##..##..##..##..##..##..###...###...###...###...###...###...###.####....####....####....####....####....#####.....#####.....#####.....#####.....######......######......######......###########.......#######.......#######....."))
+result = solve_problem()
+print(result)
