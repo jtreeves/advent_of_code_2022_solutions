@@ -90,6 +90,16 @@ def determine_cycles_increment(move):
     else:
         return 2
 
+def convert_string_to_screen(data):
+    first_line = data[0:40]
+    second_line = data[40:80]
+    third_line = data[80:120]
+    fourth_line = data[120:160]
+    fifth_line = data[160:200]
+    sixth_line = data[200:240]
+    screen = first_line + "\n" + second_line + "\n" + third_line + "\n" + fourth_line + "\n" + fifth_line + "\n" + sixth_line
+    return screen
+
 def list_all_moves(instructions):
     moves = instructions.split("\n")
     return moves
@@ -100,5 +110,7 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-result = solve_problem()
-print(result)
+# result = solve_problem()
+# print(result)
+
+print(convert_string_to_screen("##..##..##..##..##..##..##..##..##..##..###...###...###...###...###...###...###.####....####....####....####....####....#####.....#####.....#####.....#####.....######......######......######......###########.......#######.......#######....."))
