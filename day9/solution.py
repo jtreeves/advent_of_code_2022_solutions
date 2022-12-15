@@ -1,11 +1,11 @@
-class RopeEnd:
+class RopeKno:
     def __init__(self):
         self.current_position = [1, 1]
 
     def change_current_position(self, new_position):
         self.current_position = new_position
 
-class Tail(RopeEnd):
+class Tail(RopeKno):
     def __init__(self):
         super().__init__()
         self.all_positions = set()
@@ -114,7 +114,7 @@ class Tail(RopeEnd):
                 else:
                     self.move_vertically_to_head(head)
 
-class Head(RopeEnd):
+class Head(RopeKno):
     def adjust_position_in_direction(self, direction):
         x = self.current_position[0]
         y = self.current_position[1]
@@ -133,14 +133,28 @@ class Move:
         self.distance = int(distance)
         self.direction = direction
 
-def solve_problem():
+def solve_problem(part):
     data = extract_data_from_file(9)
     moves = list_all_moves(data)
     head = Head()
-    tail = Tail()
-    execute_all_moves(moves, head, tail)
-    total_tail_positions = tail.count_all_positions()
-    return total_tail_positions
+    if part == 1:
+        tail = Tail()
+        execute_all_moves(moves, head, tail)
+        total_tail_positions = tail.count_all_positions()
+        return total_tail_positions
+    else:
+        tail1 = Tail()
+        tail2 = Tail()
+        tail3 = Tail()
+        tail4 = Tail()
+        tail5 = Tail()
+        tail6 = Tail()
+        tail7 = Tail()
+        tail8 = Tail()
+        tail9 = Tail()
+        execute_all_moves_for_multiple_tails(moves, head, tail1, tail2, tail3, tail4, tail5, tail6, tail7, tail8, tail9)
+        total_last_tail_positions = tail9.count_all_positions()
+        return total_last_tail_positions
 
 def execute_all_moves(moves, head, tail):
     for move in moves:
@@ -152,6 +166,25 @@ def adjust_head_then_tail_for_move(move, head, tail):
     for _ in range(distance):
         head.adjust_position_in_direction(direction)
         tail.adjust_position_based_on_head(head)
+
+def execute_all_moves_for_multiple_tails(moves, head, tail1, tail2, tail3, tail4, tail5, tail6, tail7, tail8, tail9):
+    for move in moves:
+        adjust_head_then_multiple_tails_for_move(move, head, tail1, tail2, tail3, tail4, tail5, tail6, tail7, tail8, tail9)
+
+def adjust_head_then_multiple_tails_for_move(move, head, tail1, tail2, tail3, tail4, tail5, tail6, tail7, tail8, tail9):
+    distance = move.distance
+    direction = move.direction
+    for _ in range(distance):
+        head.adjust_position_in_direction(direction)
+        tail1.adjust_position_based_on_head(head)
+        tail2.adjust_position_based_on_head(tail1)
+        tail3.adjust_position_based_on_head(tail2)
+        tail4.adjust_position_based_on_head(tail3)
+        tail5.adjust_position_based_on_head(tail4)
+        tail6.adjust_position_based_on_head(tail5)
+        tail7.adjust_position_based_on_head(tail6)
+        tail8.adjust_position_based_on_head(tail7)
+        tail9.adjust_position_based_on_head(tail8)
 
 def list_all_moves(instructions):
     lines = instructions.split("\n")
@@ -168,5 +201,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-result = solve_problem()
+result = solve_problem(2)
 print(result)
