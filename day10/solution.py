@@ -1,12 +1,15 @@
-def solve_problem():
+def solve_problem(part):
     data = extract_data_from_file(10)
     moves = list_all_moves(data)
     statuses = determine_register_statuses_at_key_cycles(moves)
-    # print(statuses)
     all_statuses = fill_in_all_statuses(statuses)
-    print(all_statuses)
+    pixels = draw_pixels(all_statuses)
+    image = convert_string_to_screen(pixels)
     total = sum_key_signal_strengths(statuses)
-    return total
+    if part == 1:
+        return total
+    else:
+        return image
 
 def sum_key_signal_strengths(statuses):
     pairs = find_main_register_cycle_pairs(statuses)
@@ -93,13 +96,43 @@ def determine_cycles_increment(move):
     else:
         return 2
 
-# def draw_pixels(statuses):
-#     lit = "#"
-#     dark = "."
-#     pixels = ""
-#     for i in range(len(statuses)):
-
-#     return pixels
+def draw_pixels(statuses):
+    lit = "#"
+    dark = "."
+    pixels = ""
+    for i in range(240):
+        current_register = statuses[i]["register"]
+        if i < 40:
+            if i in range(current_register - 1, current_register + 2):
+                pixels += lit
+            else:
+                pixels += dark
+        elif i < 80:
+            if i - 40 in range(current_register - 1, current_register + 2):
+                pixels += lit
+            else:
+                pixels += dark
+        elif i < 120:
+            if i - 80 in range(current_register - 1, current_register + 2):
+                pixels += lit
+            else:
+                pixels += dark
+        elif i < 160:
+            if i - 120 in range(current_register - 1, current_register + 2):
+                pixels += lit
+            else:
+                pixels += dark
+        elif i < 200:
+            if i - 160 in range(current_register - 1, current_register + 2):
+                pixels += lit
+            else:
+                pixels += dark
+        elif i < 240:
+            if i - 200 in range(current_register - 1, current_register + 2):
+                pixels += lit
+            else:
+                pixels += dark
+    return pixels
 
 def fill_in_all_statuses(key_statuses):
     full_statuses = []
@@ -133,5 +166,5 @@ def extract_data_from_file(day_number):
     file.close()
     return data
 
-result = solve_problem()
+result = solve_problem(2)
 print(result)
