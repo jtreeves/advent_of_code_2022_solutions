@@ -104,18 +104,13 @@ def determine_cycles_increment(move):
 def fill_in_all_statuses(key_statuses):
     full_statuses = []
     for i in range(len(key_statuses)):
-        if key_statuses[i]["cycles"] == 1:
-            full_statuses.append(key_statuses[i])
-        else:
-            if key_statuses[i]["cycles"] == key_statuses[i-1]["cycles"] + 1:
-                full_statuses.append(key_statuses[i])
-            else:
-                intermediary_status = {
-                    "cycles": key_statuses[i-1]["cycles"] + 1,
-                    "register": key_statuses[i-1]["register"]
-                }
-                full_statuses.append(intermediary_status)
-                full_statuses.append(key_statuses[i])
+        if key_statuses[i]["cycles"] != 1 and key_statuses[i]["cycles"] != key_statuses[i-1]["cycles"] + 1:
+            intermediary_status = {
+                "cycles": key_statuses[i-1]["cycles"] + 1,
+                "register": key_statuses[i-1]["register"]
+            }
+            full_statuses.append(intermediary_status)
+        full_statuses.append(key_statuses[i])
     return full_statuses
 
 def convert_string_to_screen(data):
