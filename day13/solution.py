@@ -5,6 +5,30 @@ def solve_problem():
     pairs = list_all_formatted_packet_pairs(data)
     return pairs
 
+def check_if_entire_pair_in_correct_order(left, right):
+    return
+
+def check_if_elements_in_correct_order(left, right):
+    left_type = type(left)
+    right_type = type(right)
+    return
+
+def check_if_integers_in_correct_order(left, right):
+    if right > left:
+        return False
+    else:
+        return True
+
+def check_if_lists_in_correct_order(left, right):
+    if len(right) < len(left):
+        return False
+    else:
+        for i in range(len(left)):
+            correct_integers = check_if_integers_in_correct_order(left[i], right[i])
+            if not correct_integers:
+                return False
+        return True
+
 def list_all_formatted_packet_pairs(data):
     raw_pairs = list_all_raw_pairs(data)
     all_pairs = []
