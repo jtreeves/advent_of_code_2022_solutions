@@ -5,6 +5,14 @@ def solve_problem():
     pairs = list_all_formatted_packet_pairs(data)
     return pairs
 
+def list_all_indices_of_pairs_in_correct_order(pairs):
+    indices = []
+    for pair in pairs:
+        correct_order = check_if_lists_in_correct_order(pair["left"], pair["right"])
+        if correct_order:
+            indices.append(pair["index"])
+    return indices
+
 def check_if_elements_in_correct_order(left, right):
     left_is_int = isinstance(left, int)
     right_is_int = isinstance(right, int)
