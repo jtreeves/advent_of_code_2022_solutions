@@ -5,9 +5,6 @@ def solve_problem():
     pairs = list_all_formatted_packet_pairs(data)
     return pairs
 
-def check_if_entire_pair_in_correct_order(left, right):
-    return
-
 def check_if_elements_in_correct_order(left, right):
     left_is_int = isinstance(left, int)
     right_is_int = isinstance(right, int)
@@ -39,18 +36,19 @@ def check_if_lists_in_correct_order(left, right):
 def list_all_formatted_packet_pairs(data):
     raw_pairs = list_all_raw_pairs(data)
     all_pairs = []
-    for pair in raw_pairs:
-        formatted_pair = create_formatted_packet_pair(pair)
+    for i in range(len(raw_pairs)):
+        formatted_pair = create_formatted_packet_pair(raw_pairs[i], i + 1)
         all_pairs.append(formatted_pair)
     return all_pairs
 
-def create_formatted_packet_pair(original_pair):
+def create_formatted_packet_pair(original_pair, index):
     raw_packets = separate_raw_packets(original_pair)
     left = convert_string_to_list(raw_packets[0])
     right = convert_string_to_list(raw_packets[1])
     formatted_pair = {
         "left": left,
-        "right": right
+        "right": right,
+        "index": index
     }
     return formatted_pair
 
