@@ -9,9 +9,16 @@ def check_if_entire_pair_in_correct_order(left, right):
     return
 
 def check_if_elements_in_correct_order(left, right):
-    left_type = type(left)
-    right_type = type(right)
-    return
+    left_is_int = isinstance(left, int)
+    right_is_int = isinstance(right, int)
+    if left_is_int and right_is_int:
+        return check_if_integers_in_correct_order(left, right)
+    elif not left_is_int and not right_is_int:
+        return check_if_lists_in_correct_order(left, right)
+    elif left_is_int and not right_is_int:
+        return check_if_lists_in_correct_order([left], right)
+    elif not left_is_int and right_is_int:
+        return check_if_lists_in_correct_order(left, [right])
 
 def check_if_integers_in_correct_order(left, right):
     if right > left:
