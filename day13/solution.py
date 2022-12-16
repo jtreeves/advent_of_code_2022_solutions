@@ -3,7 +3,8 @@ import json
 def solve_problem():
     data = extract_data_from_file(13)
     pairs = list_all_formatted_packet_pairs(data)
-    return pairs
+    total = sum_all_indices_of_pairs_in_correct_order(pairs)
+    return total
 
 def sum_all_indices_of_pairs_in_correct_order(pairs):
     indices = list_all_indices_of_pairs_in_correct_order(pairs)
