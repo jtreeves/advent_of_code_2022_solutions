@@ -1,5 +1,17 @@
 import json
 
+def compare(l, r):
+    l = l if isinstance(l, list) else [l]
+    r = r if isinstance(r, list) else [r]
+    for l2, r2 in zip(l, r):
+        if isinstance(l2, list) or isinstance(r2, list):
+            rec = compare(l2, r2)
+        else:
+            rec = r2 - l2
+        if rec != 0:
+            return rec
+    return len(r) - len(l)
+
 def solve_problem():
     data = extract_data_from_file(13)
     pairs = list_all_formatted_packet_pairs(data)
@@ -17,8 +29,8 @@ def sum_all_indices_of_pairs_in_correct_order(pairs):
 def list_all_indices_of_pairs_in_correct_order(pairs):
     indices = []
     for pair in pairs:
-        correct_order = check_if_lists_in_correct_order(pair["left"], pair["right"])
-        if correct_order:
+        correct_order = compare(pair["left"], pair["right"])
+        if correct_order > 0:
             indices.append(pair["index"])
     return indices
 
@@ -95,3 +107,5 @@ def extract_data_from_file(day_number):
 
 result = solve_problem()
 print(result)
+
+# RECEIVED HELP FROM THIS ANSWER: https://www.reddit.com/r/adventofcode/comments/zkmyh4/comment/j0cgmkb/?utm_source=reddit&utm_medium=web2x&context=3
