@@ -30,9 +30,15 @@ def check_if_elements_in_correct_order(left, right):
     elif not left_is_int and not right_is_int:
         return check_if_lists_in_correct_order(left, right)
     elif left_is_int and not right_is_int:
-        return check_if_integers_in_correct_order(left, right[0])
+        if len(right) == 0:
+            return False
+        else:
+            return check_if_integers_in_correct_order(left, right[0])
     elif not left_is_int and right_is_int:
-        return check_if_integers_in_correct_order(left[0], right)
+        if len(left) == 0:
+            return True
+        else:
+            return check_if_integers_in_correct_order(left[0], right)
 
 def check_if_integers_in_correct_order(left, right):
     if right < left:
@@ -89,5 +95,3 @@ def extract_data_from_file(day_number):
 
 result = solve_problem()
 print(result)
-
-# print(check_if_lists_in_correct_order([[1],[2,3,4]], [[1],4]))
