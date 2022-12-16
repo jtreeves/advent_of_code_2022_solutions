@@ -44,8 +44,8 @@ def check_if_lists_in_correct_order(left, right):
         return False
     else:
         for i in range(len(left)):
-            correct_integers = check_if_integers_in_correct_order(left[i], right[i])
-            if not correct_integers:
+            correct_elements = check_if_elements_in_correct_order(left[i], right[i])
+            if not correct_elements:
                 return False
         return True
 
