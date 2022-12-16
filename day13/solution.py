@@ -8,6 +8,7 @@ def solve_problem():
 
 def sum_all_indices_of_pairs_in_correct_order(pairs):
     indices = list_all_indices_of_pairs_in_correct_order(pairs)
+    print(indices)
     total = 0
     for index in indices:
         total += index
@@ -34,7 +35,7 @@ def check_if_elements_in_correct_order(left, right):
         return check_if_lists_in_correct_order(left, [right])
 
 def check_if_integers_in_correct_order(left, right):
-    if right > left:
+    if right < left:
         return False
     else:
         return True
@@ -88,3 +89,5 @@ def extract_data_from_file(day_number):
 
 result = solve_problem()
 print(result)
+
+# print(check_if_lists_in_correct_order([1,1,3,1,1], [1,1,5,1,1]))
