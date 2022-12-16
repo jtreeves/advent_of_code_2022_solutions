@@ -33,12 +33,12 @@ def check_if_elements_in_correct_order(left, right):
         if len(right) == 0:
             return False
         else:
-            return check_if_integers_in_correct_order(left, right[0])
+            return check_if_elements_in_correct_order(left, right[0])
     elif not left_is_int and right_is_int:
         if len(left) == 0:
             return True
         else:
-            return check_if_integers_in_correct_order(left[0], right)
+            return check_if_elements_in_correct_order(left[0], right)
 
 def check_if_integers_in_correct_order(left, right):
     if right < left:
