@@ -5,6 +5,13 @@ def solve_problem():
     pairs = list_all_formatted_packet_pairs(data)
     return pairs
 
+def sum_all_indices_of_pairs_in_correct_order(pairs):
+    indices = list_all_indices_of_pairs_in_correct_order(pairs)
+    total = 0
+    for index in indices:
+        total += index
+    return total
+
 def list_all_indices_of_pairs_in_correct_order(pairs):
     indices = []
     for pair in pairs:
