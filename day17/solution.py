@@ -153,17 +153,17 @@ class Rock:
             self.bottom_border = self.shape[:2]
 
     def blown_left(self, other_points):
-        if not self.touching_left_wall() and not self.touching_rock_or_floor(other_points):
+        if not self.touching_left_wall() and not self.touching_rock_to_left(other_points):
             for point in self.shape:
                 point.move_left()
 
     def blown_right(self, other_points):
-        if not self.touching_right_wall() and not self.touching_rock_or_floor(other_points):
+        if not self.touching_right_wall() and not self.touching_rock_to_right(other_points):
             for point in self.shape:
                 point.move_right()
 
-    def fall_down(self, other_points):
-        if not self.touching_rock_or_floor(other_points):
+    def fall_down(self, floor):
+        if not self.touching_floor(floor):
             for point in self.shape:
                 point.move_down()
 
@@ -179,11 +179,25 @@ class Rock:
                 return True
         return False
 
-    def touching_rock_or_floor(self, other_points):
-        for rock_point in self.shape:
+    def touching_rock_to_left(self, other_points):
+        for point in self.left_border:
             for other_point in other_points:
-                if rock_point.x == other_point.x and rock_point.y == other_point.y:
+                if point.touching_point_on_left(other_point):
                     return True
+        return False
+
+    def touching_rock_to_right(self, other_points):
+        for point in self.right_border:
+            for other_point in other_points:
+                if point.touching_point_on_right(other_point):
+                    return True
+        return False
+
+    def touching_floor(self, floor):
+        for point in self.bottom_border:
+            corresponding_point = Coordinate(point.x, floor[point.x])
+            if point.touching_point_on_bottom(corresponding_point):
+                return True
         return False
 
 def solve_problem():
