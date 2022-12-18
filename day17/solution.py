@@ -49,15 +49,10 @@ class Chamber:
     
     def drop_new_rock(self):
         new_rock = Rock(self.next_rock_type, self.height)
-        while not new_rock.touching_rock_or_floor(self.spaces):
+        while not new_rock.touching_floor(self.floor):
             self.increment_pattern(new_rock)
             new_rock.fall_down(self.spaces)
-            for rock in new_rock.left_border:
-                print(f"LEFT ROCK: [{rock.x}, {rock.y}]")
-            for rock in new_rock.right_border:
-                print(f"RIGHT ROCK: [{rock.x}, {rock.y}]")
-            for rock in new_rock.bottom_border:
-                print(f"BOTTOM ROCK: [{rock.x}, {rock.y}]")
+        self.increment_pattern(new_rock)
         for point in new_rock.shape:
             self.spaces.append(point)
         self.increment_new_rock_type()
