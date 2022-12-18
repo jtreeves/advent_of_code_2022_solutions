@@ -18,6 +18,8 @@ class Chamber:
             pattern += pattern
         self.jet_pattern = pattern
         self.spaces = set()
+        for i in range(7):
+            self.spaces.add(Coordinate(0, i + 1))
         self.next_rock_type = 1
         self.width = 7
         self.height = 0
@@ -65,17 +67,20 @@ class Rock:
                 Coordinate(4, height + 4),
             ]
 
-    def blown_left(self):
-        for point in self.shape:
-            point.move_left()
+    def blown_left(self, other_points):
+        if not self.touching_left_wall() and not self.touching_rock_or_floor(other_points):
+            for point in self.shape:
+                point.move_left()
 
-    def blown_right(self):
-        for point in self.shape:
-            point.move_right()
+    def blown_right(self, other_points):
+        if not self.touching_right_wall() and not self.touching_rock_or_floor(other_points):
+            for point in self.shape:
+                point.move_right()
 
-    def fall_down(self):
-        for point in self.shape:
-            point.move_down()
+    def fall_down(self, other_points):
+        if not self.touching_rock_or_floor(other_points):
+            for point in self.shape:
+                point.move_down()
 
     def touching_left_wall(self):
         for point in self.shape:
@@ -87,6 +92,13 @@ class Rock:
         for point in self.shape:
             if point.x == 7:
                 return True
+        return False
+
+    def touching_rock_or_floor(self, other_points):
+        for rock_point in self.shape:
+            for other_point in other_points:
+                if rock_point.x == other_point.x and rock_point.y == other_point.y:
+                    return True
         return False
 
 def solve_problem():
