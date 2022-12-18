@@ -6,10 +6,11 @@ def solve_problem():
     pairs = list_all_formatted_packet_pairs(data)
     packets = list_all_packets_together_with_divider_packets(pairs)
     ordered_packets = put_packets_in_correct_order(packets)
+    indices = find_indices_of_divider_packets(ordered_packets)
     total = sum_all_indices_of_pairs_in_correct_order(pairs)
     return {
         "part1": total,
-        "part2": ordered_packets
+        "part2": indices
     }
 
 def sum_all_indices_of_pairs_in_correct_order(pairs):
@@ -25,6 +26,13 @@ def list_all_indices_of_pairs_in_correct_order(pairs):
         difference = calculate_difference_between_packets(pair["left"], pair["right"])
         if difference > 0:
             indices.append(pair["index"])
+    return indices
+
+def find_indices_of_divider_packets(packets):
+    indices = []
+    for i in range(len(packets)):
+        if packets[i] == [[2]] or packets[i] == [[6]]:
+            indices.append(i + 1)
     return indices
 
 def put_packets_in_correct_order(packets):
