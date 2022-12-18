@@ -77,6 +77,18 @@ class Rock:
         for point in self.shape:
             point.move_down()
 
+    def touching_left_wall(self):
+        for point in self.shape:
+            if point.x == 1:
+                return True
+        return False
+
+    def touching_right_wall(self):
+        for point in self.shape:
+            if point.x == 7:
+                return True
+        return False
+
 def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
