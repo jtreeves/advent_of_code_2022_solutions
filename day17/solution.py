@@ -23,7 +23,6 @@ class Chamber:
         self.next_rock_type = 1
         self.current_iteration = 0
         self.next_jet_blow = self.jet_pattern[self.current_iteration]
-        self.width = 7
         self.height = 0
     
     def drop_new_rock(self):
@@ -33,10 +32,7 @@ class Chamber:
             new_rock.fall_down(self.spaces)
         for point in new_rock.shape:
             self.spaces.append(point)
-        if self.next_rock_type < 5:
-            self.next_rock_type += 1
-        else:
-            self.next_rock_type = 1
+        self.increment_new_rock_type()
 
     def blow_rock_left(self, rock):
         rock.blown_left(self.spaces)
@@ -51,6 +47,12 @@ class Chamber:
             self.blow_rock_right(rock)
         self.current_iteration += 1
         self.next_jet_blow = self.jet_pattern[self.current_iteration]
+
+    def increment_new_rock_type(self):
+        if self.next_rock_type < 5:
+            self.next_rock_type += 1
+        else:
+            self.next_rock_type = 1
 
 class Rock:
     def __init__(self, type, height):
@@ -123,7 +125,7 @@ class Rock:
 def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
-    for i in range(10):
+    for i in range(3):
         chamber.drop_new_rock()
     for space in chamber.spaces:
         print([space.x, space.y])
