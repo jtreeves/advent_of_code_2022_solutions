@@ -77,7 +77,7 @@ class Rock:
         elif type == 4:
             self.shape = []
             for i in range(4):
-                self.shape.append(3, height + i + 3)
+                self.shape.append(Coordinate(3, height + i + 3))
         else:
             self.shape = [
                 Coordinate(3, height + 3),
@@ -123,9 +123,10 @@ class Rock:
 def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
+    for i in range(10):
+        chamber.drop_new_rock()
     for space in chamber.spaces:
         print([space.x, space.y])
-    chamber.drop_new_rock()
     return
 
 def extract_data_from_file(day_number):
