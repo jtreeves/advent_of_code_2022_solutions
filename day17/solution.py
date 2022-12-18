@@ -17,10 +17,19 @@ class Chamber:
         while len(pattern) < 2022:
             pattern += pattern
         self.jet_pattern = pattern
-        self.spaces = []
-        self.next_rock_type = 0
-        self.height = 0
+        self.spaces = set()
+        self.next_rock_type = 1
         self.width = 7
+        self.height = 0
+    
+    def drop_new_rock(self):
+        new_rock = Rock(self.next_rock_type, self.height)
+        for point in new_rock.shape:
+            self.spaces.add(point)
+        if self.next_rock_type < 5:
+            self.next_rock_type += 1
+        else:
+            self.next_rock_type = 1
 
 class Rock:
     def __init__(self, type, height):
@@ -71,7 +80,11 @@ class Rock:
 def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
-    return chamber.jet_pattern
+    chamber.drop_new_rock()
+    for space in chamber.spaces:
+        print([space.x, space.y])
+    print(f"NEXT ROCK TYPE: {chamber.next_rock_type}")
+    return
 
 def extract_data_from_file(day_number):
     file = open(f"day{day_number}/data.txt", "r")
