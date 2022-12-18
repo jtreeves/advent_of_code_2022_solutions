@@ -17,9 +17,9 @@ class Chamber:
         while len(pattern) < 2022:
             pattern += pattern
         self.jet_pattern = pattern
-        self.spaces = set()
+        self.spaces = []
         for i in range(7):
-            self.spaces.add(Coordinate(0, i + 1))
+            self.spaces.append(Coordinate(i + 1, 0))
         self.next_rock_type = 1
         self.current_iteration = 0
         self.next_jet_blow = self.jet_pattern[self.current_iteration]
@@ -32,7 +32,7 @@ class Chamber:
             self.increment_pattern(new_rock)
             new_rock.fall_down(self.spaces)
         for point in new_rock.shape:
-            self.spaces.add(point)
+            self.spaces.append(point)
         if self.next_rock_type < 5:
             self.next_rock_type += 1
         else:
@@ -57,7 +57,7 @@ class Rock:
         if type == 1:
             self.shape = []
             for i in range(4):
-                self.shape.append(Coordinate(i + 3, height + 3))
+                self.shape.append(Coordinate(i + 3, height + 4))
         elif type == 2:
             self.shape = [
                 Coordinate(4, height + 3),
@@ -123,10 +123,9 @@ class Rock:
 def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
-    chamber.drop_new_rock()
     for space in chamber.spaces:
         print([space.x, space.y])
-    print(f"NEXT ROCK TYPE: {chamber.next_rock_type}")
+    chamber.drop_new_rock()
     return
 
 def extract_data_from_file(day_number):
