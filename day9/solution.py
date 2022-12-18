@@ -1,11 +1,11 @@
-class RopeKno:
+class RopeKnot:
     def __init__(self):
         self.current_position = [1, 1]
 
     def change_current_position(self, new_position):
         self.current_position = new_position
 
-class Tail(RopeKno):
+class Tail(RopeKnot):
     def __init__(self):
         super().__init__()
         self.all_positions = set()
@@ -114,7 +114,7 @@ class Tail(RopeKno):
                 else:
                     self.move_vertically_to_head(head)
 
-class Head(RopeKno):
+class Head(RopeKnot):
     def adjust_position_in_direction(self, direction):
         x = self.current_position[0]
         y = self.current_position[1]
