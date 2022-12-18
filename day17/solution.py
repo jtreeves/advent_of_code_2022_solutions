@@ -12,6 +12,24 @@ class Coordinate:
     def move_down(self):
         self.y = self.y - 1
 
+    def touching_point_on_left(self, other):
+        if self.x - 1 == other.x and self.y == other.y:
+            return True
+        else:
+            return False
+
+    def touching_point_on_right(self, other):
+        if self.x + 1 == other.x and self.y == other.y:
+            return True
+        else:
+            return False
+
+    def touching_point_on_bottom(self, other):
+        if self.x == other.x and self.y - 1 == other.y:
+            return True
+        else:
+            return False
+
 class Chamber:
     def __init__(self, pattern):
         while len(pattern) < 2022:
