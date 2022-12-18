@@ -56,10 +56,22 @@ class Rock:
                 Coordinate(4, height + 4),
             ]
 
+    def blown_left(self):
+        for point in self.shape:
+            point.move_left()
+
+    def blown_right(self):
+        for point in self.shape:
+            point.move_right()
+
+    def fall_down(self):
+        for point in self.shape:
+            point.move_down()
+
 def solve_problem():
     data = extract_data_from_file(17)
-    chamber = Chamber()
-    return data
+    chamber = Chamber(data)
+    return chamber.jet_pattern
 
 def extract_data_from_file(day_number):
     file = open(f"day{day_number}/data.txt", "r")
