@@ -7,10 +7,11 @@ def solve_problem():
     packets = list_all_packets_together_with_divider_packets(pairs)
     ordered_packets = put_packets_in_correct_order(packets)
     indices = find_indices_of_divider_packets(ordered_packets)
+    key = calculate_decoder_key(indices)
     total = sum_all_indices_of_pairs_in_correct_order(pairs)
     return {
         "part1": total,
-        "part2": indices
+        "part2": key
     }
 
 def sum_all_indices_of_pairs_in_correct_order(pairs):
@@ -27,6 +28,12 @@ def list_all_indices_of_pairs_in_correct_order(pairs):
         if difference > 0:
             indices.append(pair["index"])
     return indices
+
+def calculate_decoder_key(indices):
+    product = 1
+    for index in indices:
+        product *= index
+    return product
 
 def find_indices_of_divider_packets(packets):
     indices = []
