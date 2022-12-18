@@ -3,12 +3,15 @@ import json
 def solve_problem():
     data = extract_data_from_file(13)
     pairs = list_all_formatted_packet_pairs(data)
+    packets = list_all_packets_together_with_divider_packets(pairs)
     total = sum_all_indices_of_pairs_in_correct_order(pairs)
-    return total
+    return {
+        "part1": total,
+        "part2": packets
+    }
 
 def sum_all_indices_of_pairs_in_correct_order(pairs):
     indices = list_all_indices_of_pairs_in_correct_order(pairs)
-    print(indices)
     total = 0
     for index in indices:
         total += index
@@ -21,7 +24,7 @@ def list_all_indices_of_pairs_in_correct_order(pairs):
         if difference > 0:
             indices.append(pair["index"])
     return indices
-    
+
 def calculate_difference_between_packets(left_packet, right_packet):
     left = left_packet if isinstance(left_packet, list) else [left_packet]
     right = right_packet if isinstance(right_packet, list) else [right_packet]
@@ -33,6 +36,17 @@ def calculate_difference_between_packets(left_packet, right_packet):
         if difference != 0:
             return difference
     return len(right) - len(left)
+
+def list_all_packets_together_with_divider_packets(pairs):
+    all_packets = []
+    for pair in pairs:
+        all_packets.append(pair["left"])
+        all_packets.append(pair["right"])
+    first_divider_packet = [[2]]
+    second_divider_packet = [[6]]
+    all_packets.append(first_divider_packet)
+    all_packets.append(second_divider_packet)
+    return all_packets
 
 def list_all_formatted_packet_pairs(data):
     raw_pairs = list_all_raw_pairs(data)
