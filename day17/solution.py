@@ -9,14 +9,18 @@ class Coordinate:
     def move_right(self):
         self.x = self.x + 1
     
-    def fall_down(self):
+    def move_down(self):
         self.y = self.y - 1
 
 class Chamber:
-    def __init__(self):
-        self.width = 7
-        self.height = 0
+    def __init__(self, pattern):
+        while len(pattern) < 2022:
+            pattern += pattern
+        self.jet_pattern = pattern
         self.spaces = []
+        self.next_rock_type = 0
+        self.height = 0
+        self.width = 7
 
 class Rock:
     def __init__(self, type, height):
@@ -51,7 +55,6 @@ class Rock:
                 Coordinate(3, height + 4),
                 Coordinate(4, height + 4),
             ]
-
 
 def solve_problem():
     data = extract_data_from_file(17)
