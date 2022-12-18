@@ -1,17 +1,5 @@
 import json
 
-def calculate_difference_between_packets(left_packet, right_packet):
-    left = left_packet if isinstance(left_packet, list) else [left_packet]
-    right = right_packet if isinstance(right_packet, list) else [right_packet]
-    for l, r in zip(left, right):
-        if isinstance(l, list) or isinstance(r, list):
-            difference = calculate_difference_between_packets(l, r)
-        else:
-            difference = r - l
-        if difference != 0:
-            return difference
-    return len(right) - len(left)
-
 def solve_problem():
     data = extract_data_from_file(13)
     pairs = list_all_formatted_packet_pairs(data)
@@ -33,40 +21,18 @@ def list_all_indices_of_pairs_in_correct_order(pairs):
         if difference > 0:
             indices.append(pair["index"])
     return indices
-
-def check_if_elements_in_correct_order(left, right):
-    left_is_int = isinstance(left, int)
-    right_is_int = isinstance(right, int)
-    if left_is_int and right_is_int:
-        return check_if_integers_in_correct_order(left, right)
-    elif not left_is_int and not right_is_int:
-        return check_if_lists_in_correct_order(left, right)
-    elif left_is_int and not right_is_int:
-        if len(right) == 0:
-            return False
+    
+def calculate_difference_between_packets(left_packet, right_packet):
+    left = left_packet if isinstance(left_packet, list) else [left_packet]
+    right = right_packet if isinstance(right_packet, list) else [right_packet]
+    for l, r in zip(left, right):
+        if isinstance(l, list) or isinstance(r, list):
+            difference = calculate_difference_between_packets(l, r)
         else:
-            return check_if_elements_in_correct_order(left, right[0])
-    elif not left_is_int and right_is_int:
-        if len(left) == 0:
-            return True
-        else:
-            return check_if_elements_in_correct_order(left[0], right)
-
-def check_if_integers_in_correct_order(left, right):
-    if right < left:
-        return False
-    else:
-        return True
-
-def check_if_lists_in_correct_order(left, right):
-    if len(right) < len(left):
-        return False
-    else:
-        for i in range(len(left)):
-            correct_elements = check_if_elements_in_correct_order(left[i], right[i])
-            if not correct_elements:
-                return False
-        return True
+            difference = r - l
+        if difference != 0:
+            return difference
+    return len(right) - len(left)
 
 def list_all_formatted_packet_pairs(data):
     raw_pairs = list_all_raw_pairs(data)
