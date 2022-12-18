@@ -57,6 +57,8 @@ class Chamber:
             self.increment_pattern(new_rock)
             new_rock.fall_down(self.floor)
         self.increment_pattern(new_rock)
+        if not new_rock.touching_floor(self.floor):
+            new_rock.fall_down(self.floor)
         for point in new_rock.shape:
             self.spaces.append(point)
         self.update_height(new_rock)
