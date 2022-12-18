@@ -2,6 +2,15 @@ class Coordinate:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+    
+    def move_left(self):
+        self.x = self.x - 1
+    
+    def move_right(self):
+        self.x = self.x + 1
+    
+    def fall_down(self):
+        self.y = self.y - 1
 
 class Chamber:
     def __init__(self):
@@ -43,8 +52,10 @@ class Rock:
                 Coordinate(4, height + 4),
             ]
 
+
 def solve_problem():
     data = extract_data_from_file(17)
+    chamber = Chamber()
     return data
 
 def extract_data_from_file(day_number):
