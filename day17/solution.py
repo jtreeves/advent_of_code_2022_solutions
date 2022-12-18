@@ -28,6 +28,9 @@ class Chamber:
     
     def drop_new_rock(self):
         new_rock = Rock(self.next_rock_type, self.height)
+        while not new_rock.touching_rock_or_floor(self.spaces):
+            self.increment_pattern(new_rock)
+            new_rock.fall_down(self.spaces)
         for point in new_rock.shape:
             self.spaces.add(point)
         if self.next_rock_type < 5:
