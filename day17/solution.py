@@ -48,7 +48,11 @@ class Chamber:
             self.floor[i + 1] = 0
     
     def drop_new_rock(self):
+        print(f"CAVERN HEIGHT: {self.height}")
         new_rock = Rock(self.next_rock_type, self.height)
+        print("NEW ROCK AT TOP")
+        for point in new_rock.shape:
+            print(f"[{point.x}, {point.y}]")
         while not new_rock.touching_floor(self.floor):
             self.increment_pattern(new_rock)
             new_rock.fall_down(self.floor)
@@ -100,11 +104,11 @@ class Rock:
             self.bottom_border = self.shape
         elif type == 2:
             self.shape = [
-                Coordinate(4, height + 3),
-                Coordinate(3, height + 4),
                 Coordinate(4, height + 4),
-                Coordinate(5, height + 4),
+                Coordinate(3, height + 5),
                 Coordinate(4, height + 5),
+                Coordinate(5, height + 5),
+                Coordinate(4, height + 6),
             ]
             self.left_border = [
                 self.shape[0],
@@ -123,11 +127,11 @@ class Rock:
             ]
         elif type == 3:
             self.shape = [
-                Coordinate(3, height + 3),
-                Coordinate(4, height + 3),
-                Coordinate(5, height + 3),
+                Coordinate(3, height + 4),
+                Coordinate(4, height + 4),
                 Coordinate(5, height + 4),
                 Coordinate(5, height + 5),
+                Coordinate(5, height + 6),
             ]
             self.left_border = [self.shape[0]]
             self.right_border = self.shape[2:]
@@ -135,16 +139,16 @@ class Rock:
         elif type == 4:
             self.shape = []
             for i in range(4):
-                self.shape.append(Coordinate(3, height + i + 3))
+                self.shape.append(Coordinate(3, height + i + 4))
             self.left_border = self.shape
             self.right_border = self.shape
             self.bottom_border = [self.shape[0]]
         else:
             self.shape = [
-                Coordinate(3, height + 3),
-                Coordinate(4, height + 3),
                 Coordinate(3, height + 4),
                 Coordinate(4, height + 4),
+                Coordinate(3, height + 5),
+                Coordinate(4, height + 5),
             ]
             self.left_border = [
                 self.shape[0],
@@ -207,11 +211,11 @@ class Rock:
 def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
-    print(chamber.floor)
     for _ in range(3):
         chamber.drop_new_rock()
     for space in chamber.spaces:
         print([space.x, space.y])
+    print(chamber.floor)
     return
 
 def extract_data_from_file(day_number):
