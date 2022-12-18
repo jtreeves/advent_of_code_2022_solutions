@@ -55,6 +55,8 @@ class Chamber:
         self.increment_pattern(new_rock)
         for point in new_rock.shape:
             self.spaces.append(point)
+        self.update_height(new_rock)
+        self.update_floor(new_rock)
         self.increment_new_rock_type()
 
     def blow_rock_left(self, rock):
@@ -77,8 +79,15 @@ class Chamber:
         else:
             self.next_rock_type = 1
     
-    def increment_height(self):
-        return
+    def update_height(self, rock):
+        for point in rock.shape:
+            if point.y > self.height:
+                self.height = point.y
+    
+    def update_floor(self, rock):
+        for point in rock.shape:
+            if point.y > self.floor[point.x]:
+                self.floor[point.x] = point.y
 
 class Rock:
     def __init__(self, type, height):
