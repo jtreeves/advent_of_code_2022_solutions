@@ -1,13 +1,15 @@
 import json
+from functools import cmp_to_key
 
 def solve_problem():
     data = extract_data_from_file(13)
     pairs = list_all_formatted_packet_pairs(data)
     packets = list_all_packets_together_with_divider_packets(pairs)
+    ordered_packets = put_packets_in_correct_order(packets)
     total = sum_all_indices_of_pairs_in_correct_order(pairs)
     return {
         "part1": total,
-        "part2": packets
+        "part2": ordered_packets
     }
 
 def sum_all_indices_of_pairs_in_correct_order(pairs):
@@ -24,6 +26,11 @@ def list_all_indices_of_pairs_in_correct_order(pairs):
         if difference > 0:
             indices.append(pair["index"])
     return indices
+
+def put_packets_in_correct_order(packets):
+    ordered_packets = sorted(packets, key=cmp_to_key(calculate_difference_between_packets))
+    ordered_packets.reverse()
+    return ordered_packets
 
 def calculate_difference_between_packets(left_packet, right_packet):
     left = left_packet if isinstance(left_packet, list) else [left_packet]
