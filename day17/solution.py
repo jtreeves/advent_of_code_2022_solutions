@@ -21,6 +21,8 @@ class Chamber:
         for i in range(7):
             self.spaces.add(Coordinate(0, i + 1))
         self.next_rock_type = 1
+        self.current_iteration = 0
+        self.next_jet_blow = self.jet_pattern[self.current_iteration]
         self.width = 7
         self.height = 0
     
@@ -32,6 +34,20 @@ class Chamber:
             self.next_rock_type += 1
         else:
             self.next_rock_type = 1
+
+    def blow_rock_left(self, rock):
+        rock.blown_left(self.spaces)
+
+    def blow_rock_right(self, rock):
+        rock.blown_right(self.spaces)
+    
+    def increment_pattern(self, rock):
+        if self.next_jet_blow == "<":
+            self.blow_rock_left(rock)
+        elif self.next_jet_blow == ">":
+            self.blow_rock_right(rock)
+        self.current_iteration += 1
+        self.next_jet_blow = self.jet_pattern[self.current_iteration]
 
 class Rock:
     def __init__(self, type, height):
