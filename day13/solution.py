@@ -1,16 +1,16 @@
 import json
 
-def compare(l, r):
-    l = l if isinstance(l, list) else [l]
-    r = r if isinstance(r, list) else [r]
-    for l2, r2 in zip(l, r):
-        if isinstance(l2, list) or isinstance(r2, list):
-            rec = compare(l2, r2)
+def calculate_difference_between_packets(left_packet, right_packet):
+    left = left_packet if isinstance(left_packet, list) else [left_packet]
+    right = right_packet if isinstance(right_packet, list) else [right_packet]
+    for l, r in zip(left, right):
+        if isinstance(l, list) or isinstance(r, list):
+            difference = calculate_difference_between_packets(l, r)
         else:
-            rec = r2 - l2
-        if rec != 0:
-            return rec
-    return len(r) - len(l)
+            difference = r - l
+        if difference != 0:
+            return difference
+    return len(right) - len(left)
 
 def solve_problem():
     data = extract_data_from_file(13)
@@ -29,8 +29,8 @@ def sum_all_indices_of_pairs_in_correct_order(pairs):
 def list_all_indices_of_pairs_in_correct_order(pairs):
     indices = []
     for pair in pairs:
-        correct_order = compare(pair["left"], pair["right"])
-        if correct_order > 0:
+        difference = calculate_difference_between_packets(pair["left"], pair["right"])
+        if difference > 0:
             indices.append(pair["index"])
     return indices
 
