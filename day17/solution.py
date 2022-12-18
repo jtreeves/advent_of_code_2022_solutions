@@ -51,7 +51,7 @@ class Chamber:
         new_rock = Rock(self.next_rock_type, self.height)
         while not new_rock.touching_floor(self.floor):
             self.increment_pattern(new_rock)
-            new_rock.fall_down(self.spaces)
+            new_rock.fall_down(self.floor)
         self.increment_pattern(new_rock)
         for point in new_rock.shape:
             self.spaces.append(point)
@@ -130,8 +130,8 @@ class Rock:
                 Coordinate(5, height + 5),
             ]
             self.left_border = [self.shape[0]]
-            self.right_border = [self.shape[2:]]
-            self.bottom_border = [self.shape[:3]]
+            self.right_border = self.shape[2:]
+            self.bottom_border = self.shape[:3]
         elif type == 4:
             self.shape = []
             for i in range(4):
@@ -208,7 +208,7 @@ def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
     print(chamber.floor)
-    for _ in range(1):
+    for _ in range(3):
         chamber.drop_new_rock()
     for space in chamber.spaces:
         print([space.x, space.y])
