@@ -32,7 +32,7 @@ class Coordinate:
 
 class Chamber:
     def __init__(self, pattern):
-        while len(pattern) < 1000000:
+        while len(pattern) < 10000000:
             pattern += pattern
         self.jet_pattern = pattern
         self.spaces = []
@@ -188,15 +188,17 @@ class Rock:
         return False
 
     def touching_rock_to_left(self, other_points):
+        recent_points = other_points[-100:]
         for point in self.left_border:
-            for other_point in other_points:
+            for other_point in recent_points:
                 if point.touching_point_on_left(other_point):
                     return True
         return False
 
     def touching_rock_to_right(self, other_points):
+        recent_points = other_points[-100:]
         for point in self.right_border:
-            for other_point in other_points:
+            for other_point in recent_points:
                 if point.touching_point_on_right(other_point):
                     return True
         return False
