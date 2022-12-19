@@ -42,27 +42,27 @@ class Chamber:
             pattern += pattern
         self.jet_pattern = pattern
         self.spaces = []
-        self.floor = {}
+        # self.floor = {}
         self.height = 0
         self.next_rock_type = 1
         self.current_iteration = 0
         self.next_jet_blow = self.jet_pattern[self.current_iteration]
         for i in range(7):
             self.spaces.append(Coordinate(i + 1, 0))
-            self.floor[i + 1] = 0
+            # self.floor[i + 1] = 0
     
     def drop_new_rock(self):
         new_rock = Rock(self.next_rock_type, self.height)
         self.let_rock_fall_to_rest(new_rock)
         self.add_rock_to_spaces(new_rock)
         self.update_height(new_rock)
-        self.update_floor(new_rock)
+        # self.update_floor(new_rock)
         self.increment_new_rock_type()
 
     def let_rock_fall_to_rest(self, rock):
         self.increment_pattern(rock)
-        while not rock.touching_floor(self.floor):
-            rock.fall_down(self.floor)
+        while not rock.touching_floor(self.spaces):
+            rock.fall_down(self.spaces)
             self.increment_pattern(rock)
 
     def blow_rock_left(self, rock):
@@ -176,49 +176,59 @@ class Rock:
             for point in self.shape:
                 point.move_right()
 
-    def fall_down(self, floor):
-        if not self.touching_floor(floor):
+    def fall_down(self, other_points):
+        if not self.touching_floor(other_points):
             for point in self.shape:
                 point.move_down()
 
     def touching_left_wall(self):
-        for point in self.left_border:
+        for point in self.shape:
             if point.x == 1:
                 return True
         return False
 
     def touching_right_wall(self):
-        for point in self.right_border:
+        for point in self.shape:
             if point.x == 7:
                 return True
         return False
 
     def touching_rock_to_left(self, other_points):
-        for point in self.left_border:
+        for point in self.shape:
             for other_point in other_points:
                 if point.touching_point_on_left(other_point):
                     return True
         return False
 
     def touching_rock_to_right(self, other_points):
-        for point in self.right_border:
+        for point in self.shape:
             for other_point in other_points:
                 if point.touching_point_on_right(other_point):
                     return True
         return False
 
-    def touching_floor(self, floor):
-        for point in self.bottom_border:
-            corresponding_point = Coordinate(point.x, floor[point.x])
-            if point.touching_point_on_bottom(corresponding_point) or point.bottom_of_grid():
-                return True
+    def touching_floor(self, other_points):
+        for point in self.shape:
+            for other_point in other_points:
+                if point.touching_point_on_bottom(other_point):
+                    return True
         return False
+        # for point in self.shape:
+        #     if point.y < 1:
+        #         print("********* ERROR **********")
+        #         print(f"[{point.x}, {point.y}]")
+        #         return True
+        #     corresponding_point = Coordinate(point.x, floor[point.x])
+        #     if point.touching_point_on_bottom(corresponding_point):
+        #         return True
+        # return False
 
 def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
     for i in range(2022):
         chamber.drop_new_rock()
+        print(f"DROPPING ROCK {i + 1}")
     return chamber.height
 
 def extract_data_from_file(day_number):
