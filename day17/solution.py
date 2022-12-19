@@ -203,7 +203,7 @@ class Rock:
 def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
-    for i in range(2022):
+    for i in range(1000000000000):
         chamber.drop_new_rock()
         print(f"DROPPING ROCK {i + 1}")
     return chamber.height
