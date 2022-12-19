@@ -47,15 +47,17 @@ class Chamber:
     
     def drop_new_rock(self):
         new_rock = Rock(self.next_rock_type, self.height)
-        self.increment_pattern(new_rock)
-        while not new_rock.touching_floor(self.floor):
-            new_rock.fall_down(self.floor)
-            self.increment_pattern(new_rock)
-        for point in new_rock.shape:
-            self.spaces.append(point)
+        self.let_rock_fall_to_rest(new_rock)
+        self.add_rock_to_spaces(new_rock)
         self.update_height(new_rock)
         self.update_floor(new_rock)
         self.increment_new_rock_type()
+
+    def let_rock_fall_to_rest(self, rock):
+        self.increment_pattern(rock)
+        while not rock.touching_floor(self.floor):
+            rock.fall_down(self.floor)
+            self.increment_pattern(rock)
 
     def blow_rock_left(self, rock):
         rock.blown_left(self.spaces)
@@ -86,6 +88,10 @@ class Chamber:
         for point in rock.shape:
             if point.y > self.floor[point.x]:
                 self.floor[point.x] = point.y
+
+    def add_rock_to_spaces(self, rock):
+        for point in rock.shape:
+            self.spaces.append(point)
 
 class Rock:
     def __init__(self, type, height):
