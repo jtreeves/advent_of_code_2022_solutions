@@ -30,6 +30,12 @@ class Coordinate:
         else:
             return False
 
+    def bottom_of_grid(self):
+        if self.y == 1:
+            return True
+        else:
+            return False
+
 class Chamber:
     def __init__(self, pattern):
         while len(pattern) < 10000000:
@@ -188,17 +194,15 @@ class Rock:
         return False
 
     def touching_rock_to_left(self, other_points):
-        recent_points = other_points[-100:]
         for point in self.left_border:
-            for other_point in recent_points:
+            for other_point in other_points:
                 if point.touching_point_on_left(other_point):
                     return True
         return False
 
     def touching_rock_to_right(self, other_points):
-        recent_points = other_points[-100:]
         for point in self.right_border:
-            for other_point in recent_points:
+            for other_point in other_points:
                 if point.touching_point_on_right(other_point):
                     return True
         return False
@@ -206,14 +210,14 @@ class Rock:
     def touching_floor(self, floor):
         for point in self.bottom_border:
             corresponding_point = Coordinate(point.x, floor[point.x])
-            if point.touching_point_on_bottom(corresponding_point):
+            if point.touching_point_on_bottom(corresponding_point) or point.bottom_of_grid():
                 return True
         return False
 
 def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
-    for _ in range(2022):
+    for i in range(2022):
         chamber.drop_new_rock()
     return chamber.height
 
