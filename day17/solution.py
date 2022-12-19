@@ -36,29 +36,21 @@ class Chamber:
             pattern += pattern
         self.jet_pattern = pattern
         self.spaces = []
-        for i in range(7):
-            self.spaces.append(Coordinate(i + 1, 0))
+        self.floor = {}
+        self.height = 0
         self.next_rock_type = 1
         self.current_iteration = 0
         self.next_jet_blow = self.jet_pattern[self.current_iteration]
-        self.height = 0
-        self.full_line_height = None
-        self.floor = {}
         for i in range(7):
+            self.spaces.append(Coordinate(i + 1, 0))
             self.floor[i + 1] = 0
     
     def drop_new_rock(self):
-        print(f"CAVERN HEIGHT: {self.height}")
         new_rock = Rock(self.next_rock_type, self.height)
-        print("NEW ROCK AT TOP")
-        for point in new_rock.shape:
-            print(f"[{point.x}, {point.y}]")
-        while not new_rock.touching_floor(self.floor):
-            self.increment_pattern(new_rock)
-            new_rock.fall_down(self.floor)
         self.increment_pattern(new_rock)
-        if not new_rock.touching_floor(self.floor):
+        while not new_rock.touching_floor(self.floor):
             new_rock.fall_down(self.floor)
+            self.increment_pattern(new_rock)
         for point in new_rock.shape:
             self.spaces.append(point)
         self.update_height(new_rock)
@@ -213,11 +205,10 @@ class Rock:
 def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
-    for _ in range(3):
+    for _ in range(5):
         chamber.drop_new_rock()
     for space in chamber.spaces:
         print([space.x, space.y])
-    print(chamber.floor)
     return
 
 def extract_data_from_file(day_number):
