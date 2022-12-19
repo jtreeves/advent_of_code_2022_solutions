@@ -32,7 +32,7 @@ class Coordinate:
 
 class Chamber:
     def __init__(self, pattern):
-        while len(pattern) < 2022:
+        while len(pattern) < 1000000:
             pattern += pattern
         self.jet_pattern = pattern
         self.spaces = []
@@ -211,11 +211,9 @@ class Rock:
 def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
-    for _ in range(5):
+    for _ in range(2022):
         chamber.drop_new_rock()
-    for space in chamber.spaces:
-        print([space.x, space.y])
-    return
+    return chamber.height
 
 def extract_data_from_file(day_number):
     file = open(f"day{day_number}/data.txt", "r")
