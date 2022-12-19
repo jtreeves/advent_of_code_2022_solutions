@@ -32,8 +32,6 @@ class Coordinate:
 
 class Chamber:
     def __init__(self, pattern):
-        while len(pattern) < 10000000:
-            pattern += pattern
         self.jet_pattern = pattern
         self.spaces = []
         self.height = 0
@@ -68,6 +66,8 @@ class Chamber:
         elif self.next_jet_blow == ">":
             self.blow_rock_right(rock)
         self.current_iteration += 1
+        if self.current_iteration >= len(self.jet_pattern):
+            self.jet_pattern += self.jet_pattern
         self.next_jet_blow = self.jet_pattern[self.current_iteration]
 
     def increment_new_rock_type(self):
@@ -181,21 +181,21 @@ class Rock:
 
     def touching_rock_to_left(self, other_points):
         for point in self.shape:
-            for other_point in other_points:
+            for other_point in other_points[::-1]:
                 if point.touching_point_on_left(other_point):
                     return True
         return False
 
     def touching_rock_to_right(self, other_points):
         for point in self.shape:
-            for other_point in other_points:
+            for other_point in other_points[::-1]:
                 if point.touching_point_on_right(other_point):
                     return True
         return False
 
     def touching_floor(self, other_points):
         for point in self.shape:
-            for other_point in other_points:
+            for other_point in other_points[::-1]:
                 if point.touching_point_on_bottom(other_point):
                     return True
         return False
@@ -205,6 +205,7 @@ def solve_problem():
     chamber = Chamber(data)
     for i in range(2022):
         chamber.drop_new_rock()
+        print(f"DROPPING ROCK {i + 1}")
     return chamber.height
 
 def extract_data_from_file(day_number):
