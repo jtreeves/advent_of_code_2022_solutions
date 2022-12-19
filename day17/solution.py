@@ -30,33 +30,24 @@ class Coordinate:
         else:
             return False
 
-    def bottom_of_grid(self):
-        if self.y == 1:
-            return True
-        else:
-            return False
-
 class Chamber:
     def __init__(self, pattern):
         while len(pattern) < 10000000:
             pattern += pattern
         self.jet_pattern = pattern
         self.spaces = []
-        # self.floor = {}
         self.height = 0
         self.next_rock_type = 1
         self.current_iteration = 0
         self.next_jet_blow = self.jet_pattern[self.current_iteration]
         for i in range(7):
             self.spaces.append(Coordinate(i + 1, 0))
-            # self.floor[i + 1] = 0
     
     def drop_new_rock(self):
         new_rock = Rock(self.next_rock_type, self.height)
         self.let_rock_fall_to_rest(new_rock)
         self.add_rock_to_spaces(new_rock)
         self.update_height(new_rock)
-        # self.update_floor(new_rock)
         self.increment_new_rock_type()
 
     def let_rock_fall_to_rest(self, rock):
@@ -89,11 +80,6 @@ class Chamber:
         for point in rock.shape:
             if point.y > self.height:
                 self.height = point.y
-    
-    def update_floor(self, rock):
-        for point in rock.shape:
-            if point.y > self.floor[point.x]:
-                self.floor[point.x] = point.y
 
     def add_rock_to_spaces(self, rock):
         for point in rock.shape:
@@ -213,22 +199,12 @@ class Rock:
                 if point.touching_point_on_bottom(other_point):
                     return True
         return False
-        # for point in self.shape:
-        #     if point.y < 1:
-        #         print("********* ERROR **********")
-        #         print(f"[{point.x}, {point.y}]")
-        #         return True
-        #     corresponding_point = Coordinate(point.x, floor[point.x])
-        #     if point.touching_point_on_bottom(corresponding_point):
-        #         return True
-        # return False
 
 def solve_problem():
     data = extract_data_from_file(17)
     chamber = Chamber(data)
     for i in range(2022):
         chamber.drop_new_rock()
-        print(f"DROPPING ROCK {i + 1}")
     return chamber.height
 
 def extract_data_from_file(day_number):
