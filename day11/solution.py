@@ -106,6 +106,23 @@ class Monkey:
         while (len(self.current_items)):
             self.inspect_element(other_monkeys)
 
+    def inspect_element_without_lowering(self, other_monkeys):
+        element = self.current_items.pop(0)
+        updated_worry = self.update_worry_level_initally(element)
+        divisible = self.test_divisibility(updated_worry)
+        if divisible:
+            monkey_to_receive = self.true_throw_name
+        else:
+            monkey_to_receive = self.false_throw_name
+        for other_monkey in other_monkeys:
+            if other_monkey.name == monkey_to_receive:
+                other_monkey.current_items.append(updated_worry)
+        self.inspected_items += 1
+
+    def inspect_all_elements_in_round_without_lowering(self, other_monkeys):
+        while (len(self.current_items)):
+            self.inspect_element_without_lowering(other_monkeys)
+
 def execute_full_round(monkeys):
     for monkey in monkeys:
         monkey.inspect_all_elements_in_round(monkeys)
@@ -113,6 +130,14 @@ def execute_full_round(monkeys):
 def execute_multiple_rounds(rounds, monkeys):
     for _ in range(rounds):
         execute_full_round(monkeys)
+
+def execute_full_round_without_lowering(monkeys):
+    for monkey in monkeys:
+        monkey.inspect_all_elements_in_round_without_lowering(monkeys)
+
+def execute_multiple_rounds_without_lowering(rounds, monkeys):
+    for _ in range(rounds):
+        execute_full_round_without_lowering(monkeys)
 
 def calculate_monkey_business(monkeys):
     inspections = []
