@@ -51,7 +51,8 @@ def move_element(value, current_index, original_index, list):
             new_index %= length
             new_index += 1
         else:
-            new_index += length
+            new_index %= (-1 * length)
+            new_index -= 1
     updated_details = {
         "original_index": original_index,
         "value": value
