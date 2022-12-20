@@ -38,6 +38,16 @@ def determine_visible_faces_on_cube(main_cube, other_cubes):
             visible_faces -= 1
     return visible_faces
 
+def find_air_packet_between_cubes(first_cube, second_cube):
+    air_packet_exists = check_if_air_packet_between_cubes(first_cube, second_cube)
+
+def check_if_air_packet_between_cubes(first_cube, second_cube):
+    distance = calculate_distance_between_cubes(first_cube, second_cube)
+    if distance == 2:
+        return True
+    else:
+        return False
+
 def check_if_cubes_touching(first_cube, second_cube):
     distance = calculate_distance_between_cubes(first_cube, second_cube)
     if distance == 1:
