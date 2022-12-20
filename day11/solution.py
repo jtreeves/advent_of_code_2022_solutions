@@ -110,6 +110,10 @@ def execute_full_round(monkeys):
     for monkey in monkeys:
         monkey.inspect_all_elements_in_round(monkeys)
 
+def execute_multiple_rounds(rounds, monkeys):
+    for _ in range(rounds):
+        execute_full_round(monkeys)
+
 def solve_problem():
     data = extract_data_from_file(11)
     monkey_descriptions = list_all_monkey_descriptions(data)
@@ -123,8 +127,8 @@ def solve_problem():
         print(f"TRUE THROW: {new_monkey.true_throw_name}")
         print(f"FALSE THROW: {new_monkey.false_throw_name}")
         monkeys.append(new_monkey)
-    execute_full_round(monkeys)
-    print("AFTER ONE ROUND")
+    execute_multiple_rounds(20, monkeys)
+    print("AFTER 20 ROUNDS")
     for monkey in monkeys:
         print(f"NAME: {monkey.name}")
         print(f"ITEMS: {monkey.current_items}")
