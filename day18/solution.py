@@ -2,8 +2,25 @@ def solve_problem():
     data = extract_data_from_file(18)
     instructions = list_all_cube_central_coordinates(data)
     cubes = generate_all_cubes(instructions)
-    surface_area = calculate_total_surface_area(cubes)
-    return surface_area
+    air_packets = find_air_packets(cubes)
+    return air_packets
+    # surface_area = calculate_total_surface_area(cubes)
+    # return surface_area
+
+def find_air_packets(cubes):
+    cubes.sort()
+    air_packets = []
+    for i in range(len(cubes) - 1):
+        current_cube = cubes[i]
+        next_cube = cubes[i + 1]
+        if current_cube[0] == next_cube[0] and current_cube[1] == next_cube[1] and current_cube[2] + 2 == next_cube[2]:
+            air_packet = [
+                current_cube[0], 
+                current_cube[1], 
+                current_cube[2] + 1
+            ]
+            air_packets.append(air_packet)
+    return air_packets
 
 def calculate_total_surface_area(cubes):
     surface_area = 0
