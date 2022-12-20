@@ -67,6 +67,11 @@ def solve_problem():
     for description in monkey_descriptions:
         new_monkey = Monkey(description)
         print(f"NAME: {new_monkey.name}")
+        print(f"ITEMS: {new_monkey.current_items}")
+        print(f"OPERATION: {new_monkey.operation}")
+        print(f"DIVISIBLE: {new_monkey.divisible}")
+        print(f"TRUE THROW: {new_monkey.true_throw_name}")
+        print(f"FALSE THROW: {new_monkey.false_throw_name}")
         monkeys.append(new_monkey)
     return monkeys
 
