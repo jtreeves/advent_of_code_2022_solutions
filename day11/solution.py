@@ -105,6 +105,10 @@ class Monkey:
         while (len(self.current_items)):
             self.inspect_element(other_monkeys)
 
+def execute_full_round(monkeys):
+    for monkey in monkeys:
+        monkey.inspect_all_elements_in_round(monkey)
+
 def solve_problem():
     data = extract_data_from_file(11)
     monkey_descriptions = list_all_monkey_descriptions(data)
