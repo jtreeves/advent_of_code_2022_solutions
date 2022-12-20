@@ -99,6 +99,11 @@ class Monkey:
         for other_monkey in other_monkeys:
             if other_monkey.name == monkey_to_receive:
                 other_monkey.current_items.append(lowered_worry)
+        self.inspected_items += 1
+
+    def inspect_all_elements_in_round(self, other_monkeys):
+        while (len(self.current_items)):
+            self.inspect_element(other_monkeys)
 
 def solve_problem():
     data = extract_data_from_file(11)
@@ -113,6 +118,12 @@ def solve_problem():
         print(f"TRUE THROW: {new_monkey.true_throw_name}")
         print(f"FALSE THROW: {new_monkey.false_throw_name}")
         monkeys.append(new_monkey)
+    monkeys[0].inspect_all_elements_in_round(monkeys)
+    print("AFTER ONE INSPECTION")
+    for monkey in monkeys:
+        print(f"NAME: {monkey.name}")
+        print(f"ITEMS: {monkey.current_items}")
+        print(f"INSPECTED: {monkey.inspected_items}")
     return monkeys
 
 def list_all_monkey_descriptions(instructions):
