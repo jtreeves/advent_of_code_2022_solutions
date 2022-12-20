@@ -39,26 +39,35 @@ def mix_list(list):
     for i in range(len(list)):
         value = find_value_based_on_original_index(i, list)
         current_index = find_current_index_of_value_based_on_original_index(i, list)
+        print(f"VALUE: {value}")
         list = move_element(value, current_index, i, list)
+        for element in list:
+            print(element["value"])
     return list
 
 def move_element(value, current_index, original_index, list):
     length = len(list)
     new_index = value + current_index
-    abs_index = abs(new_index)
-    if abs_index >= length:
-        if new_index > 0:
-            new_index %= length
-            new_index += 1
-        else:
-            new_index %= (-1 * length)
-            new_index -= 1
+    # abs_index = abs(new_index)
+    # if abs_index >= length:
+    if new_index > 0:
+        new_index %= length
+        # new_index += 1
+    elif new_index < 0:
+        new_index %= (-1 * length)
+        # new_index -= 1
+    # else:
+    #     if value != 0:
+    #         new_index = -1
     updated_details = {
         "original_index": original_index,
         "value": value
     }
     del list[current_index]
-    list.insert(new_index, updated_details)
+    if new_index == 0 and value != 0:
+        list.append(updated_details)
+    else:
+        list.insert(new_index, updated_details)
     return list
 
 def find_current_index_of_value_based_on_original_index(original_index, list):
