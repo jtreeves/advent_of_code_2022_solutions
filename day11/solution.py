@@ -128,13 +128,17 @@ def calculate_monkey_business(monkeys):
 def solve_problem():
     data = extract_data_from_file(11)
     monkey_descriptions = list_all_monkey_descriptions(data)
-    monkeys = []
-    for description in monkey_descriptions:
-        new_monkey = Monkey(description)
-        monkeys.append(new_monkey)
+    monkeys = create_all_monkeys(monkey_descriptions)
     execute_multiple_rounds(20, monkeys)
     business = calculate_monkey_business(monkeys)
     return business
+
+def create_all_monkeys(descriptions):
+    monkeys = []
+    for description in descriptions:
+        new_monkey = Monkey(description)
+        monkeys.append(new_monkey)
+    return monkeys
 
 def list_all_monkey_descriptions(instructions):
     monkeys = instructions.split("\n\n")
