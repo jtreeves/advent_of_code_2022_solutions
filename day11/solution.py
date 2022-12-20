@@ -114,26 +114,27 @@ def execute_multiple_rounds(rounds, monkeys):
     for _ in range(rounds):
         execute_full_round(monkeys)
 
+def calculate_monkey_business(monkeys):
+    inspections = []
+    for monkey in monkeys:
+        inspections.append(monkey.inspected_items)
+    inspections.sort()
+    most_active = inspections[-2:]
+    product = 1
+    for inspection in most_active:
+        product *= inspection
+    return product
+
 def solve_problem():
     data = extract_data_from_file(11)
     monkey_descriptions = list_all_monkey_descriptions(data)
     monkeys = []
     for description in monkey_descriptions:
         new_monkey = Monkey(description)
-        print(f"NAME: {new_monkey.name}")
-        print(f"ITEMS: {new_monkey.current_items}")
-        print(f"OPERATION: {new_monkey.operation}")
-        print(f"DIVISIBLE: {new_monkey.divisible}")
-        print(f"TRUE THROW: {new_monkey.true_throw_name}")
-        print(f"FALSE THROW: {new_monkey.false_throw_name}")
         monkeys.append(new_monkey)
     execute_multiple_rounds(20, monkeys)
-    print("AFTER 20 ROUNDS")
-    for monkey in monkeys:
-        print(f"NAME: {monkey.name}")
-        print(f"ITEMS: {monkey.current_items}")
-        print(f"INSPECTED: {monkey.inspected_items}")
-    return monkeys
+    business = calculate_monkey_business(monkeys)
+    return business
 
 def list_all_monkey_descriptions(instructions):
     monkeys = instructions.split("\n\n")
