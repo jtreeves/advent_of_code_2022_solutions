@@ -1,3 +1,5 @@
+import math
+
 class Description:
     def __init__(self, text):
         self.bullets = text.split("\n")
@@ -59,6 +61,44 @@ class Monkey:
         self.true_throw_name = description.true_throw_name
         self.false_throw_name = description.false_throw_name
         self.inspected_items = 0
+
+    def update_worry_level_initally(self, element):
+        value = int(self.operation["element"])
+        is_int = isinstance(value, int)
+        final_value = value if is_int else element
+        sign = self.operation["sign"]
+        if sign == "+":
+            return element + final_value
+        elif sign == "-":
+            return element - final_value
+        elif sign == "*":
+            return element * final_value
+        elif sign == "/":
+            return element / final_value
+
+    def lower_worry_level_after(self, element):
+        division_result = element / 3
+        rounded_down = math.floor(division_result)
+        return rounded_down
+
+    def test_divisibility(self, element):
+        if element % self.divisible == 0:
+            return True
+        else:
+            return False
+
+    def inspect_element(self, other_monkeys):
+        element = self.current_items.pop(0)
+        updated_worry = self.update_worry_level_initally(element)
+        lowered_worry = self.lower_worry_level_after(updated_worry)
+        divisible = self.test_divisibility(lowered_worry)
+        if divisible:
+            monkey_to_receive = self.true_throw_name
+        else:
+            monkey_to_receive = self.false_throw_name
+        for other_monkey in other_monkeys:
+            if other_monkey.name == monkey_to_receive:
+                other_monkey.current_items.append(lowered_worry)
 
 def solve_problem():
     data = extract_data_from_file(11)
