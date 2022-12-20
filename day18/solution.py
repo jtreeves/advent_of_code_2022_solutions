@@ -4,6 +4,13 @@ def solve_problem():
     cubes = generate_all_cubes(instructions)
     return cubes
 
+def calculate_total_surface_area(cubes):
+    surface_area = 0
+    for cube in cubes:
+        visible_faces = determine_visible_faces_on_cube(cube, cubes)
+        surface_area += visible_faces
+    return surface_area
+
 def determine_visible_faces_on_cube(main_cube, other_cubes):
     visible_faces = 6
     for other_cube in other_cubes:
