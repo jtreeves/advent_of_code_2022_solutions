@@ -7,8 +7,15 @@ def solve_problem():
     numbers = list_all_numbers(data)
     index = find_index_of_zero(numbers)
     mixed_list = [1, 2, -3, 4, 0, 3, -2]
+    total = sum_key_values(mixed_list)
+    return total
+
+def sum_key_values(mixed_list):
     key_values = determine_values_at_key_indices_after_zero(mixed_list)
-    return key_values
+    total = 0
+    for value in key_values:
+        total += value
+    return total
 
 def determine_values_at_key_indices_after_zero(mixed_list):
     length = len(mixed_list)
