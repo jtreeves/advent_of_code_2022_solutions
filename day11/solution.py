@@ -63,18 +63,19 @@ class Monkey:
         self.inspected_items = 0
 
     def update_worry_level_initally(self, element):
-        value = int(self.operation["element"])
-        is_int = isinstance(value, int)
-        final_value = value if is_int else element
+        try:
+            value = int(self.operation["element"])
+        except ValueError:
+            value = element
         sign = self.operation["sign"]
         if sign == "+":
-            return element + final_value
+            return element + value
         elif sign == "-":
-            return element - final_value
+            return element - value
         elif sign == "*":
-            return element * final_value
+            return element * value
         elif sign == "/":
-            return element / final_value
+            return element / value
 
     def lower_worry_level_after(self, element):
         division_result = element / 3
@@ -107,7 +108,7 @@ class Monkey:
 
 def execute_full_round(monkeys):
     for monkey in monkeys:
-        monkey.inspect_all_elements_in_round(monkey)
+        monkey.inspect_all_elements_in_round(monkeys)
 
 def solve_problem():
     data = extract_data_from_file(11)
@@ -122,8 +123,8 @@ def solve_problem():
         print(f"TRUE THROW: {new_monkey.true_throw_name}")
         print(f"FALSE THROW: {new_monkey.false_throw_name}")
         monkeys.append(new_monkey)
-    monkeys[0].inspect_all_elements_in_round(monkeys)
-    print("AFTER ONE INSPECTION")
+    execute_full_round(monkeys)
+    print("AFTER ONE ROUND")
     for monkey in monkeys:
         print(f"NAME: {monkey.name}")
         print(f"ITEMS: {monkey.current_items}")
