@@ -1,9 +1,10 @@
 def solve_problem():
     data = extract_data_from_file(20)
     numbers = list_all_numbers(data)
-    move_element(1, 0, 0, numbers)
-    move_element(2, 0, 1, numbers)
-    move_element(-3, 1, 2, numbers)
+    # move_element(1, 0, 0, numbers)
+    # move_element(2, 0, 1, numbers)
+    # move_element(-3, 1, 2, numbers)
+    mix_list(numbers)
     # index = find_index_of_zero(numbers)
     # mixed_list = [1, 2, -3, 4, 0, 3, -2]
     # total = sum_key_values(mixed_list)
@@ -40,6 +41,12 @@ def find_index_of_zero(mixed_list):
     index = mixed_list.index(0)
     return index
 
+def mix_list(list):
+    for i in range(len(list)):
+        value = find_value_based_on_original_index(i, list)
+        current_index = find_current_index_of_value_based_on_original_index(i, list)
+        move_element(value, current_index, i, list)
+
 def move_element(value, current_index, original_index, list):
     new_index = value + current_index
     updated_details = {
@@ -54,6 +61,11 @@ def find_current_index_of_value_based_on_original_index(original_index, list):
     for i in range(len(list)):
         if list[i]["original_index"] == original_index:
             return i
+
+def find_value_based_on_original_index(original_index, list):
+    for i in range(len(list)):
+        if list[i]["original_index"] == original_index:
+            return list[i]["value"]
 
 def list_all_numbers(data):
     string_numbers = data.split("\n")
