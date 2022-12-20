@@ -4,6 +4,14 @@ def solve_problem():
     cubes = generate_all_cubes(instructions)
     return cubes
 
+def determine_visible_faces_on_cube(main_cube, other_cubes):
+    visible_faces = 6
+    for other_cube in other_cubes:
+        touching = check_if_cubes_touching(main_cube, other_cube)
+        if touching:
+            visible_faces -= 1
+    return visible_faces
+
 def check_if_cubes_touching(first_cube, second_cube):
     distance = calculate_distance_between_cubes(first_cube, second_cube)
     if distance == 1:
