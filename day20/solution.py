@@ -1,11 +1,16 @@
-print(1004 % 7)
-print(2004 % 7)
-print(3004 % 7)
+# print(1004 % 7)
+# print(2004 % 7)
+# print(3004 % 7)
 
 def solve_problem():
     data = extract_data_from_file(20)
     numbers = list_all_numbers(data)
-    return numbers
+    index = find_index_of_zero(numbers)
+    return index
+
+def find_index_of_zero(mixed_list):
+    index = mixed_list.index(0)
+    return index
 
 def copy_original_list(original_list):
     copy = []
