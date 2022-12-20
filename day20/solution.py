@@ -1,14 +1,15 @@
-# print(1004 % 7)
-# print(2004 % 7)
-# print(3004 % 7)
-
 def solve_problem():
     data = extract_data_from_file(20)
     numbers = list_all_numbers(data)
-    index = find_index_of_zero(numbers)
-    mixed_list = [1, 2, -3, 4, 0, 3, -2]
-    total = sum_key_values(mixed_list)
-    return total
+    updated_list = move_element(1, 0, numbers)
+    updated_list = move_element(2, 0, updated_list)
+    updated_list = move_element(-3, 1, updated_list)
+    # index = find_index_of_zero(numbers)
+    # mixed_list = [1, 2, -3, 4, 0, 3, -2]
+    # total = sum_key_values(mixed_list)
+    # unique = check_unique(numbers)
+    print(f"ORIGINAL NUMBERS: {numbers}")
+    return updated_list
 
 def sum_key_values(mixed_list):
     key_values = determine_values_at_key_indices_after_zero(mixed_list)
@@ -38,6 +39,12 @@ def determine_values_at_key_indices_after_zero(mixed_list):
 def find_index_of_zero(mixed_list):
     index = mixed_list.index(0)
     return index
+
+def move_element(value, index, list):
+    new_index = value + index
+    del list[index]
+    list.insert(new_index, value)
+    return list
 
 def copy_original_list(original_list):
     copy = []
