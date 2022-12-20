@@ -3,12 +3,13 @@ def solve_problem():
     instructions = list_all_cube_central_coordinates(data)
     cubes = generate_all_cubes(instructions)
     air_packets = find_air_packets(cubes)
-    return air_packets
-    # surface_area = calculate_total_surface_area(cubes)
-    # return surface_area
+    cubes.extend(air_packets)
+    surface_area = calculate_total_surface_area(cubes)
+    return surface_area
 
 def find_air_packets(cubes):
     cubes.sort()
+    print(cubes)
     air_packets = []
     for i in range(len(cubes) - 1):
         current_cube = cubes[i]
