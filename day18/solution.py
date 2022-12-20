@@ -1,31 +1,31 @@
-import itertools
-
 def solve_problem():
     data = extract_data_from_file(18)
-    instructions = list_all_cube_initial_coordinates(data)
+    instructions = list_all_cube_central_coordinates(data)
     cubes = generate_all_cubes(instructions)
     return cubes
+
+def check_if_cubes_touching(first_cube, second_cube):
+    distance = calculate_distance_between_cubes(first_cube, second_cube)
+    if distance == 1:
+        return True
+    else:
+        return False
+
+def calculate_distance_between_cubes(first_cube, second_cube):
+    summed_deltas = 0
+    for i in range(len(first_cube)):
+        delta = first_cube[i] - second_cube[i]
+        delta_squared = delta ** 2
+        summed_deltas += delta_squared
+    distance = summed_deltas ** (1/2)
+    return distance
 
 def generate_all_cubes(instructions):
     cubes = []
     for instruction in instructions:
-        corner = convert_string_coordinates(instruction)
-        vertices = generate_all_vertices(corner)
-        cubes.append(vertices)
+        center = convert_string_coordinates(instruction)
+        cubes.append(center)
     return cubes
-
-def generate_all_vertices(corner):
-    diagonal = []
-    for coordinate in corner:
-        diagonal.append(coordinate + 1)
-    vertices = list(itertools.product(*zip(corner, diagonal)))
-    return vertices
-
-# def generate_all_sides(corner):
-#     sides = []
-#     for coordinate in corner:
-
-#     return sides
 
 def convert_string_coordinates(string_coordinates):
     coordinates = string_coordinates.split(",")
@@ -35,7 +35,7 @@ def convert_string_coordinates(string_coordinates):
         final_coordinates.append(numbered_coordinate)
     return final_coordinates
 
-def list_all_cube_initial_coordinates(data):
+def list_all_cube_central_coordinates(data):
     partitioned = data.split("\n")
     return partitioned
 
