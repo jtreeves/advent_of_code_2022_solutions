@@ -136,7 +136,8 @@ def execute_full_round_without_lowering(monkeys):
         monkey.inspect_all_elements_in_round_without_lowering(monkeys)
 
 def execute_multiple_rounds_without_lowering(rounds, monkeys):
-    for _ in range(rounds):
+    for i in range(rounds):
+        print(f"EXECUTING ROUND {i + 1}")
         execute_full_round_without_lowering(monkeys)
 
 def calculate_monkey_business(monkeys):
@@ -154,7 +155,7 @@ def solve_problem():
     data = extract_data_from_file(11)
     monkey_descriptions = list_all_monkey_descriptions(data)
     monkeys = create_all_monkeys(monkey_descriptions)
-    execute_multiple_rounds(20, monkeys)
+    execute_multiple_rounds_without_lowering(10000, monkeys)
     business = calculate_monkey_business(monkeys)
     return business
 
