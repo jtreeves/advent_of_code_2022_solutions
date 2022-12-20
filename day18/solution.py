@@ -3,15 +3,39 @@ def solve_problem():
     instructions = list_all_cube_central_coordinates(data)
     cubes = generate_all_cubes(instructions)
     air_packets = find_all_air_packets(cubes)
+    # print(air_packets)
     cubes.extend(air_packets)
-    surface_area = calculate_total_surface_area(cubes)
+    trimmed_cubes = eliminate_duplicate_cubes(cubes)
+    print(trimmed_cubes)
+    surface_area = calculate_total_surface_area(trimmed_cubes)
     return surface_area
+
+def eliminate_duplicate_cubes(cubes):
+    trimmed_cubes = []
+    for cube in cubes:
+        for trimmed_cube in trimmed_cubes:
+            if check_if_cubes_equivalent(cube, trimmed_cube):
+                continue
+        trimmed_cubes.append(cube)
+    return trimmed_cubes
+
+def check_if_cubes_equivalent(first_cube, second_cube):
+    x1 = first_cube[0]
+    x2 = second_cube[0]
+    y1 = first_cube[1]
+    y2 = second_cube[1]
+    z1 = first_cube[2]
+    z2 = second_cube[2]
+    if x1 == x2 and y1 == y2 and z1 == z2:
+        return True
+    else:
+        return False
 
 def find_all_air_packets(cubes):
     all_air_packets = []
     for cube in cubes:
         air_packets = determine_possible_air_packets_near_cube(cube, cubes)
-        all_air_packets.append(air_packets)
+        all_air_packets.extend(air_packets)
     return all_air_packets
 
 def determine_possible_air_packets_near_cube(main_cube, other_cubes):

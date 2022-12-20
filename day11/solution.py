@@ -4,6 +4,9 @@ class Description:
         self.name = self.extract_name()
         self.items = self.extract_items()
         self.operation = self.extract_operation()
+        self.divisible = self.extract_divisible()
+        self.true_throw_name = self.extract_true_throw_name()
+        self.false_throw_name = self.extract_false_throw_name()
     
     def extract_name(self):
         name_bullet = self.bullets[0]
@@ -22,9 +25,23 @@ class Description:
 
     def extract_operation(self):
         operation_bullet = self.bullets[2]
+    
+    def extract_divisible(self):
+        divisibility_bullet = self.bullets[3]
+        number_to_test = divisibility_bullet[22:]
+        return int(number_to_test)
 
-    def convert_integer_from_string(self, number):
-        return int(number)
+    def extract_true_throw_name(self):
+        true_throw_bullet = self.bullets[4]
+        index = true_throw_bullet[-1]
+        name = "m" + index
+        return name
+
+    def extract_false_throw_name(self):
+        false_throw_bullet = self.bullets[5]
+        index = false_throw_bullet[-1]
+        name = "m" + index
+        return name
 
 class Monkey:
     def __init__(self, text):
