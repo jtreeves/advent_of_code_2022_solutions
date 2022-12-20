@@ -2,7 +2,8 @@ def solve_problem():
     data = extract_data_from_file(18)
     instructions = list_all_cube_central_coordinates(data)
     cubes = generate_all_cubes(instructions)
-    return cubes
+    surface_area = calculate_total_surface_area(cubes)
+    return surface_area
 
 def calculate_total_surface_area(cubes):
     surface_area = 0
