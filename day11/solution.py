@@ -25,7 +25,7 @@ class Description:
 
     def extract_operation(self):
         operation_bullet = self.bullets[2]
-        sign = operation_bullet[24]
+        sign = operation_bullet[23]
         final_element = operation_bullet.split(f" {sign} ")[1]
         return {
             "sign": sign,
@@ -34,7 +34,7 @@ class Description:
     
     def extract_divisible(self):
         divisibility_bullet = self.bullets[3]
-        number_to_test = divisibility_bullet[22:]
+        number_to_test = divisibility_bullet[21:]
         return int(number_to_test)
 
     def extract_true_throw_name(self):
