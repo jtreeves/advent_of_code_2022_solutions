@@ -25,6 +25,12 @@ class Description:
 
     def extract_operation(self):
         operation_bullet = self.bullets[2]
+        sign = operation_bullet[24]
+        final_element = operation_bullet.split(f" {sign} ")[1]
+        return {
+            "sign": sign,
+            "element": final_element
+        }
     
     def extract_divisible(self):
         divisibility_bullet = self.bullets[3]
@@ -48,14 +54,23 @@ class Monkey:
         description = Description(text)
         self.name = description.name
         self.current_items = description.items
+        self.operation = description.operation
+        self.divisible = description.divisible
+        self.true_throw_name = description.true_throw_name
+        self.false_throw_name = description.false_throw_name
         self.inspected_items = 0
 
 def solve_problem():
     data = extract_data_from_file(11)
-    monkeys = list_all_monkeys(data)
-    return data
+    monkey_descriptions = list_all_monkey_descriptions(data)
+    monkeys = []
+    for description in monkey_descriptions:
+        new_monkey = Monkey(description)
+        print(f"NAME: {new_monkey.name}")
+        monkeys.append(new_monkey)
+    return monkeys
 
-def list_all_monkeys(instructions):
+def list_all_monkey_descriptions(instructions):
     monkeys = instructions.split("\n\n")
     return monkeys
 
@@ -64,3 +79,6 @@ def extract_data_from_file(day_number):
     data = file.read()
     file.close()
     return data
+
+result = solve_problem()
+print(result)
