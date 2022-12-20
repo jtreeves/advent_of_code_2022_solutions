@@ -2,24 +2,24 @@ def solve_problem():
     data = extract_data_from_file(18)
     instructions = list_all_cube_central_coordinates(data)
     cubes = generate_all_cubes(instructions)
-    air_packets = find_air_packets(cubes)
+    air_packets = find_all_air_packets(cubes)
     cubes.extend(air_packets)
     surface_area = calculate_total_surface_area(cubes)
     return surface_area
 
-def find_air_packets(cubes):
-    cubes.sort()
-    print(cubes)
+def find_all_air_packets(cubes):
+    all_air_packets = []
+    for cube in cubes:
+        air_packets = determine_possible_air_packets_near_cube(cube, cubes)
+        all_air_packets.append(air_packets)
+    return all_air_packets
+
+def determine_possible_air_packets_near_cube(main_cube, other_cubes):
     air_packets = []
-    for i in range(len(cubes) - 1):
-        current_cube = cubes[i]
-        next_cube = cubes[i + 1]
-        if current_cube[0] == next_cube[0] and current_cube[1] == next_cube[1] and current_cube[2] + 2 == next_cube[2]:
-            air_packet = [
-                current_cube[0], 
-                current_cube[1], 
-                current_cube[2] + 1
-            ]
+    for other_cube in other_cubes:
+        air_packet_gap = check_if_air_packet_between_cubes(main_cube, other_cube)
+        if air_packet_gap:
+            air_packet = find_air_packet_between_cubes(main_cube, other_cube)
             air_packets.append(air_packet)
     return air_packets
 
