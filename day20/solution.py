@@ -1,15 +1,7 @@
 def solve_problem():
     data = extract_data_from_file(20)
     numbers = list_all_numbers(data)
-    # move_element(1, 0, 0, numbers)
-    # move_element(2, 0, 1, numbers)
-    # move_element(-3, 1, 2, numbers)
-    mix_list(numbers)
-    # index = find_index_of_zero(numbers)
-    # mixed_list = [1, 2, -3, 4, 0, 3, -2]
-    # total = sum_key_values(mixed_list)
-    # unique = check_unique(numbers)
-    # print(f"ORIGINAL NUMBERS: {numbers}")
+    numbers = mix_list(numbers)
     return numbers
 
 def sum_key_values(mixed_list):
@@ -45,10 +37,19 @@ def mix_list(list):
     for i in range(len(list)):
         value = find_value_based_on_original_index(i, list)
         current_index = find_current_index_of_value_based_on_original_index(i, list)
-        move_element(value, current_index, i, list)
+        list = move_element(value, current_index, i, list)
+    return list
 
 def move_element(value, current_index, original_index, list):
+    length = len(list)
     new_index = value + current_index
+    abs_index = abs(new_index)
+    if abs_index >= length:
+        if new_index > 0:
+            new_index %= length
+            new_index += 1
+        else:
+            new_index += length
     updated_details = {
         "original_index": original_index,
         "value": value
