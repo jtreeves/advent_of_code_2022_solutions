@@ -97,11 +97,16 @@ class Monkey:
         descriptions = data.split("\n")
         return descriptions
 
+    @staticmethod
+    def determine_root_monkey_value(data):
+        descriptions = Monkey.list_all_monkey_descriptions(data)
+        monkeys = Monkey.create_all_monkeys(descriptions)
+        root_value = Monkey.execute_all_necessary_rounds_to_get_root_value(monkeys)
+        return root_value
+
 def solve_problem():
     data = extract_data_from_file(21, True)
-    descriptions = Monkey.list_all_monkey_descriptions(data)
-    monkeys = Monkey.create_all_monkeys(descriptions)
-    root_value = Monkey.execute_all_necessary_rounds_to_get_root_value(monkeys)
+    root_value = Monkey.determine_root_monkey_value(data)
     return root_value
 
 def extract_data_from_file(day_number, is_official):
