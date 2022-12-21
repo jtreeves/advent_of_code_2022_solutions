@@ -47,6 +47,26 @@ class Monkey:
     
     def __repr__(self):
         return f"Monkey {self.name}: {self.value}"
+    
+    def determine_final_value(self, other_monkeys):
+        if self.value is not None:
+            return self.value
+        else:
+            dependency_monkey_values = []
+            for dependency in self.dependencies:
+                for other_monkey in other_monkeys:
+                    if other_monkey.name == dependency:
+                        dependency_monkey_values.append(other_monkey.value)
+
+    def evaluate_expression(self, first_value, second_value):
+        if self.operation == "+":
+            return first_value + second_value
+        elif self.operation == "-":
+            return first_value - second_value
+        elif self.operation == "*":
+            return first_value * second_value
+        elif self.operation == "/":
+            return first_value / second_value
 
 def solve_problem():
     data = extract_data_from_file(21, False)
