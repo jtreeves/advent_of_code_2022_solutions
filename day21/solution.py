@@ -90,7 +90,7 @@ def find_root_monkey(monkeys):
             return monkey
 
 def solve_problem():
-    data = extract_data_from_file(21, False)
+    data = extract_data_from_file(21, True)
     descriptions = list_all_monkey_descriptions(data)
     monkeys = create_all_monkeys(descriptions)
     root_value = execute_all_necessary_rounds(monkeys)
