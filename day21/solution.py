@@ -63,7 +63,7 @@ class Monkey:
         elif self.operation == "*":
             return first_value * second_value
         elif self.operation == "/":
-            return first_value / second_value
+            return int(first_value / second_value)
 
     @staticmethod
     def execute_all_necessary_rounds_to_get_root_value(monkeys):
