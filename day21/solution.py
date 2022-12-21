@@ -67,6 +67,8 @@ class Monkey:
             return first_value * second_value
         elif self.operation == "/":
             return first_value / second_value
+        else:
+            return "No operation possible for this monkey"
 
 def solve_problem():
     data = extract_data_from_file(21, False)
