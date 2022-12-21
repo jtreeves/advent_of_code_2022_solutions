@@ -44,6 +44,9 @@ class Monkey:
         self.operation = description.operation
         self.dependencies = description.dependencies
         self.is_waiting = description.is_waiting
+    
+    def __repr__(self):
+        return f"Monkey {self.name}: {self.value}"
 
 def solve_problem():
     data = extract_data_from_file(21, False)
