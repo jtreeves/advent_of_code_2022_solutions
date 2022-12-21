@@ -57,6 +57,11 @@ class Monkey:
                 for other_monkey in other_monkeys:
                     if other_monkey.name == dependency:
                         dependency_monkey_values.append(other_monkey.value)
+            if dependency_monkey_values[0] is not None and dependency_monkey_values[1] is not None:
+                self.value = self.evaluate_expression(dependency_monkey_values[0], dependency_monkey_values[1])
+                return self.value
+            else:
+                return "Not yet determined"
 
     def evaluate_expression(self, first_value, second_value):
         if self.operation == "+":
