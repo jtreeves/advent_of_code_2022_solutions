@@ -20,12 +20,10 @@ class Description:
             result = int(value_or_expression)
             self.value = result
             self.expression = None
-            self.is_waiting = False
         except ValueError:
             result = value_or_expression
             self.expression = result
             self.value = None
-            self.is_waiting = True
 
     def extract_operation_and_dependencies(self):
         if self.expression is not None:
@@ -43,7 +41,6 @@ class Monkey:
         self.value = description.value
         self.operation = description.operation
         self.dependencies = description.dependencies
-        self.is_waiting = description.is_waiting
     
     def __repr__(self):
         return f"Monkey {self.name}: {self.value}"
