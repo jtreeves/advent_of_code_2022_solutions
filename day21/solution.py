@@ -75,11 +75,26 @@ class Monkey:
         else:
             return "No operation possible for this monkey"
 
+def execute_all_necessary_rounds(monkeys):
+    for monkey in monkeys:
+        monkey.determine_final_value(monkeys)
+    root_monkey = find_root_monkey(monkeys)
+    if root_monkey.value is None:
+        return execute_all_necessary_rounds(monkeys)
+    else:
+        return root_monkey.value
+    
+def find_root_monkey(monkeys):
+    for monkey in monkeys:
+        if monkey.name == "root":
+            return monkey
+
 def solve_problem():
     data = extract_data_from_file(21, False)
     descriptions = list_all_monkey_descriptions(data)
     monkeys = create_all_monkeys(descriptions)
-    return monkeys
+    root_value = execute_all_necessary_rounds(monkeys)
+    return root_value
 
 def create_all_monkeys(descriptions):
     monkeys = []
