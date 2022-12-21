@@ -80,6 +80,12 @@ class Monkey:
         for monkey in monkeys:
             if monkey.name == "root":
                 return monkey
+        
+    @staticmethod
+    def find_human(monkeys):
+        for monkey in monkeys:
+            if monkey.name == "humn":
+                return monkey
 
     @staticmethod
     def create_all_monkeys(descriptions):
