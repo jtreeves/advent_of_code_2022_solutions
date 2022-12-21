@@ -49,9 +49,7 @@ class Monkey:
         return f"Monkey {self.name}: {self.value}"
     
     def determine_final_value(self, other_monkeys):
-        if self.value is not None:
-            return self.value
-        else:
+        if self.value is None:
             dependency_monkey_values = []
             for dependency in self.dependencies:
                 for other_monkey in other_monkeys:
@@ -59,9 +57,6 @@ class Monkey:
                         dependency_monkey_values.append(other_monkey.value)
             if dependency_monkey_values[0] is not None and dependency_monkey_values[1] is not None:
                 self.value = self.evaluate_expression(dependency_monkey_values[0], dependency_monkey_values[1])
-                return self.value
-            else:
-                return "Not yet determined"
 
     def evaluate_expression(self, first_value, second_value):
         if self.operation == "+":
@@ -75,12 +70,12 @@ class Monkey:
         else:
             return "No operation possible for this monkey"
 
-def execute_all_necessary_rounds(monkeys):
+def execute_all_necessary_rounds_to_get_root_value(monkeys):
     for monkey in monkeys:
         monkey.determine_final_value(monkeys)
     root_monkey = find_root_monkey(monkeys)
     if root_monkey.value is None:
-        return execute_all_necessary_rounds(monkeys)
+        return execute_all_necessary_rounds_to_get_root_value(monkeys)
     else:
         return root_monkey.value
     
@@ -93,7 +88,7 @@ def solve_problem():
     data = extract_data_from_file(21, True)
     descriptions = list_all_monkey_descriptions(data)
     monkeys = create_all_monkeys(descriptions)
-    root_value = execute_all_necessary_rounds(monkeys)
+    root_value = execute_all_necessary_rounds_to_get_root_value(monkeys)
     return root_value
 
 def create_all_monkeys(descriptions):
