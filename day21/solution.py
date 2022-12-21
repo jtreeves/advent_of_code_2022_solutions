@@ -67,40 +67,42 @@ class Monkey:
             return first_value * second_value
         elif self.operation == "/":
             return first_value / second_value
-        else:
-            return "No operation possible for this monkey"
 
-def execute_all_necessary_rounds_to_get_root_value(monkeys):
-    for monkey in monkeys:
-        monkey.determine_final_value(monkeys)
-    root_monkey = find_root_monkey(monkeys)
-    if root_monkey.value is None:
-        return execute_all_necessary_rounds_to_get_root_value(monkeys)
-    else:
-        return root_monkey.value
-    
-def find_root_monkey(monkeys):
-    for monkey in monkeys:
-        if monkey.name == "root":
-            return monkey
+    @staticmethod
+    def execute_all_necessary_rounds_to_get_root_value(monkeys):
+        for monkey in monkeys:
+            monkey.determine_final_value(monkeys)
+        root_monkey = Monkey.find_root_monkey(monkeys)
+        if root_monkey.value is None:
+            return Monkey.execute_all_necessary_rounds_to_get_root_value(monkeys)
+        else:
+            return root_monkey.value
+        
+    @staticmethod
+    def find_root_monkey(monkeys):
+        for monkey in monkeys:
+            if monkey.name == "root":
+                return monkey
+
+    @staticmethod
+    def create_all_monkeys(descriptions):
+        monkeys = []
+        for description in descriptions:
+            monkey = Monkey(description)
+            monkeys.append(monkey)
+        return monkeys
+
+    @staticmethod
+    def list_all_monkey_descriptions(data):
+        descriptions = data.split("\n")
+        return descriptions
 
 def solve_problem():
     data = extract_data_from_file(21, True)
-    descriptions = list_all_monkey_descriptions(data)
-    monkeys = create_all_monkeys(descriptions)
-    root_value = execute_all_necessary_rounds_to_get_root_value(monkeys)
+    descriptions = Monkey.list_all_monkey_descriptions(data)
+    monkeys = Monkey.create_all_monkeys(descriptions)
+    root_value = Monkey.execute_all_necessary_rounds_to_get_root_value(monkeys)
     return root_value
-
-def create_all_monkeys(descriptions):
-    monkeys = []
-    for description in descriptions:
-        monkey = Monkey(description)
-        monkeys.append(monkey)
-    return monkeys
-
-def list_all_monkey_descriptions(data):
-    descriptions = data.split("\n")
-    return descriptions
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
