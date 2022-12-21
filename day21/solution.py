@@ -47,7 +47,20 @@ class Monkey:
 
 def solve_problem():
     data = extract_data_from_file(21, False)
-    return data
+    descriptions = list_all_monkey_descriptions(data)
+    monkeys = create_all_monkeys(descriptions)
+    return monkeys
+
+def create_all_monkeys(descriptions):
+    monkeys = []
+    for description in descriptions:
+        monkey = Monkey(description)
+        monkeys.append(monkey)
+    return monkeys
+
+def list_all_monkey_descriptions(data):
+    descriptions = data.split("\n")
+    return descriptions
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
