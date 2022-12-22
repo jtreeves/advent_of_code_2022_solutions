@@ -113,6 +113,20 @@ class Monkey:
         elif self.operation == "/":
             return first_variable / second_variable
 
+    def find_deeply_nested_expression(self, other_monkeys, expression):
+        if self.value is not None:
+            expression = self.value
+        else:
+            expression = self.create_expression_with_variables()
+            for dependency in self.dependencies:
+                for other_monkey in other_monkeys:
+                    if other_monkey.name == dependency:
+                        if other_monkey.value is not None:
+                            expression = expression.subs(symbols(dependency), other_monkey.value)
+                        else:
+                            expression = expression.subs(symbols(dependency), other_monkey.find_deeply_nested_expression(other_monkeys, expression))
+        return expression
+
     @staticmethod
     def find_needed_humn_value(monkeys):
         root_monkey = Monkey.find_root_monkey(monkeys)
@@ -165,8 +179,9 @@ def solve_problem():
     data = extract_data_from_file(21, False)
     descriptions = Monkey.list_all_monkey_descriptions(data)
     monkeys = Monkey.create_all_monkeys(descriptions)
-    expression = Monkey.find_needed_humn_value(monkeys)
-    # expression = monkeys[0].create_expression_with_variables()
+    # expression = Monkey.find_needed_humn_value(monkeys)
+    expression = 0
+    expression = monkeys[0].find_deeply_nested_expression(monkeys, expression)
     # root_value = Monkey.determine_root_monkey_value(data)
     return expression
 
