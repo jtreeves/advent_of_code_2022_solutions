@@ -1,3 +1,39 @@
+from sympy import symbols, solve
+
+# x = symbols('x')
+# y = symbols('y')
+# expr1 = x + y
+# a = symbols('a')
+# b = symbols('b')
+# expr2 = a * b
+# expr = expr1 - expr2
+# # expr = (((3 + 7) * (x - 3)) + (15 + 35))
+# print(expr)
+# updated = expr.subs(a, 7)
+# print(updated)
+# sol = solve(expr)
+
+# print(sol[0])
+
+# def update_expression(initial_expression, variable_to_replace, value_to_use):
+#     for element in initial_expression:
+#         if element == variable_to_replace:
+#             element = value_to_use
+#     return initial_expression
+
+# updated_expression = update_expression(expr, a, 3)
+# print(updated_expression)
+
+# find root
+# get root's dependencies
+# do left v right
+# for each side, find its dependencies
+# create expression using dependencies and operation
+# for each new dependency, find its dependencies
+# create expression using new dependencies and operation
+# update original left with new values
+# keep going until bottom is humn or integer
+
 class Description:
     def __init__(self, text):
         self.text = text
@@ -65,6 +101,30 @@ class Monkey:
         elif self.operation == "/":
             return int(first_value / second_value)
 
+    def create_expression_with_variables(self):
+        first_variable = symbols(self.dependencies[0])
+        second_variable = symbols(self.dependencies[1])
+        if self.operation == "+":
+            return first_variable + second_variable
+        elif self.operation == "-":
+            return first_variable - second_variable
+        elif self.operation == "*":
+            return first_variable * second_variable
+        elif self.operation == "/":
+            return first_variable / second_variable
+
+    @staticmethod
+    def find_needed_humn_value(monkeys):
+        root_monkey = Monkey.find_root_monkey(monkeys)
+        left = symbols(root_monkey.dependencies[0])
+        right = symbols(root_monkey.dependencies[1])
+        for monkey in monkeys:
+            if monkey.name == root_monkey.dependencies[0]:
+                left = left.subs(left, monkey.create_expression_with_variables())
+            if monkey.name == root_monkey.dependencies[1]:
+                right = right.subs(right, monkey.create_expression_with_variables())
+        return [left, right]
+
     @staticmethod
     def execute_all_necessary_rounds_to_get_root_value(monkeys):
         for monkey in monkeys:
@@ -80,13 +140,7 @@ class Monkey:
         for monkey in monkeys:
             if monkey.name == "root":
                 return monkey
-        
-    @staticmethod
-    def find_human(monkeys):
-        for monkey in monkeys:
-            if monkey.name == "humn":
-                return monkey
-
+    
     @staticmethod
     def create_all_monkeys(descriptions):
         monkeys = []
@@ -108,9 +162,13 @@ class Monkey:
         return root_value
 
 def solve_problem():
-    data = extract_data_from_file(21, True)
-    root_value = Monkey.determine_root_monkey_value(data)
-    return root_value
+    data = extract_data_from_file(21, False)
+    descriptions = Monkey.list_all_monkey_descriptions(data)
+    monkeys = Monkey.create_all_monkeys(descriptions)
+    expression = Monkey.find_needed_humn_value(monkeys)
+    # expression = monkeys[0].create_expression_with_variables()
+    # root_value = Monkey.determine_root_monkey_value(data)
+    return expression
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
