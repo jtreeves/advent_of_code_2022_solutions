@@ -1,38 +1,4 @@
-from sympy import symbols, solve, UnevaluatedExpr
-
-# x = symbols('x')
-# y = symbols('y')
-# expr1 = x + y
-# a = symbols('a')
-# b = symbols('b')
-# expr2 = a * b
-# expr = expr1 - expr2
-# # expr = (((3 + 7) * (x - 3)) + (15 + 35))
-# print(expr)
-# updated = expr.subs(a, 7)
-# print(updated)
-# sol = solve(expr)
-
-# print(sol[0])
-
-# def update_expression(initial_expression, variable_to_replace, value_to_use):
-#     for element in initial_expression:
-#         if element == variable_to_replace:
-#             element = value_to_use
-#     return initial_expression
-
-# updated_expression = update_expression(expr, a, 3)
-# print(updated_expression)
-
-# find root
-# get root's dependencies
-# do left v right
-# for each side, find its dependencies
-# create expression using dependencies and operation
-# for each new dependency, find its dependencies
-# create expression using new dependencies and operation
-# update original left with new values
-# keep going until bottom is humn or integer
+from sympy import symbols, solve
 
 class Description:
     def __init__(self, text):
@@ -115,18 +81,18 @@ class Monkey:
 
     def find_deeply_nested_expression_with_humn(self, other_monkeys, expression):
         if self.name == "humn":
-            expression = UnevaluatedExpr(symbols("humn"))
+            expression = symbols("humn")
         elif self.value is not None:
-            expression = UnevaluatedExpr(self.value)
+            expression = self.value
         else:
-            expression = UnevaluatedExpr(self.create_expression_with_variables())
+            expression = self.create_expression_with_variables()
             for dependency in self.dependencies:
                 for other_monkey in other_monkeys:
                     if other_monkey.name == dependency:
                         if other_monkey.value is not None and other_monkey.name != "humn":
-                            expression = UnevaluatedExpr(expression.subs(symbols(dependency), other_monkey.value))
+                            expression = expression.subs(symbols(dependency), other_monkey.value)
                         else:
-                            expression = UnevaluatedExpr(expression.subs(symbols(dependency), other_monkey.find_deeply_nested_expression_with_humn(other_monkeys, expression)))
+                            expression = expression.subs(symbols(dependency), other_monkey.find_deeply_nested_expression_with_humn(other_monkeys, expression))
         return expression
 
     @staticmethod
@@ -139,7 +105,10 @@ class Monkey:
                 left = left.subs(left, monkey.find_deeply_nested_expression_with_humn(monkeys, left))
             if monkey.name == root_monkey.dependencies[1]:
                 right = right.subs(right, monkey.find_deeply_nested_expression_with_humn(monkeys, right))
-        return [left, right]
+        final_expression = left - right
+        solution = solve(final_expression)
+        humn_value = solution[0]
+        return humn_value
 
     @staticmethod
     def execute_all_necessary_rounds_to_get_root_value(monkeys):
@@ -181,11 +150,11 @@ def solve_problem():
     data = extract_data_from_file(21, False)
     descriptions = Monkey.list_all_monkey_descriptions(data)
     monkeys = Monkey.create_all_monkeys(descriptions)
-    expression = Monkey.find_needed_humn_value(monkeys)
+    value = Monkey.find_needed_humn_value(monkeys)
     # expression = 0
     # expression = monkeys[0].find_deeply_nested_expression_with_humn(monkeys, expression)
     # root_value = Monkey.determine_root_monkey_value(data)
-    return expression
+    return value
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
