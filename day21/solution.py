@@ -1,4 +1,4 @@
-from sympy import symbols, solve
+from sympy import symbols, solve, UnevaluatedExpr
 
 # x = symbols('x')
 # y = symbols('y')
@@ -113,18 +113,20 @@ class Monkey:
         elif self.operation == "/":
             return first_variable / second_variable
 
-    def find_deeply_nested_expression(self, other_monkeys, expression):
-        if self.value is not None:
-            expression = self.value
+    def find_deeply_nested_expression_with_humn(self, other_monkeys, expression):
+        if self.name == "humn":
+            expression = UnevaluatedExpr(symbols("humn"))
+        elif self.value is not None:
+            expression = UnevaluatedExpr(self.value)
         else:
-            expression = self.create_expression_with_variables()
+            expression = UnevaluatedExpr(self.create_expression_with_variables())
             for dependency in self.dependencies:
                 for other_monkey in other_monkeys:
                     if other_monkey.name == dependency:
-                        if other_monkey.value is not None:
-                            expression = expression.subs(symbols(dependency), other_monkey.value)
+                        if other_monkey.value is not None and other_monkey.name != "humn":
+                            expression = UnevaluatedExpr(expression.subs(symbols(dependency), other_monkey.value))
                         else:
-                            expression = expression.subs(symbols(dependency), other_monkey.find_deeply_nested_expression(other_monkeys, expression))
+                            expression = UnevaluatedExpr(expression.subs(symbols(dependency), other_monkey.find_deeply_nested_expression_with_humn(other_monkeys, expression)))
         return expression
 
     @staticmethod
@@ -134,9 +136,9 @@ class Monkey:
         right = symbols(root_monkey.dependencies[1])
         for monkey in monkeys:
             if monkey.name == root_monkey.dependencies[0]:
-                left = left.subs(left, monkey.create_expression_with_variables())
+                left = left.subs(left, monkey.find_deeply_nested_expression_with_humn(monkeys, left))
             if monkey.name == root_monkey.dependencies[1]:
-                right = right.subs(right, monkey.create_expression_with_variables())
+                right = right.subs(right, monkey.find_deeply_nested_expression_with_humn(monkeys, right))
         return [left, right]
 
     @staticmethod
@@ -179,9 +181,9 @@ def solve_problem():
     data = extract_data_from_file(21, False)
     descriptions = Monkey.list_all_monkey_descriptions(data)
     monkeys = Monkey.create_all_monkeys(descriptions)
-    # expression = Monkey.find_needed_humn_value(monkeys)
-    expression = 0
-    expression = monkeys[0].find_deeply_nested_expression(monkeys, expression)
+    expression = Monkey.find_needed_humn_value(monkeys)
+    # expression = 0
+    # expression = monkeys[0].find_deeply_nested_expression_with_humn(monkeys, expression)
     # root_value = Monkey.determine_root_monkey_value(data)
     return expression
 
