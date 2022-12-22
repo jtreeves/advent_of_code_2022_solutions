@@ -146,15 +146,21 @@ class Monkey:
         root_value = Monkey.execute_all_necessary_rounds_to_get_root_value(monkeys)
         return root_value
 
+    @staticmethod
+    def determine_humn_value_for_root_equality(data):
+        descriptions = Monkey.list_all_monkey_descriptions(data)
+        monkeys = Monkey.create_all_monkeys(descriptions)
+        humn_value = Monkey.find_needed_humn_value(monkeys)
+        return humn_value
+
 def solve_problem():
-    data = extract_data_from_file(21, False)
-    descriptions = Monkey.list_all_monkey_descriptions(data)
-    monkeys = Monkey.create_all_monkeys(descriptions)
-    value = Monkey.find_needed_humn_value(monkeys)
-    # expression = 0
-    # expression = monkeys[0].find_deeply_nested_expression_with_humn(monkeys, expression)
-    # root_value = Monkey.determine_root_monkey_value(data)
-    return value
+    data = extract_data_from_file(21, True)
+    root_value = Monkey.determine_root_monkey_value(data)
+    humn_value = Monkey.determine_humn_value_for_root_equality(data)
+    return {
+        "part1": root_value,
+        "part2": humn_value
+    }
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
