@@ -107,6 +107,73 @@ class CoordinatePair:
             else:
                 return False
 
+    def find_new_location_to_propose(self, round, other_points):
+        step = round % 4
+        if step == 1:
+            north = self.check_if_any_north_occupied(other_points)
+            if north:
+                self.propose_new_location(self.x, self.y + 1)
+            else:
+                south = self.check_if_any_south_occupied(other_points)
+                if south:
+                    self.propose_new_location(self.x, self.y - 1)
+                else:
+                    west = self.check_if_any_west_occupied(other_points)
+                    if west:
+                        self.propose_new_location(self.x - 1, self.y)
+                    else:
+                        east = self.check_if_any_east_occupied(other_points)
+                        if east:
+                            self.propose_new_location(self.x + 1, self.y)
+        elif step == 2:
+            south = self.check_if_any_south_occupied(other_points)
+            if south:
+                self.propose_new_location(self.x, self.y - 1)
+            else:
+                west = self.check_if_any_west_occupied(other_points)
+                if west:
+                    self.propose_new_location(self.x - 1, self.y)
+                else:
+                    east = self.check_if_any_east_occupied(other_points)
+                    if east:
+                        self.propose_new_location(self.x + 1, self.y)
+                    else:
+                        north = self.check_if_any_north_occupied(other_points)
+                        if north:
+                            self.propose_new_location(self.x, self.y + 1)
+        elif step == 3:
+            west = self.check_if_any_west_occupied(other_points)
+            if west:
+                self.propose_new_location(self.x - 1, self.y)
+            else:
+                east = self.check_if_any_east_occupied(other_points)
+                if east:
+                    self.propose_new_location(self.x + 1, self.y)
+                else:
+                    north = self.check_if_any_north_occupied(other_points)
+                    if north:
+                        self.propose_new_location(self.x, self.y + 1)
+                    else:
+                        south = self.check_if_any_south_occupied(other_points)
+                        if south:
+                            self.propose_new_location(self.x, self.y - 1)
+        else:
+            east = self.check_if_any_east_occupied(other_points)
+            if east:
+                self.propose_new_location(self.x + 1, self.y)
+            else:
+                north = self.check_if_any_north_occupied(other_points)
+                if north:
+                    self.propose_new_location(self.x, self.y + 1)
+                else:
+                    south = self.check_if_any_south_occupied(other_points)
+                    if south:
+                        self.propose_new_location(self.x, self.y - 1)
+                    else:
+                        west = self.check_if_any_west_occupied(other_points)
+                        if west:
+                            self.propose_new_location(self.x - 1, self.y)
+
     def propose_new_location(self, new_x, new_y):
         self.proposed_x = new_x
         self.proposed_y = new_y
