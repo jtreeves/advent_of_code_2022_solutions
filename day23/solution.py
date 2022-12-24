@@ -8,6 +8,98 @@ class CoordinatePair:
     def __repr__(self):
         return f"({self.x}, {self.y})"
 
+    def check_if_direct_north_occupied(self, other_points):
+        for other_point in other_points:
+            if self.x == other_point.x and self.y + 1 == other_point.y:
+                return True
+            else:
+                return False
+
+    def check_if_direct_south_occupied(self, other_points):
+        for other_point in other_points:
+            if self.x == other_point.x and self.y - 1 == other_point.y:
+                return True
+            else:
+                return False
+
+    def check_if_direct_east_occupied(self, other_points):
+        for other_point in other_points:
+            if self.x + 1 == other_point.x and self.y == other_point.y:
+                return True
+            else:
+                return False
+
+    def check_if_direct_west_occupied(self, other_points):
+        for other_point in other_points:
+            if self.x - 1 == other_point.x and self.y == other_point.y:
+                return True
+            else:
+                return False
+
+    def check_if_northeast_occupied(self, other_points):
+        for other_point in other_points:
+            if self.x + 1 == other_point.x and self.y + 1 == other_point.y:
+                return True
+            else:
+                return False
+
+    def check_if_northwest_occupied(self, other_points):
+        for other_point in other_points:
+            if self.x - 1 == other_point.x and self.y + 1 == other_point.y:
+                return True
+            else:
+                return False
+
+    def check_if_southeast_occupied(self, other_points):
+        for other_point in other_points:
+            if self.x + 1 == other_point.x and self.y - 1 == other_point.y:
+                return True
+            else:
+                return False
+
+    def check_if_southwest_occupied(self, other_points):
+        for other_point in other_points:
+            if self.x - 1 == other_point.x and self.y - 1 == other_point.y:
+                return True
+            else:
+                return False
+
+    def check_if_any_north_occupied(self, other_points):
+        direct_north = self.check_if_direct_north_occupied(other_points)
+        northwest = self.check_if_northwest_occupied(other_points)
+        northeast = self.check_if_northeast_occupied(other_points)
+        if not direct_north and not northwest and not northeast:
+            return True
+        else:
+            return False
+
+    def check_if_any_south_occupied(self, other_points):
+        direct_south = self.check_if_direct_south_occupied(other_points)
+        southwest = self.check_if_southwest_occupied(other_points)
+        southeast = self.check_if_southeast_occupied(other_points)
+        if not direct_south and not southwest and not southeast:
+            return True
+        else:
+            return False
+
+    def check_if_any_east_occupied(self, other_points):
+        direct_east = self.check_if_direct_east_occupied(other_points)
+        southeast = self.check_if_southeast_occupied(other_points)
+        northeast = self.check_if_northeast_occupied(other_points)
+        if not direct_east and not northeast and not southeast:
+            return True
+        else:
+            return False
+
+    def check_if_any_west_occupied(self, other_points):
+        direct_west = self.check_if_direct_west_occupied(other_points)
+        southwest = self.check_if_southwest_occupied(other_points)
+        northwest = self.check_if_northwest_occupied(other_points)
+        if not direct_west and not northwest and not southwest:
+            return True
+        else:
+            return False
+
     def check_if_proposed_location_already_proposed(self, other_points):
         for other_point in other_points:
             if self.proposed_x == other_point.proposed_x and self.proposed_y == other_point.proposed_y:
