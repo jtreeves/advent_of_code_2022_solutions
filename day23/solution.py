@@ -8,11 +8,12 @@ class CoordinatePair:
     def __repr__(self):
         return f"({self.x}, {self.y})"
 
-    def check_if_equal(self, other_point):
-        if self.x == other_point.x and self.y == other_point.y:
-            return True
-        else:
-            return False
+    def check_if_proposed_location_already_proposed(self, other_points):
+        for other_point in other_points:
+            if self.proposed_x == other_point.proposed_x and self.proposed_y == other_point.proposed_y:
+                return True
+            else:
+                return False
 
     def propose_new_location(self, new_x, new_y):
         self.proposed_x = new_x
