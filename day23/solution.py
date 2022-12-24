@@ -118,6 +118,7 @@ class CoordinatePair:
 class Grid:
     def __init__(self, description):
         self.lines = description.split("\n")
+        self.round = 1
         self.original_height = len(self.lines)
         self.original_width = len(self.lines[0])
         self.pairs = self.create_pairs()
@@ -130,6 +131,9 @@ class Grid:
                     new_pair = CoordinatePair(column, row)
                     pairs.append(new_pair)
         return pairs
+    
+    def increment_round(self):
+        self.round += 1
 
 def solve_problem():
     data = extract_data_from_file(23, False)
