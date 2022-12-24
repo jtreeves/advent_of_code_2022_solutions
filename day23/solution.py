@@ -107,7 +107,7 @@ class CoordinatePair:
             else:
                 return False
 
-    def find_new_location_to_propose(self, round, other_points):
+    def find_new_location_to_propose(self, other_points, round):
         step = round % 4
         if step == 1:
             north = self.check_if_any_north_occupied(other_points)
@@ -201,10 +201,19 @@ class Grid:
     
     def increment_round(self):
         self.round += 1
+    
+    def execute_full_round(self):
+        for pair in self.pairs:
+            pair.find_new_location_to_propose(self.pairs, self.round)
+        for pair in self.pairs:
+            if pair.check_if_proposed_location_already_proposed(self.pairs):
+                pair.move_to_new_location()
+        self.increment_round()
 
 def solve_problem():
     data = extract_data_from_file(23, False)
     grid = Grid(data)
+    grid.execute_full_round()
     return grid.pairs
 
 def extract_data_from_file(day_number, is_official):
