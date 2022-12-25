@@ -220,13 +220,37 @@ class Grid:
     def execute_multiple_rounds(self, amount_of_rounds):
         for _ in range(amount_of_rounds):
             self.execute_full_round()
+    
+    def determine_current_dimensions(self):
+        x_max = self.pairs[0].x
+        x_min = self.pairs[0].x
+        y_max = self.pairs[0].y
+        y_min = self.pairs[0].y
+        for pair in self.pairs:
+            if pair.x > x_max:
+                x_max = pair.x
+            if pair.x < x_min:
+                x_min = pair.x
+            if pair.y > y_max:
+                y_max = pair.y
+            if pair.y < y_min:
+                y_min = pair.y
+        width = x_max - x_min
+        height = y_max - y_min
+        dimensions = {
+            "width": width,
+            "height": height
+        }
+        return dimensions
 
 def solve_problem():
     data = extract_data_from_file(23, False)
     grid = Grid(data)
     print(grid.pairs)
     grid.execute_multiple_rounds(10)
-    return grid.pairs
+    dimensions = grid.determine_current_dimensions()
+    print(dimensions)
+    return grid.amount_of_pairs
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
