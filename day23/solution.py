@@ -216,12 +216,16 @@ class Grid:
             if not pair.check_if_proposed_location_already_proposed(self.pairs):
                 pair.move_to_new_location()
         self.increment_round()
+    
+    def execute_multiple_rounds(self, amount_of_rounds):
+        for _ in range(amount_of_rounds):
+            self.execute_full_round()
 
 def solve_problem():
     data = extract_data_from_file(23, False)
     grid = Grid(data)
     print(grid.pairs)
-    grid.execute_full_round()
+    grid.execute_multiple_rounds(10)
     return grid.pairs
 
 def extract_data_from_file(day_number, is_official):
