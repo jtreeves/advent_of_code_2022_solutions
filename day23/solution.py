@@ -103,7 +103,7 @@ class CoordinatePair:
     def check_if_proposed_location_already_proposed(self, other_points):
         already_proposed = False
         for other_point in other_points:
-            if self.proposed_x == other_point.proposed_x and self.proposed_y == other_point.proposed_y:
+            if self.proposed_x == other_point.proposed_x and self.proposed_y == other_point.proposed_y and self is not other_point:
                 already_proposed = True
         return already_proposed
 
