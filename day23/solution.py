@@ -235,8 +235,8 @@ class Grid:
                 y_max = pair.y
             if pair.y < y_min:
                 y_min = pair.y
-        width = x_max - x_min
-        height = y_max - y_min
+        width = x_max - x_min + 1
+        height = y_max - y_min + 1
         dimensions = {
             "width": width,
             "height": height
@@ -252,7 +252,7 @@ class Grid:
 def solve_problem():
     data = extract_data_from_file(23, False)
     grid = Grid(data)
-    grid.execute_multiple_rounds(10)
+    grid.execute_multiple_rounds(3)
     dimensions = grid.determine_current_dimensions()
     print(grid.pairs)
     print(dimensions)
