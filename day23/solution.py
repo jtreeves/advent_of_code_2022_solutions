@@ -243,13 +243,21 @@ class Grid:
         }
         return dimensions
 
+    def calculate_blank_spaces(self):
+        dimensions = self.determine_current_dimensions()
+        area = dimensions["height"] * dimensions["width"]
+        blanks = area - self.amount_of_pairs
+        return blanks
+
 def solve_problem():
     data = extract_data_from_file(23, False)
     grid = Grid(data)
-    print(grid.pairs)
     grid.execute_multiple_rounds(10)
     dimensions = grid.determine_current_dimensions()
+    print(grid.pairs)
     print(dimensions)
+    blanks = grid.calculate_blank_spaces()
+    print(blanks)
     return grid.amount_of_pairs
 
 def extract_data_from_file(day_number, is_official):
