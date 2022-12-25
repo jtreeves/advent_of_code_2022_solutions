@@ -190,6 +190,7 @@ class Grid:
         self.original_height = len(self.lines)
         self.original_width = len(self.lines[0])
         self.pairs = self.create_pairs()
+        self.amount_of_pairs = len(self.pairs)
     
     def create_lines(self):
         lines = self.description.split("\n")
