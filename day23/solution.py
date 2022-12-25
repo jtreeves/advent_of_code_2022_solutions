@@ -101,14 +101,13 @@ class CoordinatePair:
             return False
 
     def check_if_proposed_location_already_proposed(self, other_points):
+        already_proposed = False
         for other_point in other_points:
             if self.proposed_x == other_point.proposed_x and self.proposed_y == other_point.proposed_y:
-                return True
-            else:
-                return False
+                already_proposed = True
+        return already_proposed
 
     def find_new_location_to_propose(self, other_points, round):
-        print(self)
         step = round % 4
         if step == 1:
             north = self.confirm_no_north_occupied(other_points)
