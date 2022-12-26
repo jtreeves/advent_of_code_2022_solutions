@@ -48,11 +48,18 @@ class Bob:
             digital_number = snafu_number.convert_to_decimal()
             digital_numbers.append(digital_number)
         return digital_numbers
+    
+    def calculate_total_fuel_in_decimal(self):
+        total = 0
+        for decimal in self.digital_numbers:
+            total += decimal
+        return total
 
 def solve_problem():
     data = extract_data_from_file(25, False)
     bob = Bob(data)
-    return bob.digital_numbers
+    total_decimal = bob.calculate_total_fuel_in_decimal()
+    return total_decimal
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
