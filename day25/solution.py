@@ -1,4 +1,5 @@
 import copy
+import math
 
 class SNAFU:
     def __init__(self, respresentation):
@@ -27,6 +28,31 @@ class SNAFU:
             return -1
         elif digit == "=":
             return -2
+    
+    @staticmethod
+    def convert_to_snafu(decimal):
+        snafu = ""
+        log_5 = math.log(decimal, 5)
+        lower_bound = math.ceil(log_5)
+        upper_bound = lower_bound + 1
+        above_lower = decimal > 5 ** lower_bound
+        below_upper = decimal < 5 ** upper_bound
+        exact_already = log_5 % 1 == 0
+        return {
+            "above": above_lower,
+            "below": below_upper,
+            "exact": exact_already
+        }
+    
+    @staticmethod
+    def convert_to_base_5(decimal, conversion):
+        remainder = decimal % 5
+        conversion.insert(0, str(remainder))
+        quotient = int(decimal / 5)
+        if quotient == 0:
+            return "".join(conversion)
+        else:
+            return SNAFU.convert_to_base_5(quotient, conversion)
 
 class Bob:
     def __init__(self, directions):
@@ -57,8 +83,12 @@ class Bob:
 def solve_problem():
     data = extract_data_from_file(25, False)
     bob = Bob(data)
-    total_decimal = bob.calculate_total_fuel_in_decimal()
-    return total_decimal
+    for i in range(30):
+        print(f"NUMBER: {i + 1}")
+        print(SNAFU.convert_to_base_5(i + 1, []))
+    # print(SNAFU.convert_to_base_5(353, []))
+    # total_decimal = bob.calculate_total_fuel_in_decimal()
+    # return total_decimal
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
