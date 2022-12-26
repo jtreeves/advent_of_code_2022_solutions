@@ -30,19 +30,46 @@ class SNAFU:
             return -2
     
     @staticmethod
-    def convert_to_snafu(decimal):
-        snafu = ""
-        log_5 = math.log(decimal, 5)
-        lower_bound = math.ceil(log_5)
-        upper_bound = lower_bound + 1
-        above_lower = decimal > 5 ** lower_bound
-        below_upper = decimal < 5 ** upper_bound
-        exact_already = log_5 % 1 == 0
-        return {
-            "above": above_lower,
-            "below": below_upper,
-            "exact": exact_already
-        }
+    def convert_to_snafu(base_5, conversion):
+        base_5_list = list(base_5)
+        for index, char in enumerate(reversed(base_5_list)):
+            if index == 0:
+                if char == "3":
+                    updated = "="
+                elif char == "4":
+                    updated = "-"
+                elif char == "5":
+                    updated = "0"
+                else:
+                    updated = char
+                if updated == char:
+                    return updated + "".join(conversion)
+                else:
+                    return "1" + updated + "".join(conversion)
+            else:
+                if char == "3":
+                    updated = "="
+                elif char == "4":
+                    updated = "-"
+                elif char == "5":
+                    updated = "0"
+                else:
+                    updated = char
+                if updated == char:
+                    conversion.insert(0, updated)
+                else:
+                    previous = int(base_5_list[index - 1])
+                    updated_preceding = str(previous + 1)
+                    beginning = "".join(base_5_list[0:index - 1])
+                    ending = "".join(base_5_list[index + 1:])
+                    print(f"BEGINNING: {beginning}")
+                    print(f"UPDATED PRECEDING: {updated_preceding}")
+                    print(f"UPDATED: {updated}")
+                    print(f"ENDING: {ending}")
+                    updated_whole = beginning + updated_preceding + updated + ending
+                    conversion.insert(0, updated)
+                    conversion.insert(0, updated_preceding)
+                    return SNAFU.convert_to_snafu(updated_whole, conversion)
     
     @staticmethod
     def convert_to_base_5(decimal, conversion):
@@ -85,7 +112,10 @@ def solve_problem():
     bob = Bob(data)
     for i in range(30):
         print(f"NUMBER: {i + 1}")
-        print(SNAFU.convert_to_base_5(i + 1, []))
+        base_5= SNAFU.convert_to_base_5(i + 1, [])
+        print(f"BASE 5: {base_5}")
+        snafu = SNAFU.convert_to_snafu(base_5, [])
+        print(f"SNAFU: {snafu}")
     # print(SNAFU.convert_to_base_5(353, []))
     # total_decimal = bob.calculate_total_fuel_in_decimal()
     # return total_decimal
