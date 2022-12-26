@@ -31,45 +31,27 @@ class SNAFU:
     
     @staticmethod
     def convert_to_snafu(base_5, conversion):
-        base_5_list = list(base_5)
-        for index, char in enumerate(reversed(base_5_list)):
-            if index == 0:
-                if char == "3":
-                    updated = "="
-                elif char == "4":
-                    updated = "-"
-                elif char == "5":
-                    updated = "0"
-                else:
-                    updated = char
-                if updated == char:
-                    return updated + "".join(conversion)
-                else:
-                    return "1" + updated + "".join(conversion)
-            else:
-                if char == "3":
-                    updated = "="
-                elif char == "4":
-                    updated = "-"
-                elif char == "5":
-                    updated = "0"
-                else:
-                    updated = char
-                if updated == char:
-                    conversion.insert(0, updated)
-                else:
-                    previous = int(base_5_list[index - 1])
-                    updated_preceding = str(previous + 1)
-                    beginning = "".join(base_5_list[0:index - 1])
-                    ending = "".join(base_5_list[index + 1:])
-                    print(f"BEGINNING: {beginning}")
-                    print(f"UPDATED PRECEDING: {updated_preceding}")
-                    print(f"UPDATED: {updated}")
-                    print(f"ENDING: {ending}")
-                    updated_whole = beginning + updated_preceding + updated + ending
-                    conversion.insert(0, updated)
-                    conversion.insert(0, updated_preceding)
-                    return SNAFU.convert_to_snafu(updated_whole, conversion)
+        final_character = base_5[-1]
+        updated_base = base_5[:-1]
+        if final_character == "3" or final_character == "4" or final_character == "5":
+            preceding = int(updated_base[-1]) if len(updated_base) != 0 else 0
+            updated_preceding = str(preceding + 1)
+            updated_base = updated_base[:-1] if len(updated_base) != 0 else []
+            if final_character == "3":
+                updated = "="
+            elif final_character == "4":
+                updated = "-"
+            elif final_character == "5":
+                updated = "0"
+            conversion.insert(0, updated)
+            conversion.insert(0, updated_preceding)
+        else:
+            conversion.insert(0, final_character)
+        if len(updated_base) == 0:
+            return "".join(conversion)
+        else:
+            return SNAFU.convert_to_snafu(updated_base, conversion)
+        
     
     @staticmethod
     def convert_to_base_5(decimal, conversion):
@@ -116,7 +98,7 @@ def solve_problem():
         print(f"BASE 5: {base_5}")
         snafu = SNAFU.convert_to_snafu(base_5, [])
         print(f"SNAFU: {snafu}")
-    # print(SNAFU.convert_to_base_5(353, []))
+    print(SNAFU.convert_to_snafu(SNAFU.convert_to_base_5(353, []), []))
     # total_decimal = bob.calculate_total_fuel_in_decimal()
     # return total_decimal
 
