@@ -110,7 +110,7 @@ The Elves are starting to get cold. What SNAFU number do you supply to Bob's con
 
 ### Solution
 
-NOT YET SOLVED
+2-0==21--=0==2201==2
 
 ## Part Two
 

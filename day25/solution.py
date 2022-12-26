@@ -94,7 +94,7 @@ class Bob:
     def calculate_total_fuel_in_snafu(self):
         decimal = self.calculate_total_fuel_in_decimal()
         base_5 = SNAFU.convert_to_base_5(decimal, [])
-        snafu = SNAFU.convert_to_snafu(base_5, [])
+        snafu = SNAFU.convert_to_snafu(base_5)
         return snafu
 
 def solve_problem():
