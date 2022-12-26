@@ -89,20 +89,18 @@ class Bob:
         for decimal in self.digital_numbers:
             total += decimal
         return total
+    
+    def calculate_total_fuel_in_snafu(self):
+        decimal = self.calculate_total_fuel_in_decimal()
+        base_5 = SNAFU.convert_to_base_5(decimal, [])
+        snafu = SNAFU.convert_to_snafu(base_5, [])
+        return snafu
 
 def solve_problem():
-    data = extract_data_from_file(25, False)
+    data = extract_data_from_file(25, True)
     bob = Bob(data)
-    # for i in range(30):
-    #     print(f"NUMBER: {i + 1}")
-    #     base_5= SNAFU.convert_to_base_5(i + 1, [])
-    #     print(f"BASE 5: {base_5}")
-    #     snafu = SNAFU.convert_to_snafu(base_5, [])
-    #     print(f"SNAFU: {snafu}")
-    print(SNAFU.convert_to_snafu(SNAFU.convert_to_base_5(353, []), []))
-    print(SNAFU.convert_to_snafu(SNAFU.convert_to_base_5(1747, []), []))
-    # total_decimal = bob.calculate_total_fuel_in_decimal()
-    # return total_decimal
+    total_snafu = bob.calculate_total_fuel_in_snafu()
+    return total_snafu
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
