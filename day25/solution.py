@@ -1,5 +1,4 @@
 import copy
-import math
 
 class SNAFU:
     def __init__(self, respresentation):
