@@ -37,12 +37,20 @@ class Bob:
     def create_snafu_numbers(self):
         snafu_numbers = []
         for representation in self.representations:
-            new_snafu = SNAFU(representation)
-            snafu_numbers.append(new_snafu)
+            snafu_number = SNAFU(representation)
+            snafu_numbers.append(snafu_number)
         return snafu_numbers
+    
+    def convert_snafu_numbers_to_digital(self):
+        digital_numbers = []
+        for snafu_number in self.snafu_numbers:
+            digital_number = snafu_number.convert_to_decimal()
+            digital_numbers.append(digital_number)
+        return digital_numbers
 
 def solve_problem():
     data = extract_data_from_file(25, False)
+    bob = Bob(data)
     return data
 
 def extract_data_from_file(day_number, is_official):
