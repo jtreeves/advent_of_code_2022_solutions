@@ -30,28 +30,30 @@ class SNAFU:
             return -2
     
     @staticmethod
-    def convert_to_snafu(base_5, conversion):
-        final_character = base_5[-1]
-        updated_base = base_5[:-1]
-        if final_character == "3" or final_character == "4" or final_character == "5":
-            preceding = int(updated_base[-1]) if len(updated_base) != 0 else 0
-            updated_preceding = str(preceding + 1)
-            updated_base = updated_base[:-1] if len(updated_base) != 0 else ""
-            if final_character == "3":
+    def convert_to_snafu(base_5):
+        last_index_3 = base_5.rfind("3")
+        last_index_4 = base_5.rfind("4")
+        last_index_5 = base_5.rfind("5")
+        if last_index_3 == -1 and last_index_4 == -1 and last_index_5 == -1:
+            return base_5
+        else:
+            last_indices = [last_index_3, last_index_4, last_index_5]
+            last_indices.sort()
+            highest_index = last_indices[-1]
+            preceding_index = highest_index - 1
+            beginning = base_5[:preceding_index] if preceding_index > 0 else ""
+            preceding_value = int(base_5[preceding_index]) if preceding_index >= 0 else 0
+            value = int(base_5[highest_index])
+            ending = base_5[highest_index + 1:] if highest_index < len(base_5) - 1 else ""
+            if value == 3:
                 updated = "="
-            elif final_character == "4":
+            elif value == 4:
                 updated = "-"
-            elif final_character == "5":
+            elif value == 5:
                 updated = "0"
-            conversion.insert(0, updated)
-            updated_updated_preceding = SNAFU.convert_to_snafu(updated_preceding, [])
-            conversion.insert(0, updated_updated_preceding)
-        else:
-            conversion.insert(0, final_character)
-        if len(updated_base) == 0:
-            return "".join(conversion)
-        else:
-            return SNAFU.convert_to_snafu(updated_base, conversion)
+            updated_preceding = str(preceding_value + 1)
+            updated_base = beginning + updated_preceding + updated + ending
+            return SNAFU.convert_to_snafu(updated_base)
         
     
     @staticmethod
