@@ -263,6 +263,8 @@ What is the fewest number of minutes required to avoid the blizzards and reach t
 
 ### Solution
 
+NOT YET SOLVED
+
 ## Part Two
 
 ### Problem
