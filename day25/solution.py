@@ -2,7 +2,7 @@ import copy
 
 class SNAFU:
     def __init__(self, respresentation):
-        self.digits = respresentation.split("")
+        self.digits = list(respresentation)
         self.backwards_digits = copy.deepcopy(self.digits)
         self.backwards_digits.reverse()
         self.places = len(self.digits)
@@ -33,6 +33,7 @@ class Bob:
     def __init__(self, directions):
         self.representations = directions.split("\n")
         self.snafu_numbers = self.create_snafu_numbers()
+        self.digital_numbers = self.convert_snafu_numbers_to_digital()
     
     def create_snafu_numbers(self):
         snafu_numbers = []
@@ -51,7 +52,7 @@ class Bob:
 def solve_problem():
     data = extract_data_from_file(25, False)
     bob = Bob(data)
-    return data
+    return bob.digital_numbers
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
