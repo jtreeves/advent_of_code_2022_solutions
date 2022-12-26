@@ -4,7 +4,15 @@ class SNAFU:
 
 class Bob:
     def __init__(self, directions):
-        self.numbers = directions.split("\n")
+        self.representations = directions.split("\n")
+        self.snafu_numbers = self.create_snafu_numbers()
+    
+    def create_snafu_numbers(self):
+        snafu_numbers = []
+        for representation in self.representations:
+            new_snafu = SNAFU(representation)
+            snafu_numbers.append(new_snafu)
+        return snafu_numbers
 
 def solve_problem():
     data = extract_data_from_file(25, False)
