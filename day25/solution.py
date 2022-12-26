@@ -1,6 +1,33 @@
+import copy
+
 class SNAFU:
     def __init__(self, respresentation):
-        self.representation = respresentation
+        self.digits = respresentation.split("")
+        self.backwards_digits = copy.deepcopy(self.digits)
+        self.backwards_digits.reverse()
+        self.places = len(self.digits)
+    
+    def convert_to_decimal(self):
+        total = 0
+        for i in range(len(self.backwards_digits)):
+            multiplier = 5 ** i
+            value = SNAFU.determine_value_of_digit(self.backwards_digits[i])
+            product = multiplier * value
+            total += product
+        return total
+    
+    @staticmethod
+    def determine_value_of_digit(digit):
+        if digit == "2":
+            return 2
+        elif digit == "1":
+            return 1
+        elif digit == "0":
+            return 0
+        elif digit == "-":
+            return -1
+        elif digit == "=":
+            return -2
 
 class Bob:
     def __init__(self, directions):
