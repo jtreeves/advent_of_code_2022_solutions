@@ -1,3 +1,11 @@
+class SNAFU:
+    def __init__(self, respresentation):
+        self.representation = respresentation
+
+class Bob:
+    def __init__(self, directions):
+        self.numbers = directions.split("\n")
+
 def solve_problem():
     data = extract_data_from_file(25, False)
     return data
