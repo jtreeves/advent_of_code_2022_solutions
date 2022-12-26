@@ -3,15 +3,14 @@ import copy
 class SNAFU:
     def __init__(self, respresentation):
         self.digits = list(respresentation)
-        self.backwards_digits = copy.deepcopy(self.digits)
-        self.backwards_digits.reverse()
-        self.places = len(self.digits)
     
     def convert_to_decimal(self):
         total = 0
-        for i in range(len(self.backwards_digits)):
+        backwards_digits = copy.deepcopy(self.digits)
+        backwards_digits.reverse()
+        for i in range(len(backwards_digits)):
             multiplier = 5 ** i
-            value = SNAFU.determine_value_of_digit(self.backwards_digits[i])
+            value = SNAFU.determine_value_of_digit(backwards_digits[i])
             product = multiplier * value
             total += product
         return total
