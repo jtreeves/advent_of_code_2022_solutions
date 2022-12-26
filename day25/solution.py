@@ -36,7 +36,7 @@ class SNAFU:
         if final_character == "3" or final_character == "4" or final_character == "5":
             preceding = int(updated_base[-1]) if len(updated_base) != 0 else 0
             updated_preceding = str(preceding + 1)
-            updated_base = updated_base[:-1] if len(updated_base) != 0 else []
+            updated_base = updated_base[:-1] if len(updated_base) != 0 else ""
             if final_character == "3":
                 updated = "="
             elif final_character == "4":
@@ -44,7 +44,8 @@ class SNAFU:
             elif final_character == "5":
                 updated = "0"
             conversion.insert(0, updated)
-            conversion.insert(0, updated_preceding)
+            updated_updated_preceding = SNAFU.convert_to_snafu(updated_preceding, [])
+            conversion.insert(0, updated_updated_preceding)
         else:
             conversion.insert(0, final_character)
         if len(updated_base) == 0:
@@ -92,13 +93,14 @@ class Bob:
 def solve_problem():
     data = extract_data_from_file(25, False)
     bob = Bob(data)
-    for i in range(30):
-        print(f"NUMBER: {i + 1}")
-        base_5= SNAFU.convert_to_base_5(i + 1, [])
-        print(f"BASE 5: {base_5}")
-        snafu = SNAFU.convert_to_snafu(base_5, [])
-        print(f"SNAFU: {snafu}")
+    # for i in range(30):
+    #     print(f"NUMBER: {i + 1}")
+    #     base_5= SNAFU.convert_to_base_5(i + 1, [])
+    #     print(f"BASE 5: {base_5}")
+    #     snafu = SNAFU.convert_to_snafu(base_5, [])
+    #     print(f"SNAFU: {snafu}")
     print(SNAFU.convert_to_snafu(SNAFU.convert_to_base_5(353, []), []))
+    print(SNAFU.convert_to_snafu(SNAFU.convert_to_base_5(1747, []), []))
     # total_decimal = bob.calculate_total_fuel_in_decimal()
     # return total_decimal
 
