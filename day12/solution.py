@@ -55,6 +55,23 @@ class Traveler:
             if cell.letter == "E":
                 return cell
 
+    def find_cell_by_coordinates(self, x, y):
+        for cell in self.grid.cells:
+            if cell.x == x and cell.y == y:
+                return cell
+    
+    def determine_if_can_move(self, new_x, new_y):
+        if new_x >= 0 and new_x < self.grid.width and new_y >= 0 and new_y < self.grid.height:
+            new_position = self.find_cell_by_coordinates(new_x, new_y)
+            new_position_value = new_position.value
+            current_position_value = self.current_position.value
+            if new_position_value - current_position_value <= 1:
+                return new_position
+            else:
+                return False
+        else:
+            return False
+
 def solve_problem():
     data = extract_data_from_file(12, False)
     grid = Grid(data)
