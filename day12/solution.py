@@ -137,6 +137,12 @@ class Traveler:
         self.current_position = last_position
         self.decrement_moves()
 
+    def determine_neighboring_locations(self):
+        neighbors = [self.consider_move_down(), self.consider_move_right(), self.consider_move_left(), self.consider_move_up()]
+        filtered_neighbors = list(filter(bool, neighbors))
+        sorted_neighbors = sorted(filtered_neighbors, key=itemgetter("distance"), reverse=True)
+        return sorted_neighbors
+
     def make_move(self):
         moves = [self.consider_move_down(), self.consider_move_right(), self.consider_move_left(), self.consider_move_up()]
         filtered_moves = list(filter(bool, moves))
@@ -149,24 +155,6 @@ class Traveler:
             self.increment_moves()
         else:
             self.move_back()
-        # for move in sorted_moves:
-        #     new_position = move["position"]
-        #     print(f"NEW POSITION: {new_position}")
-        #     not_yet_visited = self.confirm_not_yet_visited(new_position)
-        #     print(f"NOT YET VISITED: {not_yet_visited}")
-        #     if not_yet_visited:
-        #         self.current_position = new_position
-        #         self.increment_moves()
-        #         break
-        #     else:
-        #         continue
-
-    def confirm_not_yet_visited(self, new_position):
-        not_yet_visited = True
-        for position in self.previous_positions:
-            if new_position == position:
-                not_yet_visited = False
-        return not_yet_visited
 
     def move_to_ending_position(self):
         if self.current_position != self.ending_position:
