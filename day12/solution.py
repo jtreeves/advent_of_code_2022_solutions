@@ -5,6 +5,7 @@ class Cell:
         self.x = x
         self.y = y
         self.letter = letter
+        self.visited = False
         self.value = self.convert_letter_to_number()
     
     def __repr__(self):
@@ -17,6 +18,9 @@ class Cell:
             return 26
         else:
             return ord(self.letter) - 96
+
+    def mark_as_visited(self):
+        self.visited = True
 
 class Grid:
     def __init__(self, description):
@@ -132,7 +136,9 @@ class Traveler:
         sorted_moves = sorted(filtered_moves, key=itemgetter("distance"), reverse=True)
         for move in sorted_moves:
             new_position = move["position"]
+            print(f"NEW POSITION: {new_position}")
             not_yet_visited = self.confirm_not_yet_visited(new_position)
+            print(f"NOT YET VISITED: {not_yet_visited}")
             if not_yet_visited:
                 self.current_position = new_position
                 self.increment_moves()
@@ -149,13 +155,14 @@ class Traveler:
 
     def move_to_ending_position(self):
         if self.current_position != self.ending_position:
+            print(self)
             self.make_move()
             return self.move_to_ending_position()
         else:
             return self.total_moves
 
 def solve_problem():
-    data = extract_data_from_file(12, False)
+    data = extract_data_from_file(12, True)
     grid = Grid(data)
     traveler = Traveler(grid)
     result = traveler.move_to_ending_position()
