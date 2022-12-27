@@ -108,6 +108,15 @@ class Traveler:
         else:
             return False
 
+    def make_move(self):
+        moves = [self.move_down, self.move_right, self.move_left, self.move_up]
+        for move in moves:
+            result = move()
+            if result == False:
+                continue
+            else:
+                break
+
 def solve_problem():
     data = extract_data_from_file(12, False)
     grid = Grid(data)
