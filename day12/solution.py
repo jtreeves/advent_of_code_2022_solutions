@@ -90,6 +90,9 @@ class Traveler:
     def increment_moves(self):
         self.total_moves += 1
 
+    def decrement_moves(self):
+        self.total_moves -= 1
+
     def add_to_previous_positions(self):
         self.previous_positions.append(self.current_position)
 
@@ -129,15 +132,23 @@ class Traveler:
         else:
             return False
 
+    def move_back(self):
+        last_position = self.previous_positions.pop()
+        self.current_position = last_position
+        self.decrement_moves()
+
     def make_move(self):
-        self.add_to_previous_positions()
         moves = [self.consider_move_down(), self.consider_move_right(), self.consider_move_left(), self.consider_move_up()]
         filtered_moves = list(filter(bool, moves))
         sorted_moves = sorted(filtered_moves, key=itemgetter("distance"), reverse=True)
-        new_position = sorted_moves[0]["position"]
-        new_position.mark_as_visited()
-        self.current_position = new_position
-        self.increment_moves()
+        if len(sorted_moves) > 0:
+            self.add_to_previous_positions()
+            new_position = sorted_moves[0]["position"]
+            new_position.mark_as_visited()
+            self.current_position = new_position
+            self.increment_moves()
+        else:
+            self.move_back()
         # for move in sorted_moves:
         #     new_position = move["position"]
         #     print(f"NEW POSITION: {new_position}")
