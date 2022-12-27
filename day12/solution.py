@@ -1,12 +1,12 @@
 from operator import itemgetter
 
 class Cell:
-    def __init__(self, x, y, letter, name):
+    def __init__(self, x, y, letter, name, neighbors):
         self.x = x
         self.y = y
         self.letter = letter
         self.name = name
-        self.visited = False
+        self.neighbors = neighbors
         self.value = self.convert_letter_to_number()
     
     def __repr__(self):
@@ -19,9 +19,6 @@ class Cell:
             return 26
         else:
             return ord(self.letter) - 96
-
-    def mark_as_visited(self):
-        self.visited = True
 
 class Grid:
     def __init__(self, description):
@@ -42,10 +39,31 @@ class Grid:
             for column in range(self.width):
                 letter = self.description[row][column]
                 name = "x" + column + "y" + row
-                new_cell = Cell(column, row, letter, name)
+                neighbors = self.determine_neighbors(column, row)
+                new_cell = Cell(column, row, letter, name, neighbors)
                 cells[name] = new_cell
         return cells
 
+    def determine_neighbors(self, x, y):
+        neighbors = []
+        x_left = x - 1
+        x_right = x + 1
+        y_up = y - 1
+        y_down = y + 1
+        if x_left >= 0:
+            left_name = "x" + x_left + "y" + y
+            neighbors.append(left_name)
+        if y_up >= 0:
+            up_name = "x" + x + "y" + y_up
+            neighbors.append(up_name)
+        if x_right < self.width:
+            right_name = "x" + x_right + "y" + y
+            neighbors.append(right_name)
+        if y_down < self.height:
+            down_name = "x" + x + "y" + y_down
+            neighbors.append(down_name)
+        return neighbors
+        
 class Traveler:
     def __init__(self, grid):
         self.grid = grid
