@@ -130,9 +130,15 @@ class Traveler:
         moves = [self.consider_move_down(), self.consider_move_right(), self.consider_move_left(), self.consider_move_up()]
         filtered_moves = list(filter(bool, moves))
         sorted_moves = sorted(filtered_moves, key=itemgetter("distance"), reverse=True)
-        new_position = sorted_moves[0]["position"]
-        self.current_position = new_position
-        self.increment_moves()
+        for move in sorted_moves:
+            new_position = move["position"]
+            not_yet_visited = self.confirm_not_yet_visited(new_position)
+            if not_yet_visited:
+                self.current_position = new_position
+                self.increment_moves()
+                break
+            else:
+                continue
 
     def confirm_not_yet_visited(self, new_position):
         not_yet_visited = False
