@@ -77,12 +77,12 @@ class Traveler:
         return f"{self.current_position} -> {self.total_moves} MOVES"
 
     def find_starting_position(self):
-        for cell in self.grid.cells:
+        for cell in self.grid.cells.values():
             if cell.letter == "S":
                 return cell
 
     def find_ending_position(self):
-        for cell in self.grid.cells:
+        for cell in self.grid.cells.values():
             if cell.letter == "E":
                 return cell
 
