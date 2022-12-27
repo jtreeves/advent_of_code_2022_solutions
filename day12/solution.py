@@ -4,6 +4,9 @@ class Cell:
         self.y = y
         self.letter = letter
         self.value = self.convert_letter_to_number()
+    
+    def __repr__(self):
+        return f"({self.x}, {self.y}): {self.letter}"
 
     def convert_letter_to_number(self):
         if self.letter == "S":
@@ -18,16 +21,27 @@ class Grid:
         self.description = description.split("\n")
         self.height = self.calculate_height()
         self.width = self.calculate_width()
+        self.cells = self.create_cells()
     
     def calculate_height(self):
         return len(self.description)
     
     def calculate_width(self):
         return len(self.description[0])
+    
+    def create_cells(self):
+        cells = []
+        for row in range(self.height):
+            for column in range(self.width):
+                letter = self.description[row][column]
+                new_cell = Cell(column, row, letter)
+                cells.append(new_cell)
+        return cells
 
 def solve_problem():
     data = extract_data_from_file(12, False)
-    return data
+    grid = Grid(data)
+    return grid.cells
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
