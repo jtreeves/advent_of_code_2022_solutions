@@ -77,7 +77,7 @@ class Traveler:
             new_position_value = new_position.value
             current_position_value = self.current_position.value
             distance = new_position_value - current_position_value
-            if distance <= 1:
+            if distance <= 1 and not new_position.visited:
                 return {
                     "position": new_position,
                     "distance": distance
@@ -134,17 +134,21 @@ class Traveler:
         moves = [self.consider_move_down(), self.consider_move_right(), self.consider_move_left(), self.consider_move_up()]
         filtered_moves = list(filter(bool, moves))
         sorted_moves = sorted(filtered_moves, key=itemgetter("distance"), reverse=True)
-        for move in sorted_moves:
-            new_position = move["position"]
-            print(f"NEW POSITION: {new_position}")
-            not_yet_visited = self.confirm_not_yet_visited(new_position)
-            print(f"NOT YET VISITED: {not_yet_visited}")
-            if not_yet_visited:
-                self.current_position = new_position
-                self.increment_moves()
-                break
-            else:
-                continue
+        new_position = sorted_moves[0]["position"]
+        new_position.mark_as_visited()
+        self.current_position = new_position
+        self.increment_moves()
+        # for move in sorted_moves:
+        #     new_position = move["position"]
+        #     print(f"NEW POSITION: {new_position}")
+        #     not_yet_visited = self.confirm_not_yet_visited(new_position)
+        #     print(f"NOT YET VISITED: {not_yet_visited}")
+        #     if not_yet_visited:
+        #         self.current_position = new_position
+        #         self.increment_moves()
+        #         break
+        #     else:
+        #         continue
 
     def confirm_not_yet_visited(self, new_position):
         not_yet_visited = True
