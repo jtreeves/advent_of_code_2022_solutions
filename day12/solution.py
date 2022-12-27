@@ -1,3 +1,5 @@
+from operator import itemgetter
+
 class Cell:
     def __init__(self, x, y, letter):
         self.x = x
@@ -122,7 +124,7 @@ class Traveler:
     def make_move(self):
         moves = [self.consider_move_down(), self.consider_move_right(), self.consider_move_left(), self.consider_move_up()]
         filtered_moves = list(filter(bool, moves))
-        sorted_moves = sorted(filtered_moves, key=lambda x: x.distance, reverse=True)
+        sorted_moves = sorted(filtered_moves, key=itemgetter("distance"), reverse=True)
         new_position = sorted_moves[0]["position"]
         self.current_position = new_position
         self.increment_moves()
