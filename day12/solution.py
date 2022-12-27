@@ -192,8 +192,8 @@ class Traveler:
             return self.total_moves
 
 class Path:
-    def __init__(self):
-        self.positions = []
+    def __init__(self, previous_positions):
+        self.positions = previous_positions
     
     def add_new_position(self, name):
         self.positions.append(name)
