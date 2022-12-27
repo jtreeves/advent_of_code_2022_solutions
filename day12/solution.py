@@ -86,9 +86,9 @@ class Traveler:
             if cell.letter == "E":
                 return cell
 
-    def find_cell_by_coordinates(self, x, y):
-        for cell in self.grid.cells:
-            if cell.x == x and cell.y == y:
+    def find_cell_by_name(self, name):
+        for cell in self.grid.cells.values():
+            if cell.name == name:
                 return cell
     
     def determine_if_can_move(self, new_x, new_y):
@@ -192,11 +192,34 @@ class Traveler:
             return self.total_moves
 
 class Path:
-    def __init__(self, previous_positions):
-        self.positions = previous_positions
+    def __init__(self, grid, previous_positions, current_position):
+        self.grid = grid
+        self.previous_positions = previous_positions
+        self.current_position = current_position
+        self.neighbors = self.current_position.neighbors
+        self.filter_out_bad_neighbors()
     
-    def add_new_position(self, name):
-        self.positions.append(name)
+    def filter_out_previously_visited_neighbors(self):
+        filtered = []
+        for neighbor in self.neighbors:
+            if neighbor not in self.previous_positions:
+                filtered.append(neighbor)
+        self.neighbors = filtered
+    
+    def filter_out_neighbors_exceding_climb_limit(self):
+        filtered = []
+        for neighbor in self.neighbors:
+            new_position = self.grid.find_cell_by_name(neighbor)
+            new_position_value = new_position.value
+            current_position_value = self.current_position.value
+            distance = new_position_value - current_position_value
+            if distance <= 1:
+                filtered.append(neighbor)
+        self.neighbors = filtered
+
+    def filter_out_bad_neighbors(self):
+        self.filter_out_previously_visited_neighbors()
+        self.filter_out_neighbors_exceding_climb_limit()
 
 def solve_problem():
     data = extract_data_from_file(12, True)
