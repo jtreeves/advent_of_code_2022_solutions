@@ -191,6 +191,13 @@ class Traveler:
         else:
             return self.total_moves
 
+class Path:
+    def __init__(self):
+        self.positions = []
+    
+    def add_new_position(self, name):
+        self.positions.append(name)
+
 def solve_problem():
     data = extract_data_from_file(12, True)
     grid = Grid(data)
