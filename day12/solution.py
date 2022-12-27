@@ -78,6 +78,8 @@ class Traveler:
         result = self.determine_if_can_move(new_x, new_y)
         if result:
             self.current_position = result
+        else:
+            return False
 
     def move_down(self):
         new_x = self.current_position.x
@@ -85,6 +87,8 @@ class Traveler:
         result = self.determine_if_can_move(new_x, new_y)
         if result:
             self.current_position = result
+        else:
+            return False
 
     def move_left(self):
         new_x = self.current_position.x - 1
@@ -92,6 +96,8 @@ class Traveler:
         result = self.determine_if_can_move(new_x, new_y)
         if result:
             self.current_position = result
+        else:
+            return False
 
     def move_right(self):
         new_x = self.current_position.x + 1
@@ -99,10 +105,13 @@ class Traveler:
         result = self.determine_if_can_move(new_x, new_y)
         if result:
             self.current_position = result
+        else:
+            return False
 
 def solve_problem():
     data = extract_data_from_file(12, False)
     grid = Grid(data)
+    traveler = Traveler(grid)
     return grid.cells
 
 def extract_data_from_file(day_number, is_official):
