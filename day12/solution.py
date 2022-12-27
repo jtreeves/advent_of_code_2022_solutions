@@ -126,12 +126,20 @@ class Traveler:
             return False
 
     def make_move(self):
+        self.add_to_previous_positions()
         moves = [self.consider_move_down(), self.consider_move_right(), self.consider_move_left(), self.consider_move_up()]
         filtered_moves = list(filter(bool, moves))
         sorted_moves = sorted(filtered_moves, key=itemgetter("distance"), reverse=True)
         new_position = sorted_moves[0]["position"]
         self.current_position = new_position
         self.increment_moves()
+
+    def confirm_not_yet_visited(self, new_position):
+        not_yet_visited = False
+        for position in self.previous_positions:
+            if new_position == position:
+                not_yet_visited = True
+        return not_yet_visited
 
     def move_to_ending_position(self):
         if self.current_position != self.ending_position:
