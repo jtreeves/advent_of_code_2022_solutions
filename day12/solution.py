@@ -63,7 +63,22 @@ class Grid:
             down_name = "x" + x + "y" + y_down
             neighbors.append(down_name)
         return neighbors
-        
+
+    def find_starting_position(self):
+        for cell in self.cells.values():
+            if cell.letter == "S":
+                return cell
+
+    def find_ending_position(self):
+        for cell in self.cells.values():
+            if cell.letter == "E":
+                return cell
+
+    def find_cell_by_name(self, name):
+        for cell in self.cells.values():
+            if cell.name == name:
+                return cell
+
 class Traveler:
     def __init__(self, grid):
         self.grid = grid
@@ -198,6 +213,7 @@ class Path:
         self.current_position = current_position
         self.neighbors = self.current_position.neighbors
         self.filter_out_bad_neighbors()
+        self.branches = self.continue_path_by_branching_off()
     
     def filter_out_previously_visited_neighbors(self):
         filtered = []
@@ -220,6 +236,14 @@ class Path:
     def filter_out_bad_neighbors(self):
         self.filter_out_previously_visited_neighbors()
         self.filter_out_neighbors_exceding_climb_limit()
+    
+    def continue_path_by_branching_off(self):
+        branches = []
+        for neighbor in self.neighbors:
+            new_position = self.grid.find_cell_by_name(neighbor)
+            new_path = Path(self.grid, self.previous_positions.append(self.current_position.name), new_position)
+            branches.append(new_path)
+        return branches
 
 def solve_problem():
     data = extract_data_from_file(12, True)
