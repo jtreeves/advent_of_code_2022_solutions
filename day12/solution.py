@@ -1,10 +1,11 @@
 from operator import itemgetter
 
 class Cell:
-    def __init__(self, x, y, letter):
+    def __init__(self, x, y, letter, name):
         self.x = x
         self.y = y
         self.letter = letter
+        self.name = name
         self.visited = False
         self.value = self.convert_letter_to_number()
     
@@ -36,12 +37,13 @@ class Grid:
         return len(self.description[0])
     
     def create_cells(self):
-        cells = []
+        cells = {}
         for row in range(self.height):
             for column in range(self.width):
                 letter = self.description[row][column]
-                new_cell = Cell(column, row, letter)
-                cells.append(new_cell)
+                name = "x" + column + "y" + row
+                new_cell = Cell(column, row, letter, name)
+                cells[name] = new_cell
         return cells
 
 class Traveler:
@@ -142,6 +144,13 @@ class Traveler:
         filtered_neighbors = list(filter(bool, neighbors))
         sorted_neighbors = sorted(filtered_neighbors, key=itemgetter("distance"), reverse=True)
         return sorted_neighbors
+
+    def branch_off_to_neighboring_locations(self, previous_locations):
+        neighbors = self.determine_neighboring_locations()
+        if len(neighbors) > 0:
+            return previous_locations
+        else:
+            return
 
     def make_move(self):
         moves = [self.consider_move_down(), self.consider_move_right(), self.consider_move_left(), self.consider_move_up()]
