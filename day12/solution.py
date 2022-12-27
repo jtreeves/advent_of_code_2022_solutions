@@ -46,6 +46,7 @@ class Traveler:
         self.starting_position = self.find_starting_position()
         self.ending_position = self.find_ending_position()
         self.current_position = self.starting_position
+        self.previous_positions = []
         self.total_moves = 0
     
     def __repr__(self):
@@ -84,6 +85,9 @@ class Traveler:
 
     def increment_moves(self):
         self.total_moves += 1
+
+    def add_to_previous_positions(self):
+        self.previous_positions.append(self.current_position)
 
     def consider_move_up(self):
         new_x = self.current_position.x
@@ -131,7 +135,6 @@ class Traveler:
 
     def move_to_ending_position(self):
         if self.current_position != self.ending_position:
-            print(self)
             self.make_move()
             return self.move_to_ending_position()
         else:
@@ -142,9 +145,6 @@ def solve_problem():
     grid = Grid(data)
     traveler = Traveler(grid)
     result = traveler.move_to_ending_position()
-    # print(f"BEFORE MOVE: {traveler}")
-    # traveler.make_move()
-    # print(f"AFTER MOVE: {traveler}")
     return result
 
 def extract_data_from_file(day_number, is_official):
