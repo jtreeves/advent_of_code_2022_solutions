@@ -69,8 +69,12 @@ class Traveler:
             new_position = self.find_cell_by_coordinates(new_x, new_y)
             new_position_value = new_position.value
             current_position_value = self.current_position.value
-            if new_position_value - current_position_value <= 1:
-                return new_position
+            distance = new_position_value - current_position_value
+            if distance <= 1:
+                return {
+                    "position": new_position,
+                    "distance": distance
+                }
             else:
                 return False
         else:
@@ -79,44 +83,45 @@ class Traveler:
     def increment_moves(self):
         self.total_moves += 1
 
-    def move_up(self):
+    def consider_move_up(self):
         new_x = self.current_position.x
         new_y = self.current_position.y - 1
         result = self.determine_if_can_move(new_x, new_y)
         if result:
-            self.current_position = result
+            return result
         else:
             return False
 
-    def move_down(self):
+    def consider_move_down(self):
         new_x = self.current_position.x
         new_y = self.current_position.y + 1
         result = self.determine_if_can_move(new_x, new_y)
         if result:
-            self.current_position = result
+            return result
         else:
             return False
 
-    def move_left(self):
+    def consider_move_left(self):
         new_x = self.current_position.x - 1
         new_y = self.current_position.y
         result = self.determine_if_can_move(new_x, new_y)
         if result:
-            self.current_position = result
+            return result
         else:
             return False
 
-    def move_right(self):
+    def consider_move_right(self):
         new_x = self.current_position.x + 1
         new_y = self.current_position.y
         result = self.determine_if_can_move(new_x, new_y)
         if result:
-            self.current_position = result
+            return result
         else:
             return False
 
     def make_move(self):
-        moves = [self.move_down, self.move_right, self.move_left, self.move_up]
+        moves = [self.consider_move_down(), self.consider_move_right(), self.consider_move_left(), self.consider_move_up()]
+        filtered_moves = list(filter(bool, moves))
         for move in moves:
             result = move()
             if result == False:
@@ -125,14 +130,23 @@ class Traveler:
                 self.increment_moves()
                 break
 
+    def move_to_ending_position(self):
+        if self.current_position != self.ending_position:
+            print(self)
+            self.make_move()
+            return self.move_to_ending_position()
+        else:
+            return self.total_moves
+
 def solve_problem():
     data = extract_data_from_file(12, False)
     grid = Grid(data)
     traveler = Traveler(grid)
-    print(f"BEFORE MOVE: {traveler}")
-    traveler.make_move()
-    print(f"AFTER MOVE: {traveler}")
-    return grid.cells
+    result = traveler.move_to_ending_position()
+    # print(f"BEFORE MOVE: {traveler}")
+    # traveler.make_move()
+    # print(f"AFTER MOVE: {traveler}")
+    return result
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
