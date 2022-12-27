@@ -141,10 +141,10 @@ class Traveler:
                 continue
 
     def confirm_not_yet_visited(self, new_position):
-        not_yet_visited = False
+        not_yet_visited = True
         for position in self.previous_positions:
             if new_position == position:
-                not_yet_visited = True
+                not_yet_visited = False
         return not_yet_visited
 
     def move_to_ending_position(self):
