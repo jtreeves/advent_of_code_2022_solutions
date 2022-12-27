@@ -72,6 +72,34 @@ class Traveler:
         else:
             return False
 
+    def move_up(self):
+        new_x = self.current_position.x
+        new_y = self.current_position.y - 1
+        result = self.determine_if_can_move(new_x, new_y)
+        if result:
+            self.current_position = result
+
+    def move_down(self):
+        new_x = self.current_position.x
+        new_y = self.current_position.y + 1
+        result = self.determine_if_can_move(new_x, new_y)
+        if result:
+            self.current_position = result
+
+    def move_left(self):
+        new_x = self.current_position.x - 1
+        new_y = self.current_position.y
+        result = self.determine_if_can_move(new_x, new_y)
+        if result:
+            self.current_position = result
+
+    def move_right(self):
+        new_x = self.current_position.x + 1
+        new_y = self.current_position.y
+        result = self.determine_if_can_move(new_x, new_y)
+        if result:
+            self.current_position = result
+
 def solve_problem():
     data = extract_data_from_file(12, False)
     grid = Grid(data)
