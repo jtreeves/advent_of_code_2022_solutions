@@ -38,6 +38,23 @@ class Grid:
                 cells.append(new_cell)
         return cells
 
+class Traveler:
+    def __init__(self, grid):
+        self.grid = grid
+        self.starting_position = self.find_starting_position()
+        self.ending_position = self.find_ending_position()
+        self.current_position = self.starting_position
+
+    def find_starting_position(self):
+        for cell in self.grid.cells:
+            if cell.letter == "S":
+                return cell
+
+    def find_ending_position(self):
+        for cell in self.grid.cells:
+            if cell.letter == "E":
+                return cell
+
 def solve_problem():
     data = extract_data_from_file(12, False)
     grid = Grid(data)
