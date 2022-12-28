@@ -91,6 +91,13 @@ class Grid:
         for cell in self.cells.values():
             if cell.name == name:
                 return cell
+    
+    def find_cells_by_value(self, value):
+        selected_cells = []
+        for cell in self.cells.values():
+            if cell.value == value:
+                selected_cells.append(cell)
+        return selected_cells
 
 class Traveler:
     def __init__(self, grid):
@@ -101,10 +108,10 @@ class Traveler:
     def __repr__(self):
         return f"{self.current_position}"
 
-    def find_shortest_path(self):
+    def find_shortest_path(self, starting_position):
         minimum_distance = float('inf')
-        queue = [(self.starting_position, 0)]
-        self.starting_position.mark_as_visited()
+        queue = [(starting_position, 0)]
+        starting_position.mark_as_visited()
         while queue:
             (position, distance) = queue.pop(0)
             if position == self.ending_position:
@@ -118,11 +125,18 @@ class Traveler:
                     queue.append((new_position, distance + 1))
         return minimum_distance
 
+    def find_shortest_path_from_marked_start(self):
+        result = self.find_shortest_path(self.starting_position)
+        return result
+
+    def find_shortest_path_from_any_minimal_elevation(self):
+        minimal_cells = self.grid.find_cells_by_value(1)
+
 def solve_problem():
-    data = extract_data_from_file(12, True)
+    data = extract_data_from_file(12, False)
     grid = Grid(data)
     traveler = Traveler(grid)
-    result = traveler.find_shortest_path()
+    result = traveler.find_shortest_path_from_marked_start()
     return result
 
 def extract_data_from_file(day_number, is_official):
