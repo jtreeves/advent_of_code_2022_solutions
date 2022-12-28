@@ -83,23 +83,21 @@ class Traveler:
         self.starting_position = self.grid.find_starting_position()
         self.ending_position = self.grid.find_ending_position()
         self.current_position = self.starting_position
+        self.path = Path(self.grid, [], self.current_position)
     
     def __repr__(self):
         return f"{self.current_position}"
 
-    def find_shortest_path(self):
-        total = 0
-        path = Path(self.grid, [], self.starting_position)
-        neighbors = path.neighbors
-        while len(neighbors) != 0 and self.current_position is not self.ending_position:
-            print(self)
-            for neighbor in neighbors:
-                new_position = self.grid.find_cell_by_name(neighbor)
-                self.current_position = new_position
-                path = Path(self.grid, path.previous_positions.append(self.current_position.name), new_position)
-                neighbors = path.neighbors
-                total += 1
-        return total
+    # def find_shortest_path(self):
+    #     paths = []
+    #     path = Path(self.grid, previous_positions, self.current_position)
+    #     neighbors = path.neighbors
+    #     while len(neighbors) != 0 and self.current_position is not self.ending_position:
+    #         print(self)
+    #         for neighbor in neighbors:
+    #             new_position = self.grid.find_cell_by_name(neighbor)
+    #             self.current_position = new_position
+    #             return self.find_shortest_path(path.previous_positions, total + 1)
 
 class Path:
     def __init__(self, grid, previous_positions, current_position):
@@ -108,7 +106,12 @@ class Path:
         self.current_position = current_position
         self.neighbors = self.current_position.neighbors
         self.filter_out_bad_neighbors()
-    
+        self.confirm_not_at_end()
+        self.branches = self.continue_path_by_branching_off()
+
+    def __repr__(self):
+        return f"{self.current_position} -> {self.neighbors}"
+
     def filter_out_previously_visited_neighbors(self):
         filtered = []
         for neighbor in self.neighbors:
@@ -131,12 +134,25 @@ class Path:
         self.filter_out_previously_visited_neighbors()
         self.filter_out_neighbors_exceding_climb_limit()
 
+    def continue_path_by_branching_off(self):
+        branches = []
+        for neighbor in self.neighbors:
+            new_position = self.grid.find_cell_by_name(neighbor)
+            new_path = Path(self.grid, self.previous_positions + [self.current_position.name], new_position)
+            branches.append(new_path)
+        return branches
+    
+    def confirm_not_at_end(self):
+        if self.current_position == self.grid.find_ending_position():
+            self.neighbors = []
+
 def solve_problem():
     data = extract_data_from_file(12, False)
     grid = Grid(data)
     traveler = Traveler(grid)
-    result = traveler.find_shortest_path()
-    return result
+    # result = traveler.find_shortest_path([], 0)
+    # traversal = traveler.path.traverse_path()
+    return traveler.path.branches[0].branches
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
