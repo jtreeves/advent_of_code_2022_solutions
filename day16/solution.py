@@ -50,6 +50,9 @@ class Exploration:
             if i == 0:
                 self.current_valve = new_valve
         return valves
+    
+    def decrement_time(self):
+        self.time_remaining -= 1
 
 def solve_problem():
     data = extract_data_from_file(16, False)
