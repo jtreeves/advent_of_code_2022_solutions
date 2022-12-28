@@ -42,7 +42,7 @@ What is the fewest steps required to move from your current position to the loca
 
 ### Solution
 
-NOT YET SOLVED
+497
 
 ## Part Two
 

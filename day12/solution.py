@@ -119,7 +119,7 @@ class Traveler:
         return minimum_distance
 
 def solve_problem():
-    data = extract_data_from_file(12, False)
+    data = extract_data_from_file(12, True)
     grid = Grid(data)
     traveler = Traveler(grid)
     result = traveler.find_shortest_path()
