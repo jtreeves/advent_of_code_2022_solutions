@@ -22,6 +22,9 @@ class Cell:
     def mark_as_visited(self):
         self.visited = True
 
+    def mark_as_unvisited(self):
+        self.visited = False
+
     def filter_out_neighbors(self, grid):
         filtered = []
         for neighbor in self.neighbors:
@@ -92,12 +95,21 @@ class Grid:
             if cell.name == name:
                 return cell
     
-    def find_cells_by_value(self, value):
+    def find_cell_names_by_value(self, value):
         selected_cells = []
         for cell in self.cells.values():
             if cell.value == value:
-                selected_cells.append(cell)
+                selected_cells.append(cell.name)
         return selected_cells
+
+    def mark_all_cells_unvisited(self):
+        for cell in self.cells.values():
+            cell.mark_as_unvisited()
+
+    def repopulate_original_neighbors_for_all_cells(self):
+        for cell in self.cells.values():
+            neighbors = self.determine_neighbors(cell.x, cell.y)
+            cell.neighbors = neighbors
 
 class Traveler:
     def __init__(self, grid):
@@ -126,17 +138,27 @@ class Traveler:
         return minimum_distance
 
     def find_shortest_path_from_marked_start(self):
-        result = self.find_shortest_path(self.starting_position)
+        result = self.find_shortest_path(self.starting_position, self.ending_position)
         return result
 
     def find_shortest_path_from_any_minimal_elevation(self):
-        minimal_cells = self.grid.find_cells_by_value(1)
+        cell_names = self.grid.find_cell_names_by_value(1)
+        distances = []
+        for name in cell_names:
+            self.grid.mark_all_cells_unvisited()
+            self.grid.repopulate_original_neighbors_for_all_cells()
+            current_position = self.grid.find_cell_by_name(name)
+            distance = self.find_shortest_path(current_position)
+            distances.append(distance)
+        distances.sort()
+        print(distances)
+        return distances[0]
 
 def solve_problem():
     data = extract_data_from_file(12, False)
     grid = Grid(data)
     traveler = Traveler(grid)
-    result = traveler.find_shortest_path_from_marked_start()
+    result = traveler.find_shortest_path_from_any_minimal_elevation()
     return result
 
 def extract_data_from_file(day_number, is_official):
