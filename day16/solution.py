@@ -4,6 +4,7 @@ class Valve:
         self.name = self.extract_name()
         self.flow_rate = self.extract_flow_rate()
         self.tunnels = self.extract_tunnels()
+        self.open = False
     
     def __repr__(self):
         return f"{self.name}: {self.flow_rate} -> {self.tunnels}"
@@ -25,14 +26,25 @@ class Valve:
         tunnels[0] = tunnels[0][-2:]
         return tunnels
 
+class Exploration:
+    def __init__(self, data):
+        self.descriptions = data.split("\n")
+        self.valves = self.create_valves()
+
+    def __repr__(self):
+        return f"{self.valves}"
+    
+    def create_valves(self):
+        valves = []
+        for description in self.descriptions:
+            new_valve = Valve(description)
+            valves.append(new_valve)
+        return valves
+
 def solve_problem():
     data = extract_data_from_file(16, False)
-    lines = data.split("\n")
-    valves = []
-    for line in lines:
-        valve = Valve(line)
-        valves.append(valve)
-    return valves
+    experience = Exploration(data)
+    return experience
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
