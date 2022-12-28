@@ -25,6 +25,9 @@ class Valve:
         tunnels = tunnels_half.split(", ")
         tunnels[0] = tunnels[0][-2:]
         return tunnels
+    
+    def open_valve(self):
+        self.open = True
 
 class Exploration:
     def __init__(self, data):
@@ -37,9 +40,11 @@ class Exploration:
     
     def create_valves(self):
         valves = {}
-        for description in self.descriptions:
-            new_valve = Valve(description)
+        for i in range(len(self.descriptions)):
+            new_valve = Valve(self.descriptions[i])
             valves[new_valve.name] = new_valve
+            if i == 0:
+                self.current_valve = new_valve
         return valves
 
 def solve_problem():
