@@ -1,5 +1,3 @@
-from operator import itemgetter
-
 class Cell:
     def __init__(self, x, y, letter, name, neighbors):
         self.x = x
@@ -82,129 +80,25 @@ class Grid:
 class Traveler:
     def __init__(self, grid):
         self.grid = grid
-        self.starting_position = self.find_starting_position()
-        self.ending_position = self.find_ending_position()
+        self.starting_position = self.grid.find_starting_position()
+        self.ending_position = self.grid.find_ending_position()
         self.current_position = self.starting_position
-        self.previous_positions = []
-        self.total_moves = 0
     
     def __repr__(self):
-        return f"{self.current_position} -> {self.total_moves} MOVES"
+        return f"{self.current_position}"
 
-    def find_starting_position(self):
-        for cell in self.grid.cells.values():
-            if cell.letter == "S":
-                return cell
-
-    def find_ending_position(self):
-        for cell in self.grid.cells.values():
-            if cell.letter == "E":
-                return cell
-
-    def find_cell_by_name(self, name):
-        for cell in self.grid.cells.values():
-            if cell.name == name:
-                return cell
-    
-    def determine_if_can_move(self, new_x, new_y):
-        if new_x >= 0 and new_x < self.grid.width and new_y >= 0 and new_y < self.grid.height:
-            new_position = self.find_cell_by_coordinates(new_x, new_y)
-            new_position_value = new_position.value
-            current_position_value = self.current_position.value
-            distance = new_position_value - current_position_value
-            if distance <= 1 and not new_position.visited:
-                return {
-                    "position": new_position,
-                    "distance": distance
-                }
-            else:
-                return False
-        else:
-            return False
-
-    def increment_moves(self):
-        self.total_moves += 1
-
-    def decrement_moves(self):
-        self.total_moves -= 1
-
-    def add_to_previous_positions(self):
-        self.previous_positions.append(self.current_position)
-
-    def consider_move_up(self):
-        new_x = self.current_position.x
-        new_y = self.current_position.y - 1
-        result = self.determine_if_can_move(new_x, new_y)
-        if result:
-            return result
-        else:
-            return False
-
-    def consider_move_down(self):
-        new_x = self.current_position.x
-        new_y = self.current_position.y + 1
-        result = self.determine_if_can_move(new_x, new_y)
-        if result:
-            return result
-        else:
-            return False
-
-    def consider_move_left(self):
-        new_x = self.current_position.x - 1
-        new_y = self.current_position.y
-        result = self.determine_if_can_move(new_x, new_y)
-        if result:
-            return result
-        else:
-            return False
-
-    def consider_move_right(self):
-        new_x = self.current_position.x + 1
-        new_y = self.current_position.y
-        result = self.determine_if_can_move(new_x, new_y)
-        if result:
-            return result
-        else:
-            return False
-
-    def move_back(self):
-        last_position = self.previous_positions.pop()
-        self.current_position = last_position
-        self.decrement_moves()
-
-    def determine_neighboring_locations(self):
-        neighbors = [self.consider_move_down(), self.consider_move_right(), self.consider_move_left(), self.consider_move_up()]
-        filtered_neighbors = list(filter(bool, neighbors))
-        sorted_neighbors = sorted(filtered_neighbors, key=itemgetter("distance"), reverse=True)
-        return sorted_neighbors
-
-    def branch_off_to_neighboring_locations(self, previous_locations):
-        neighbors = self.determine_neighboring_locations()
-        if len(neighbors) > 0:
-            return previous_locations
-        else:
-            return
-
-    def make_move(self):
-        moves = [self.consider_move_down(), self.consider_move_right(), self.consider_move_left(), self.consider_move_up()]
-        filtered_moves = list(filter(bool, moves))
-        sorted_moves = sorted(filtered_moves, key=itemgetter("distance"), reverse=True)
-        if len(sorted_moves) > 0:
-            self.add_to_previous_positions()
-            new_position = sorted_moves[0]["position"]
-            new_position.mark_as_visited()
-            self.current_position = new_position
-            self.increment_moves()
-        else:
-            self.move_back()
-
-    def move_to_ending_position(self):
-        if self.current_position != self.ending_position:
-            print(self)
-            self.make_move()
-            return self.move_to_ending_position()
-        else:
-            return self.total_moves
+    def find_shortest_path(self):
+        total = 0
+        path = Path(self.grid, [], self.starting_position)
+        neighbors = path.neighbors
+        while len(neighbors) != 0 and self.current_position is not self.ending_position:
+            for neighbor in neighbors:
+                new_position = self.grid.find_cell_by_name(neighbor)
+                self.current_position = new_position
+                path = Path(self.grid, path.previous_positions.append(self.current_position.name), new_position)
+                neighbors = path.neighbors
+                total += 1
+        return total
 
 class Path:
     def __init__(self, grid, previous_positions, current_position):
@@ -213,7 +107,6 @@ class Path:
         self.current_position = current_position
         self.neighbors = self.current_position.neighbors
         self.filter_out_bad_neighbors()
-        self.branches = self.continue_path_by_branching_off()
     
     def filter_out_previously_visited_neighbors(self):
         filtered = []
@@ -236,20 +129,12 @@ class Path:
     def filter_out_bad_neighbors(self):
         self.filter_out_previously_visited_neighbors()
         self.filter_out_neighbors_exceding_climb_limit()
-    
-    def continue_path_by_branching_off(self):
-        branches = []
-        for neighbor in self.neighbors:
-            new_position = self.grid.find_cell_by_name(neighbor)
-            new_path = Path(self.grid, self.previous_positions.append(self.current_position.name), new_position)
-            branches.append(new_path)
-        return branches
 
 def solve_problem():
-    data = extract_data_from_file(12, True)
+    data = extract_data_from_file(12, False)
     grid = Grid(data)
     traveler = Traveler(grid)
-    result = traveler.move_to_ending_position()
+    result = traveler.find_shortest_path()
     return result
 
 def extract_data_from_file(day_number, is_official):
