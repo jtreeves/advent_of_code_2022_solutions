@@ -78,4 +78,4 @@ What is the fewest steps required to move starting from any square with elevatio
 
 ### Solution
 
-NOT YET SOLVED
+492

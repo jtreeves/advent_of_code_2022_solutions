@@ -122,6 +122,10 @@ class Grid:
             neighbors = self.determine_neighbors(cell.x, cell.y)
             cell.neighbors = neighbors
 
+    def reset_cells(self):
+        self.mark_all_cells_unvisited()
+        self.repopulate_original_neighbors_for_all_cells()
+
 class Traveler:
     def __init__(self, grid):
         self.grid = grid
@@ -132,6 +136,7 @@ class Traveler:
         return f"{self.current_position}"
 
     def find_shortest_path_from_start_to_end(self):
+        self.grid.reset_cells()
         minimum_distance = float('inf')
         queue = [(self.starting_position, 0)]
         self.starting_position.mark_as_visited()
@@ -149,6 +154,7 @@ class Traveler:
         return minimum_distance
 
     def find_shortest_path_from_end_to_minimal_elevation(self):
+        self.grid.reset_cells()
         minimum_distance = float('inf')
         queue = [(self.ending_position, 0)]
         self.ending_position.mark_as_visited()
@@ -166,11 +172,15 @@ class Traveler:
         return minimum_distance
 
 def solve_problem():
-    data = extract_data_from_file(12, False)
+    data = extract_data_from_file(12, True)
     grid = Grid(data)
     traveler = Traveler(grid)
-    result = traveler.find_shortest_path_from_end_to_minimal_elevation()
-    return result
+    part1 = traveler.find_shortest_path_from_start_to_end()
+    part2 = traveler.find_shortest_path_from_end_to_minimal_elevation()
+    return {
+        "part1": part1,
+        "part2": part2
+    }
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
