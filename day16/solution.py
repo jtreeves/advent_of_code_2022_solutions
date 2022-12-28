@@ -28,6 +28,10 @@ class Valve:
     
     def open_valve(self):
         self.open = True
+    
+    def calculate_current_cumulative_flow(self, time):
+        total_flow = self.flow_rate * time
+        return total_flow
 
 class Exploration:
     def __init__(self, data):
