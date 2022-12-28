@@ -82,22 +82,28 @@ class Traveler:
         self.grid = grid
         self.starting_position = self.grid.find_starting_position()
         self.ending_position = self.grid.find_ending_position()
-        self.current_position = self.starting_position
-        self.path = Path(self.grid, [], self.current_position)
     
     def __repr__(self):
         return f"{self.current_position}"
 
-    # def find_shortest_path(self):
-    #     paths = []
-    #     path = Path(self.grid, previous_positions, self.current_position)
-    #     neighbors = path.neighbors
-    #     while len(neighbors) != 0 and self.current_position is not self.ending_position:
-    #         print(self)
-    #         for neighbor in neighbors:
-    #             new_position = self.grid.find_cell_by_name(neighbor)
-    #             self.current_position = new_position
-    #             return self.find_shortest_path(path.previous_positions, total + 1)
+    def find_shortest_path(self):
+        path = Path(self.grid, [], self.starting_position)
+        ending_name = self.ending_position.name
+        lengths = {}
+        queue = [path.branches]
+        while queue:
+            branches = queue.pop(0)
+            for branch in branches:
+                if branch.branches:
+                    queue.append(branch.branches)
+                else:
+                    lengths[branch.current_position.name] = len(branch.previous_positions)
+        numerical_lengths = []
+        for name, length in lengths.items():
+            if name == ending_name:
+                numerical_lengths.append(length)
+        numerical_lengths.sort()
+        return numerical_lengths[0]
 
 class Path:
     def __init__(self, grid, previous_positions, current_position):
@@ -150,9 +156,8 @@ def solve_problem():
     data = extract_data_from_file(12, False)
     grid = Grid(data)
     traveler = Traveler(grid)
-    # result = traveler.find_shortest_path([], 0)
-    # traversal = traveler.path.traverse_path()
-    return traveler.path.branches[0].branches
+    result = traveler.find_shortest_path()
+    return result
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
