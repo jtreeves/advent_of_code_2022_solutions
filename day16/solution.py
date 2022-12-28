@@ -61,6 +61,16 @@ class Exploration:
     def open_current_valve(self):
         self.current_valve.open_valve()
         self.decrement_time()
+    
+    def determine_all_valves_worth_opening(self):
+        worth_opening = []
+        for valve in self.valves.values():
+            if valve.flow_rate > 0:
+                worth_opening.append(valve.name)
+        return worth_opening
+
+    def find_maximum_pressure(self):
+        pass
 
 def solve_problem():
     data = extract_data_from_file(16, False)
