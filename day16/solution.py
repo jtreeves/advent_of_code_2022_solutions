@@ -53,6 +53,14 @@ class Exploration:
     
     def decrement_time(self):
         self.time_remaining -= 1
+    
+    def move_to_new_valve(self, new_valve):
+        self.current_valve = new_valve
+        self.decrement_time()
+    
+    def open_current_valve(self):
+        self.current_valve.open_valve()
+        self.decrement_time()
 
 def solve_problem():
     data = extract_data_from_file(16, False)
