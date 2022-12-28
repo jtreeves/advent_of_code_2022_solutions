@@ -5,6 +5,7 @@ class Cell:
         self.letter = letter
         self.name = name
         self.neighbors = neighbors
+        self.visited = False
         self.value = self.convert_letter_to_number()
     
     def __repr__(self):
@@ -17,6 +18,20 @@ class Cell:
             return 26
         else:
             return ord(self.letter) - 96
+
+    def mark_as_visited(self):
+        self.visited = True
+
+    def filter_out_neighbors(self, grid):
+        filtered = []
+        for neighbor in self.neighbors:
+            new_position = grid.find_cell_by_name(neighbor)
+            new_position_value = new_position.value
+            current_position_value = self.value
+            distance = new_position_value - current_position_value
+            if distance <= 1 and not new_position.visited:
+                filtered.append(neighbor)
+        self.neighbors = filtered
 
 class Grid:
     def __init__(self, description):
@@ -87,70 +102,21 @@ class Traveler:
         return f"{self.current_position}"
 
     def find_shortest_path(self):
-        path = Path(self.grid, [], self.starting_position)
-        ending_name = self.ending_position.name
-        lengths = {}
-        queue = [path.branches]
+        minimum_distance = float('inf')
+        queue = [(self.starting_position, 0)]
+        self.starting_position.mark_as_visited()
         while queue:
-            branches = queue.pop(0)
-            for branch in branches:
-                if branch.branches:
-                    queue.append(branch.branches)
-                else:
-                    lengths[branch.current_position.name] = len(branch.previous_positions)
-        numerical_lengths = []
-        for name, length in lengths.items():
-            if name == ending_name:
-                numerical_lengths.append(length)
-        numerical_lengths.sort()
-        return numerical_lengths[0]
-
-class Path:
-    def __init__(self, grid, previous_positions, current_position):
-        self.grid = grid
-        self.previous_positions = previous_positions
-        self.current_position = current_position
-        self.neighbors = self.current_position.neighbors
-        self.filter_out_bad_neighbors()
-        self.confirm_not_at_end()
-        self.branches = self.continue_path_by_branching_off()
-
-    def __repr__(self):
-        return f"{self.current_position} -> {self.neighbors}"
-
-    def filter_out_previously_visited_neighbors(self):
-        filtered = []
-        for neighbor in self.neighbors:
-            if neighbor not in self.previous_positions:
-                filtered.append(neighbor)
-        self.neighbors = filtered
-    
-    def filter_out_neighbors_exceding_climb_limit(self):
-        filtered = []
-        for neighbor in self.neighbors:
-            new_position = self.grid.find_cell_by_name(neighbor)
-            new_position_value = new_position.value
-            current_position_value = self.current_position.value
-            distance = new_position_value - current_position_value
-            if distance <= 1:
-                filtered.append(neighbor)
-        self.neighbors = filtered
-
-    def filter_out_bad_neighbors(self):
-        self.filter_out_previously_visited_neighbors()
-        self.filter_out_neighbors_exceding_climb_limit()
-
-    def continue_path_by_branching_off(self):
-        branches = []
-        for neighbor in self.neighbors:
-            new_position = self.grid.find_cell_by_name(neighbor)
-            new_path = Path(self.grid, self.previous_positions + [self.current_position.name], new_position)
-            branches.append(new_path)
-        return branches
-    
-    def confirm_not_at_end(self):
-        if self.current_position == self.grid.find_ending_position():
-            self.neighbors = []
+            (position, distance) = queue.pop(0)
+            if position == self.ending_position:
+                minimum_distance = distance
+                break
+            else:
+                position.filter_out_neighbors(self.grid)
+                for neighbor in position.neighbors:
+                    new_position = self.grid.find_cell_by_name(neighbor)
+                    new_position.mark_as_visited()
+                    queue.append((new_position, distance + 1))
+        return minimum_distance
 
 def solve_problem():
     data = extract_data_from_file(12, False)
