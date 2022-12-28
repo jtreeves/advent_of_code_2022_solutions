@@ -30,15 +30,16 @@ class Exploration:
     def __init__(self, data):
         self.descriptions = data.split("\n")
         self.valves = self.create_valves()
+        self.time_remaining = 30
 
     def __repr__(self):
         return f"{self.valves}"
     
     def create_valves(self):
-        valves = []
+        valves = {}
         for description in self.descriptions:
             new_valve = Valve(description)
-            valves.append(new_valve)
+            valves[new_valve.name] = new_valve
         return valves
 
 def solve_problem():
