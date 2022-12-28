@@ -36,6 +36,17 @@ class Cell:
                 filtered.append(neighbor)
         self.neighbors = filtered
 
+    def filter_out_neighbors_backwards(self, grid):
+        filtered = []
+        for neighbor in self.neighbors:
+            new_position = grid.find_cell_by_name(neighbor)
+            new_position_value = new_position.value
+            current_position_value = self.value
+            distance = current_position_value - new_position_value
+            if distance <= 1 and not new_position.visited:
+                filtered.append(neighbor)
+        self.neighbors = filtered
+
 class Grid:
     def __init__(self, description):
         self.description = description.split("\n")
@@ -120,10 +131,10 @@ class Traveler:
     def __repr__(self):
         return f"{self.current_position}"
 
-    def find_shortest_path(self, starting_position):
+    def find_shortest_path_from_start_to_end(self):
         minimum_distance = float('inf')
-        queue = [(starting_position, 0)]
-        starting_position.mark_as_visited()
+        queue = [(self.starting_position, 0)]
+        self.starting_position.mark_as_visited()
         while queue:
             (position, distance) = queue.pop(0)
             if position == self.ending_position:
@@ -137,28 +148,28 @@ class Traveler:
                     queue.append((new_position, distance + 1))
         return minimum_distance
 
-    def find_shortest_path_from_marked_start(self):
-        result = self.find_shortest_path(self.starting_position, self.ending_position)
-        return result
-
-    def find_shortest_path_from_any_minimal_elevation(self):
-        cell_names = self.grid.find_cell_names_by_value(1)
-        distances = []
-        for name in cell_names:
-            self.grid.mark_all_cells_unvisited()
-            self.grid.repopulate_original_neighbors_for_all_cells()
-            current_position = self.grid.find_cell_by_name(name)
-            distance = self.find_shortest_path(current_position)
-            distances.append(distance)
-        distances.sort()
-        print(distances)
-        return distances[0]
+    def find_shortest_path_from_end_to_minimal_elevation(self):
+        minimum_distance = float('inf')
+        queue = [(self.ending_position, 0)]
+        self.ending_position.mark_as_visited()
+        while queue:
+            (position, distance) = queue.pop(0)
+            if position.value == 1:
+                minimum_distance = distance
+                break
+            else:
+                position.filter_out_neighbors_backwards(self.grid)
+                for neighbor in position.neighbors:
+                    new_position = self.grid.find_cell_by_name(neighbor)
+                    new_position.mark_as_visited()
+                    queue.append((new_position, distance + 1))
+        return minimum_distance
 
 def solve_problem():
     data = extract_data_from_file(12, False)
     grid = Grid(data)
     traveler = Traveler(grid)
-    result = traveler.find_shortest_path_from_any_minimal_elevation()
+    result = traveler.find_shortest_path_from_end_to_minimal_elevation()
     return result
 
 def extract_data_from_file(day_number, is_official):
