@@ -36,7 +36,7 @@ class Grid:
         for row in range(self.height):
             for column in range(self.width):
                 letter = self.description[row][column]
-                name = "x" + column + "y" + row
+                name = f"x{column}y{row}"
                 neighbors = self.determine_neighbors(column, row)
                 new_cell = Cell(column, row, letter, name, neighbors)
                 cells[name] = new_cell
@@ -49,16 +49,16 @@ class Grid:
         y_up = y - 1
         y_down = y + 1
         if x_left >= 0:
-            left_name = "x" + x_left + "y" + y
+            left_name = f"x{x_left}y{y}"
             neighbors.append(left_name)
         if y_up >= 0:
-            up_name = "x" + x + "y" + y_up
+            up_name = f"x{x}y{y_up}"
             neighbors.append(up_name)
         if x_right < self.width:
-            right_name = "x" + x_right + "y" + y
+            right_name = f"x{x_right}y{y}"
             neighbors.append(right_name)
         if y_down < self.height:
-            down_name = "x" + x + "y" + y_down
+            down_name = f"x{x}y{y_down}"
             neighbors.append(down_name)
         return neighbors
 
@@ -92,6 +92,7 @@ class Traveler:
         path = Path(self.grid, [], self.starting_position)
         neighbors = path.neighbors
         while len(neighbors) != 0 and self.current_position is not self.ending_position:
+            print(self)
             for neighbor in neighbors:
                 new_position = self.grid.find_cell_by_name(neighbor)
                 self.current_position = new_position
