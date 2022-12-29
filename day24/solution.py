@@ -1,8 +1,9 @@
 class Position:
-    def __init__(self, x, y, blocked):
+    def __init__(self, x, y, blocked, name):
         self.x = x
         self.y = y
         self.blocked = blocked
+        self.name = name
     
     def __repr__(self):
         return f"({self.x}, {self.y}): {self.blocked}"
@@ -16,6 +17,7 @@ class Blizzard:
         return f"({self.position.x}, {self.position.y}): {self.direction}"
     
     def update_position(self, valley):
+        old_name = self.position.name
         match self.direction:
             case ">":
                 new_x = self.position.x + 1
@@ -54,6 +56,9 @@ class Blizzard:
                     new_name = f"x{new_x}y{new_y}"
                     new_position = valley.find_position_by_name(new_name)
         self.position = new_position
+        new_name = new_position.name
+        del valley.blizzards[old_name]
+        valley.blizzards[new_name] = self
 
 class Traveler:
     def __init__(self, position):
@@ -66,9 +71,13 @@ class Traveler:
         current_x = self.position.x
         current_y = self.position.y
         down_name = f"x{current_x}y{current_y + 1}"
+        check_down = valley.check_if_blizzard_by_name(down_name)
         right_name = f"x{current_x + 1}y{current_y}"
+        check_right = valley.check_if_blizzard_by_name(right_name)
         up_name = f"x{current_x}y{current_y - 1}"
+        check_up = valley.check_if_blizzard_by_name(up_name)
         left_name = f"x{current_x - 1}y{current_y}"
+        check_left = valley.check_if_blizzard_by_name(left_name)
 
 class Valley:
     def __init__(self, description):
@@ -88,7 +97,7 @@ class Valley:
                 character = self.description[row][column]
                 blocked = character == "#"
                 name = f"x{column}y{row}"
-                new_position = Position(column, row, blocked)
+                new_position = Position(column, row, blocked, name)
                 positions[name] = new_position
                 if row == 0 and not blocked:
                     self.starting_position = name
