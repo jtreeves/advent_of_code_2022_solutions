@@ -45,7 +45,7 @@ def dijkstra_algorithm(graph, start_node):
     shortest_path = {}
  
     # We'll use this dict to save the shortest known path to a node found so far
-    previous_nodes = {}
+    # previous_nodes = {}
  
     # We'll use max_value to initialize the "infinity" value of the unvisited nodes   
     max_value = sys.maxsize
@@ -71,14 +71,16 @@ def dijkstra_algorithm(graph, start_node):
             if tentative_value < shortest_path[neighbor]:
                 shortest_path[neighbor] = tentative_value
                 # We also update the best path to the current node
-                previous_nodes[neighbor] = current_min_node
+                # previous_nodes[neighbor] = current_min_node
  
         # After visiting its neighbors, we mark the node as "visited"
         unvisited_nodes.remove(current_min_node)
     
-    return previous_nodes, shortest_path
+    return shortest_path
 
 def print_result(previous_nodes, shortest_path, start_node, target_node):
+    print(f"PREVIOUS NODES: {previous_nodes}")
+    print(f"SHORTEST PATH: {shortest_path}")
     path = []
     node = target_node
     
@@ -110,9 +112,10 @@ init_graph["Rome"]["Athens"] = 2
 
 graph = Graph(nodes, init_graph)
 
-previous_nodes, shortest_path = dijkstra_algorithm(graph=graph, start_node="Reykjavik")
+shortest_path = dijkstra_algorithm(graph=graph, start_node="Reykjavik")
+print(shortest_path)
 
-print_result(previous_nodes, shortest_path, start_node="Reykjavik", target_node="Belgrade")
+# print_result(previous_nodes, shortest_path, start_node="Reykjavik", target_node="Belgrade")
 
 # CODE FROM: https://www.udacity.com/blog/2021/10/implementing-dijkstras-algorithm-in-python.html
 # ALEXEY KLOCHAY
