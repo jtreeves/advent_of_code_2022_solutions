@@ -111,6 +111,13 @@ class Traveler:
 
     def __repr__(self):
         return f"{self.current_position} >>> {self.facing}"
+    
+    def determine_password(self):
+        row = self.current_position.y
+        column = self.current_position.x
+        facing = self.facing
+        password = 1000 * row + 4 * column + facing
+        return password
 
 def solve_problem():
     data = extract_data_from_file(22, False)
@@ -118,7 +125,8 @@ def solve_problem():
     board = Board(partitioned[0])
     instructions = Instructions(partitioned[1])
     traveler = Traveler(board, instructions)
-    return traveler
+    password = traveler.determine_password()
+    return password
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
