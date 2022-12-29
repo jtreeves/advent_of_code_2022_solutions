@@ -100,36 +100,36 @@ class Board:
                     opposite_cell = self.find_cell_by_name(opposite_name)
         return opposite_cell
 
-    def find_adjacent_cell_down(self, current_cell):
-        down_cell = self.find_adjacent_cell(current_cell, "y", 1)
-        return down_cell
-
-    def find_adjacent_cell_up(self, current_cell):
-        up_cell = self.find_adjacent_cell(current_cell, "y", -1)
-        return up_cell
-
     def find_adjacent_cell_right(self, current_cell):
         right_cell = self.find_adjacent_cell(current_cell, "x", 1)
         return right_cell
+
+    def find_adjacent_cell_down(self, current_cell):
+        down_cell = self.find_adjacent_cell(current_cell, "y", 1)
+        return down_cell
 
     def find_adjacent_cell_left(self, current_cell):
         left_cell = self.find_adjacent_cell(current_cell, "x", -1)
         return left_cell
 
-    def find_opposite_cell_at_top_of_column(self, current_cell):
-        opposite_cell = self.find_opposite_cell(current_cell, "y", 1)
-        return opposite_cell
-
-    def find_opposite_cell_at_bottom_of_column(self, current_cell):
-        opposite_cell = self.find_opposite_cell(current_cell, "y", -1)
-        return opposite_cell
+    def find_adjacent_cell_up(self, current_cell):
+        up_cell = self.find_adjacent_cell(current_cell, "y", -1)
+        return up_cell
 
     def find_opposite_cell_at_beginning_of_row(self, current_cell):
         opposite_cell = self.find_opposite_cell(current_cell, "x", 1)
         return opposite_cell
 
+    def find_opposite_cell_at_top_of_column(self, current_cell):
+        opposite_cell = self.find_opposite_cell(current_cell, "y", 1)
+        return opposite_cell
+
     def find_opposite_cell_at_end_of_row(self, current_cell):
         opposite_cell = self.find_opposite_cell(current_cell, "x", -1)
+        return opposite_cell
+
+    def find_opposite_cell_at_bottom_of_column(self, current_cell):
+        opposite_cell = self.find_opposite_cell(current_cell, "y", -1)
         return opposite_cell
 
 class Step:
