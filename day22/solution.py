@@ -130,7 +130,12 @@ class Traveler:
         self.update_position(next_step.distance)
         self.step_index += 1
     
+    def complete_all_steps(self):
+        while self.step_index < len(self.instructions):
+            self.execute_next_step()
+    
     def determine_password(self):
+        self.complete_all_steps()
         row = self.current_position.y
         column = self.current_position.x
         facing = self.facing
