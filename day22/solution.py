@@ -68,13 +68,13 @@ class Board:
         adjacent_cell = self.find_cell_by_name(adjacent_name)
         return adjacent_cell
 
-    def find_cell_below(self, current_cell):
-        below_cell = self.find_adjacent_cell(current_cell, "y", 1)
-        return below_cell
+    def find_cell_down(self, current_cell):
+        down_cell = self.find_adjacent_cell(current_cell, "y", 1)
+        return down_cell
 
-    def find_cell_above(self, current_cell):
-        above_cell = self.find_adjacent_cell(current_cell, "y", -1)
-        return above_cell
+    def find_cell_up(self, current_cell):
+        up_cell = self.find_adjacent_cell(current_cell, "y", -1)
+        return up_cell
 
     def find_cell_right(self, current_cell):
         right_cell = self.find_adjacent_cell(current_cell, "x", 1)
