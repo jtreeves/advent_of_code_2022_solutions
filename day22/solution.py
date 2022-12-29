@@ -112,6 +112,14 @@ class Traveler:
     def __repr__(self):
         return f"{self.current_position} >>> {self.facing}"
     
+    def update_facing(self, direction):
+        new_direction = self.facing + direction
+        if new_direction == 4:
+            new_direction = 0
+        elif new_direction == -1:
+            new_direction = 3
+        self.facing = new_direction
+    
     def determine_password(self):
         row = self.current_position.y
         column = self.current_position.x
