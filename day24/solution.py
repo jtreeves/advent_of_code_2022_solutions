@@ -15,8 +15,45 @@ class Blizzard:
     def __repr__(self):
         return f"({self.position.x}, {self.position.y}): {self.direction}"
     
-    def update_position(self, all_positions):
-        pass
+    def update_position(self, valley):
+        match self.direction:
+            case ">":
+                new_x = self.position.x + 1
+                new_y = self.position.y
+                new_name = f"x{new_x}y{new_y}"
+                new_position = valley.find_position_by_name(new_name)
+                if new_position.blocked:
+                    new_x = 1
+                    new_name = f"x{new_x}y{new_y}"
+                    new_position = valley.find_position_by_name(new_name)
+            case "v":
+                new_x = self.position.x
+                new_y = self.position.y + 1
+                new_name = f"x{new_x}y{new_y}"
+                new_position = valley.find_position_by_name(new_name)
+                if new_position.blocked:
+                    new_y = 1
+                    new_name = f"x{new_x}y{new_y}"
+                    new_position = valley.find_position_by_name(new_name)
+            case "<":
+                new_x = self.position.x - 1
+                new_y = self.position.y
+                new_name = f"x{new_x}y{new_y}"
+                new_position = valley.find_position_by_name(new_name)
+                if new_position.blocked:
+                    new_x = valley.width - 2
+                    new_name = f"x{new_x}y{new_y}"
+                    new_position = valley.find_position_by_name(new_name)
+            case "^":
+                new_x = self.position.x
+                new_y = self.position.y - 1
+                new_name = f"x{new_x}y{new_y}"
+                new_position = valley.find_position_by_name(new_name)
+                if new_position.blocked:
+                    new_y = valley.height - 2
+                    new_name = f"x{new_x}y{new_y}"
+                    new_position = valley.find_position_by_name(new_name)
+        self.position = new_position
 
 class Traveler:
     def __init__(self, position):
@@ -25,8 +62,13 @@ class Traveler:
     def __repr__(self):
         return f"({self.position.x}, {self.position.y})"
 
-    def update_position(self, all_positions):
-        pass
+    def update_position(self, valley):
+        current_x = self.position.x
+        current_y = self.position.y
+        down_name = f"x{current_x}y{current_y + 1}"
+        right_name = f"x{current_x + 1}y{current_y}"
+        up_name = f"x{current_x}y{current_y - 1}"
+        left_name = f"x{current_x - 1}y{current_y}"
 
 class Valley:
     def __init__(self, description):
@@ -63,10 +105,17 @@ class Valley:
 
     def update_blizzards(self):
         for blizzard in self.blizzards.values():
-            blizzard.update_position(self.positions)
+            blizzard.update_position(self)
 
     def update_traveler(self):
         self.traveler.update_position()
+
+    def find_position_by_name(self, name):
+        try:
+            position = self.positions[name]
+            return position
+        except KeyError:
+            return None
 
 def solve_problem():
     data = extract_data_from_file(24, False)
