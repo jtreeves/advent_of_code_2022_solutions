@@ -104,13 +104,18 @@ class Traveler:
     def __init__(self, board, instructions):
         self.board = board
         self.instructions = instructions
+        self.current_position = board.starting_position
+
+    def __repr__(self):
+        return f"{self.current_position}"
 
 def solve_problem():
     data = extract_data_from_file(22, False)
     partitioned = data.split("\n\n")
     board = Board(partitioned[0])
     instructions = Instructions(partitioned[1])
-    return board
+    traveler = Traveler(board, instructions)
+    return traveler
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
