@@ -57,6 +57,33 @@ class Board:
         except KeyError:
             return None
 
+    def find_adjacent_cell(self, current_cell, dimension, direction):
+        if dimension == "x":
+            adjacent_x = current_cell.x + direction
+            adjacent_y = current_cell.y
+        else:
+            adjacent_x = current_cell.x
+            adjacent_y = current_cell.y + direction
+        adjacent_name = f"x{adjacent_x}y{adjacent_y}"
+        adjacent_cell = self.find_cell_by_name(adjacent_name)
+        return adjacent_cell
+
+    def find_cell_below(self, current_cell):
+        below_cell = self.find_adjacent_cell(current_cell, "y", 1)
+        return below_cell
+
+    def find_cell_above(self, current_cell):
+        above_cell = self.find_adjacent_cell(current_cell, "y", -1)
+        return above_cell
+
+    def find_cell_right(self, current_cell):
+        right_cell = self.find_adjacent_cell(current_cell, "x", 1)
+        return right_cell
+
+    def find_cell_left(self, current_cell):
+        left_cell = self.find_adjacent_cell(current_cell, "x", -1)
+        return left_cell
+
 class Step:
     def __init__(self, characters):
         self.characters = characters
