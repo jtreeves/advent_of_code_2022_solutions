@@ -32,19 +32,21 @@ class Board:
             for column in range(self.width):
                 character = self.description[row][column]
                 if character != " ":
-                    name = f"x{column}y{row}"
-                    new_cell = Cell(column, row, character, name)
+                    x = column + 1
+                    y = row + 1
+                    name = f"x{x}y{y}"
+                    new_cell = Cell(x, y, character, name)
                     cells[name] = new_cell
         return cells
     
     def determine_starting_position(self):
         open_tops = []
         for cell in self.cells.values():
-            if "y0" in cell.name and cell.open:
+            if "y1" in cell.name and cell.name.split("y1")[1] == "" and cell.open:
                 open_tops.append(cell.x)
         open_tops.sort()
         first_x = open_tops[0]
-        starting_name = f"x{first_x}y0"
+        starting_name = f"x{first_x}y1"
         starting_cell = self.find_cell_by_name(starting_name)
         return starting_cell
     
