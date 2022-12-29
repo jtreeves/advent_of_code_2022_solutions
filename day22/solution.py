@@ -100,19 +100,19 @@ class Board:
                     opposite_cell = self.find_cell_by_name(opposite_name)
         return opposite_cell
 
-    def find_cell_down(self, current_cell):
+    def find_adjacent_cell_down(self, current_cell):
         down_cell = self.find_adjacent_cell(current_cell, "y", 1)
         return down_cell
 
-    def find_cell_up(self, current_cell):
+    def find_adjacent_cell_up(self, current_cell):
         up_cell = self.find_adjacent_cell(current_cell, "y", -1)
         return up_cell
 
-    def find_cell_right(self, current_cell):
+    def find_adjacent_cell_right(self, current_cell):
         right_cell = self.find_adjacent_cell(current_cell, "x", 1)
         return right_cell
 
-    def find_cell_left(self, current_cell):
+    def find_adjacent_cell_left(self, current_cell):
         left_cell = self.find_adjacent_cell(current_cell, "x", -1)
         return left_cell
 
@@ -191,13 +191,13 @@ class Traveler:
     def move_to_position_one_unit_in_one_direction(self):
         match self.facing:
             case 0:
-                new_cell = self.board.find_cell_right(self.current_position)
+                new_cell = self.board.find_adjacent_cell_right(self.current_position)
             case 1:
-                new_cell = self.board.find_cell_down(self.current_position)
+                new_cell = self.board.find_adjacent_cell_down(self.current_position)
             case 2:
-                new_cell = self.board.find_cell_left(self.current_position)
+                new_cell = self.board.find_adjacent_cell_left(self.current_position)
             case 3:
-                new_cell = self.board.find_cell_up(self.current_position)
+                new_cell = self.board.find_adjacent_cell_up(self.current_position)
         if new_cell is not None and new_cell.open:
             self.current_position = new_cell
 
