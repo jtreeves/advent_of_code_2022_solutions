@@ -39,9 +39,25 @@ class Board:
 class Step:
     def __init__(self, characters):
         self.characters = characters
+        self.move = self.determine_movement()
+        self.direction = self.determine_direction()
 
     def __repr__(self):
-        return f"{self.characters}"
+        return f"{self.move} -> {self.direction}"
+
+    def determine_movement(self):
+        if self.characters == "R" or self.characters == "L":
+            return 0
+        else:
+            return int(self.characters)
+    
+    def determine_direction(self):
+        if self.characters == "R":
+            return 1
+        elif self.characters == "L":
+            return -1
+        else:
+            return 0
 
 class Instructions:
     def __init__(self, notes):
