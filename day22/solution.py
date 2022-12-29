@@ -68,7 +68,7 @@ class Board:
         adjacent_cell = self.find_cell_by_name(adjacent_name)
         return adjacent_cell
 
-    def find_oppposite_cell(self, current_cell, dimension, direction):
+    def find_opposite_cell(self, current_cell, dimension, direction):
         opposite_cell = None
         if dimension == "x":
             opposite_y = current_cell.y
