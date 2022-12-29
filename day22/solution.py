@@ -152,7 +152,22 @@ class Traveler:
         self.facing = new_direction
     
     def update_position(self, distance):
-        pass
+        while distance > 0:
+            self.move_to_position_one_unit_in_one_direction()
+            distance -= 1
+
+    def move_to_position_one_unit_in_one_direction(self):
+        match self.facing:
+            case 0:
+                new_cell = self.board.find_cell_right(self.current_position)
+            case 1:
+                new_cell = self.board.find_cell_down(self.current_position)
+            case 2:
+                new_cell = self.board.find_cell_left(self.current_position)
+            case 3:
+                new_cell = self.board.find_cell_up(self.current_position)
+        if new_cell is not None and new_cell.open:
+            self.current_position = new_cell
 
     def execute_next_step(self):
         next_step = self.instructions.steps[self.step_index]
