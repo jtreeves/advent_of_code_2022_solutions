@@ -52,20 +52,46 @@ class Exploration:
             if valve.flow_rate > 0:
                 worth_opening.append(valve.name)
         return worth_opening
+    
+    def find_valve_by_name(self, name):
+        for valve in self.valves.values():
+            if valve.name == name:
+                return valve
 
     def find_maximum_pressure(self):
         unopened_valves_worth_opening = self.determine_all_valves_worth_opening()
-        remaining_time = 30
-        maximum_pressure = 0
         current_valve = self.starting_valve
-        while len(unopened_valves_worth_opening) != 0 and remaining_time > 0:
-            pass
+        current_pressure = 0
+        current_time = 30
+        paths = [(current_valve, current_pressure, current_time)]
+        tested_valves = []
+        while unopened_valves_worth_opening:
+            valve, pressure, time = paths[-1]
+            if valve.name in tested_valves:
+                break
+            if valve.flow_rate != 0:
+                time -= 1
+                pressure += valve.calculate_current_cumulative_flow(time)
+                unopened_valves_worth_opening.remove(valve.name)
+            tested_valves.append(valve.name)
+            for tunnel in valve.tunnels:
+                if tunnel in unopened_valves_worth_opening:
+                    time -= 1
+                    new_valve = self.find_valve_by_name(tunnel)
+                    paths.append((new_valve, pressure, time))
+        viable_paths = []
+        for valve, pressure, time in paths:
+            if time >= 0:
+                viable_paths.append(pressure)
+        viable_paths.sort()
+        maximum_pressure = viable_paths[-1]
         return maximum_pressure
 
 def solve_problem():
     data = extract_data_from_file(16, False)
     experience = Exploration(data)
-    return experience
+    max_pressure = experience.find_maximum_pressure()
+    return max_pressure
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
