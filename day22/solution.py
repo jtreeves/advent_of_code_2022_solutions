@@ -108,6 +108,7 @@ class Traveler:
         self.instructions = instructions
         self.current_position = board.starting_position
         self.facing = 0
+        self.step_index = 0
 
     def __repr__(self):
         return f"{self.current_position} >>> {self.facing}"
@@ -119,6 +120,15 @@ class Traveler:
         elif new_direction == -1:
             new_direction = 3
         self.facing = new_direction
+    
+    def update_position(self, distance):
+        pass
+
+    def execute_next_step(self):
+        next_step = self.instructions[self.step_index]
+        self.update_facing(next_step.direction)
+        self.update_position(next_step.distance)
+        self.step_index += 1
     
     def determine_password(self):
         row = self.current_position.y
