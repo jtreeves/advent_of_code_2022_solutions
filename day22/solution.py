@@ -68,6 +68,38 @@ class Board:
         adjacent_cell = self.find_cell_by_name(adjacent_name)
         return adjacent_cell
 
+    def find_oppposite_cell(self, current_cell, dimension, direction):
+        opposite_cell = None
+        if dimension == "x":
+            opposite_y = current_cell.y
+            if direction == 1:
+                opposite_x = 0
+                while opposite_cell == None:
+                    opposite_x += 1
+                    opposite_name = f"x{opposite_x}y{opposite_y}"
+                    opposite_cell = self.find_cell_by_name(opposite_name)
+            else:
+                opposite_x = self.width
+                while opposite_cell == None:
+                    opposite_x -= 1
+                    opposite_name = f"x{opposite_x}y{opposite_y}"
+                    opposite_cell = self.find_cell_by_name(opposite_name)
+        else:
+            opposite_x = current_cell.x
+            if direction == 1:
+                opposite_y = 0
+                while opposite_cell == None:
+                    opposite_y += 1
+                    opposite_name = f"x{opposite_x}y{opposite_y}"
+                    opposite_cell = self.find_cell_by_name(opposite_name)
+            else:
+                opposite_y = self.height
+                while opposite_cell == None:
+                    opposite_y -= 1
+                    opposite_name = f"x{opposite_x}y{opposite_y}"
+                    opposite_cell = self.find_cell_by_name(opposite_name)
+        return opposite_cell
+
     def find_cell_down(self, current_cell):
         down_cell = self.find_adjacent_cell(current_cell, "y", 1)
         return down_cell
