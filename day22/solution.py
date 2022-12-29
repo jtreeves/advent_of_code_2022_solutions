@@ -201,31 +201,39 @@ class Traveler:
     
     def update_position(self, distance):
         while distance > 0:
-            self.move_to_position_one_unit_in_one_direction()
+            self.move_to_position()
             distance -= 1
 
-    def move_to_position_one_unit_in_one_direction(self):
+    def find_adjacent_cell_in_direction(self):
         match self.facing:
             case 0:
-                new_cell = self.board.find_adjacent_cell_right(self.current_position)
+                found_cell = self.board.find_adjacent_cell_right(self.current_position)
             case 1:
-                new_cell = self.board.find_adjacent_cell_down(self.current_position)
+                found_cell = self.board.find_adjacent_cell_down(self.current_position)
             case 2:
-                new_cell = self.board.find_adjacent_cell_left(self.current_position)
+                found_cell = self.board.find_adjacent_cell_left(self.current_position)
             case 3:
-                new_cell = self.board.find_adjacent_cell_up(self.current_position)
+                found_cell = self.board.find_adjacent_cell_up(self.current_position)
+        return found_cell
+
+    def find_opposite_cell_in_direction(self):
+        match self.facing:
+            case 0:
+                found_cell = self.board.find_opposite_cell_at_beginning_of_row(self.current_position)
+            case 1:
+                found_cell = self.board.find_opposite_cell_at_top_of_column(self.current_position)
+            case 2:
+                found_cell = self.board.find_opposite_cell_at_end_of_row(self.current_position)
+            case 3:
+                found_cell = self.board.find_opposite_cell_at_bottom_of_column(self.current_position)
+        return found_cell
+
+    def move_to_position(self):
+        new_cell = self.find_adjacent_cell_in_direction()
         if new_cell is not None and new_cell.open:
             self.current_position = new_cell
         elif new_cell is None:
-            match self.facing:
-                case 0:
-                    new_cell = self.board.find_opposite_cell_at_beginning_of_row(self.current_position)
-                case 1:
-                    new_cell = self.board.find_opposite_cell_at_top_of_column(self.current_position)
-                case 2:
-                    new_cell = self.board.find_opposite_cell_at_end_of_row(self.current_position)
-                case 3:
-                    new_cell = self.board.find_opposite_cell_at_bottom_of_column(self.current_position)
+            new_cell = self.find_opposite_cell_in_direction()
             if new_cell is not None and new_cell.open:
                 self.current_position = new_cell
 
