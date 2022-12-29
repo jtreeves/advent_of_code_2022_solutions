@@ -21,9 +21,10 @@ class Board:
         self.height = len(self.description)
         self.width = len(self.description[0])
         self.cells = self.create_cells()
+        self.starting_position = self.determine_starting_position()
     
     def __repr__(self):
-        return f"{self.cells}"
+        return f"{self.starting_position.name} >>> {self.cells}"
 
     def create_cells(self):
         cells = {}
@@ -35,6 +36,21 @@ class Board:
                     new_cell = Cell(column, row, character, name)
                     cells[name] = new_cell
         return cells
+    
+    def determine_starting_position(self):
+        open_tops = []
+        for cell in self.cells.values():
+            if "y0" in cell.name and cell.open:
+                open_tops.append(cell.x)
+        open_tops.sort()
+        first_x = open_tops[0]
+        starting_name = f"x{first_x}y0"
+        starting_cell = self.find_cell_by_name(starting_name)
+        return starting_cell
+    
+    def find_cell_by_name(self, name):
+        cell = self.cells[name]
+        return cell
 
 class Step:
     def __init__(self, characters):
@@ -84,12 +100,17 @@ class Instructions:
             steps.append(new_step)
         return steps
 
+class Traveler:
+    def __init__(self, board, instructions):
+        self.board = board
+        self.instructions = instructions
+
 def solve_problem():
     data = extract_data_from_file(22, False)
     partitioned = data.split("\n\n")
     board = Board(partitioned[0])
     instructions = Instructions(partitioned[1])
-    return instructions
+    return board
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
