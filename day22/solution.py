@@ -216,6 +216,18 @@ class Traveler:
                 new_cell = self.board.find_adjacent_cell_up(self.current_position)
         if new_cell is not None and new_cell.open:
             self.current_position = new_cell
+        elif new_cell is None:
+            match self.facing:
+                case 0:
+                    new_cell = self.board.find_opposite_cell_at_beginning_of_row(self.current_position)
+                case 1:
+                    new_cell = self.board.find_opposite_cell_at_top_of_column(self.current_position)
+                case 2:
+                    new_cell = self.board.find_opposite_cell_at_end_of_row(self.current_position)
+                case 3:
+                    new_cell = self.board.find_opposite_cell_at_bottom_of_column(self.current_position)
+            if new_cell is not None and new_cell.open:
+                self.current_position = new_cell
 
     def execute_next_step(self):
         next_step = self.instructions.steps[self.step_index]
