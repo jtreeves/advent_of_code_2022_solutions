@@ -44,13 +44,16 @@ class Board:
         cells = {}
         for row in range(self.height):
             for column in range(self.width):
-                character = self.description[row][column]
-                if character != " ":
-                    x = column + 1
-                    y = row + 1
-                    name = f"x{x}y{y}"
-                    new_cell = Cell(x, y, character, name)
-                    cells[name] = new_cell
+                try:
+                    character = self.description[row][column]
+                    if character != " ":
+                        x = column + 1
+                        y = row + 1
+                        name = f"x{x}y{y}"
+                        new_cell = Cell(x, y, character, name)
+                        cells[name] = new_cell
+                except IndexError:
+                    continue
         return cells
     
     def determine_starting_position(self):
