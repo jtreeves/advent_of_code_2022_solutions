@@ -27,8 +27,8 @@ class Valley:
         self.description = description.split("\n")
         self.height = len(self.description)
         self.width = len(self.description[0])
-        self.positions = self.create_positions()
         self.blizzards = {}
+        self.positions = self.create_positions()
     
     def __repr__(self):
         return f"{self.starting_position} -> {self.ending_position}"
