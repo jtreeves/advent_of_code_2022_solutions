@@ -116,6 +116,22 @@ class Board:
         left_cell = self.find_adjacent_cell(current_cell, "x", -1)
         return left_cell
 
+    def find_opposite_cell_at_top_of_column(self, current_cell):
+        opposite_cell = self.find_opposite_cell(current_cell, "y", 1)
+        return opposite_cell
+
+    def find_opposite_cell_at_bottom_of_column(self, current_cell):
+        opposite_cell = self.find_opposite_cell(current_cell, "y", -1)
+        return opposite_cell
+
+    def find_opposite_cell_at_beginning_of_row(self, current_cell):
+        opposite_cell = self.find_opposite_cell(current_cell, "x", 1)
+        return opposite_cell
+
+    def find_opposite_cell_at_end_of_row(self, current_cell):
+        opposite_cell = self.find_opposite_cell(current_cell, "x", -1)
+        return opposite_cell
+
 class Step:
     def __init__(self, characters):
         self.characters = characters
