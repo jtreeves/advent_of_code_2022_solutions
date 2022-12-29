@@ -51,8 +51,11 @@ class Board:
         return starting_cell
     
     def find_cell_by_name(self, name):
-        cell = self.cells[name]
-        return cell
+        try:
+            cell = self.cells[name]
+            return cell
+        except KeyError:
+            return None
 
 class Step:
     def __init__(self, characters):
