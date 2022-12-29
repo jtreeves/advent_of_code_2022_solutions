@@ -117,6 +117,13 @@ class Valley:
         except KeyError:
             return None
 
+    def check_if_blizzard_by_name(self, name):
+        try:
+            self.blizzards[name]
+            return True
+        except KeyError:
+            return False
+
 def solve_problem():
     data = extract_data_from_file(24, False)
     valley = Valley(data)
