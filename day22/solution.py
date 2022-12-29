@@ -57,13 +57,13 @@ class Board:
 class Step:
     def __init__(self, characters):
         self.characters = characters
-        self.move = self.determine_movement()
+        self.distance = self.determine_distance()
         self.direction = self.determine_direction()
 
     def __repr__(self):
-        return f"{self.move} -> {self.direction}"
+        return f"{self.distance} -> {self.direction}"
 
-    def determine_movement(self):
+    def determine_distance(self):
         if self.characters == "R" or self.characters == "L":
             return 0
         else:
