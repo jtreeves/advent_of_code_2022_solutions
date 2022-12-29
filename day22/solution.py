@@ -16,15 +16,14 @@ class Cell:
             return False
 
 class Board:
-    def __init__(self, description, instructions):
-        self.instructions = instructions
+    def __init__(self, description):
         self.description = description.split("\n")
         self.height = len(self.description)
         self.width = len(self.description[0])
         self.cells = self.create_cells()
     
     def __repr__(self):
-        return f"{self.cells} -> {self.instructions}"
+        return f"{self.cells}"
 
     def create_cells(self):
         cells = {}
@@ -37,11 +36,44 @@ class Board:
                     cells[name] = new_cell
         return cells
 
+class Step:
+    def __init__(self, characters):
+        self.characters = characters
+
+    def __repr__(self):
+        return f"{self.characters}"
+
+class Instructions:
+    def __init__(self, notes):
+        self.notes = notes
+        self.steps = self.create_steps()
+
+    def __repr__(self):
+        return f"{self.steps}"
+    
+    def create_steps(self):
+        steps = []
+        characters = self.notes
+        while characters:
+            current_character = characters[0]
+            characters = characters[1:]
+            if current_character == "R" or current_character == "L":
+                new_step = Step(current_character)
+            else:
+                digits = current_character
+                while characters and characters[0] != "R" and characters[0] != "L":
+                    digits += characters[0]
+                    characters = characters[1:]
+                new_step = Step(digits)
+            steps.append(new_step)
+        return steps
+
 def solve_problem():
     data = extract_data_from_file(22, False)
     partitioned = data.split("\n\n")
-    board = Board(partitioned[0], partitioned[1])
-    return board
+    board = Board(partitioned[0])
+    instructions = Instructions(partitioned[1])
+    return instructions
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
