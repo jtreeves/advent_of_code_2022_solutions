@@ -107,9 +107,10 @@ class Traveler:
         self.board = board
         self.instructions = instructions
         self.current_position = board.starting_position
+        self.facing = 0
 
     def __repr__(self):
-        return f"{self.current_position}"
+        return f"{self.current_position} >>> {self.facing}"
 
 def solve_problem():
     data = extract_data_from_file(22, False)
