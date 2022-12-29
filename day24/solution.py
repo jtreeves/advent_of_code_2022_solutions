@@ -14,6 +14,9 @@ class Blizzard:
     
     def __repr__(self):
         return f"({self.position.x}, {self.position.y}): {self.direction}"
+    
+    def update_position(self, all_positions):
+        pass
 
 class Traveler:
     def __init__(self, position):
@@ -21,6 +24,9 @@ class Traveler:
     
     def __repr__(self):
         return f"({self.position.x}, {self.position.y})"
+
+    def update_position(self, all_positions):
+        pass
 
 class Valley:
     def __init__(self, description):
@@ -51,11 +57,20 @@ class Valley:
                     self.blizzards[name] = Blizzard(new_position, character)
         return positions
 
+    def update_valley(self):
+        self.update_blizzards()
+        self.update_traveler()
+
+    def update_blizzards(self):
+        for blizzard in self.blizzards.values():
+            blizzard.update_position(self.positions)
+
+    def update_traveler(self):
+        self.traveler.update_position()
+
 def solve_problem():
     data = extract_data_from_file(24, False)
     valley = Valley(data)
-    print(valley.blizzards)
-    print(valley.traveler)
     return valley
 
 def extract_data_from_file(day_number, is_official):
