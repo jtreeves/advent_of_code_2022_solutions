@@ -18,13 +18,27 @@ class Cell:
 class Board:
     def __init__(self, description):
         self.description = description.split("\n")
-        self.height = len(self.description)
-        self.width = len(self.description[0])
+        self.height = self.calculate_height()
+        self.width = self.calculate_width()
         self.cells = self.create_cells()
         self.starting_position = self.determine_starting_position()
     
     def __repr__(self):
         return f"{self.starting_position.name} >>> {self.cells}"
+    
+    def calculate_height(self):
+        height = len(self.description)
+        return height
+    
+    def calculate_width(self):
+        rows = self.description
+        widths = []
+        for row in rows:
+            width = len(row)
+            widths.append(width)
+        widths.sort()
+        widest = widths[-1]
+        return widest
 
     def create_cells(self):
         cells = {}
@@ -256,7 +270,7 @@ class Traveler:
         return password
 
 def solve_problem():
-    data = extract_data_from_file(22, False)
+    data = extract_data_from_file(22, True)
     partitioned = data.split("\n\n")
     board = Board(partitioned[0])
     instructions = Instructions(partitioned[1])
