@@ -125,13 +125,13 @@ class Traveler:
         pass
 
     def execute_next_step(self):
-        next_step = self.instructions[self.step_index]
+        next_step = self.instructions.steps[self.step_index]
         self.update_facing(next_step.direction)
         self.update_position(next_step.distance)
         self.step_index += 1
     
     def complete_all_steps(self):
-        while self.step_index < len(self.instructions):
+        while self.step_index < len(self.instructions.steps):
             self.execute_next_step()
     
     def determine_password(self):
