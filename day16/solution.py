@@ -4,7 +4,6 @@ class Valve:
         self.name = self.extract_name()
         self.flow_rate = self.extract_flow_rate()
         self.tunnels = self.extract_tunnels()
-        self.open = False
     
     def __repr__(self):
         return f"{self.name}: {self.flow_rate} -> {self.tunnels}"
@@ -26,9 +25,6 @@ class Valve:
         tunnels[0] = tunnels[0][-2:]
         return tunnels
     
-    def open_valve(self):
-        self.open = True
-    
     def calculate_current_cumulative_flow(self, time):
         total_flow = self.flow_rate * time
         return total_flow
@@ -37,7 +33,6 @@ class Exploration:
     def __init__(self, data):
         self.descriptions = data.split("\n")
         self.valves = self.create_valves()
-        self.time_remaining = 30
 
     def __repr__(self):
         return f"{self.valves}"
@@ -48,19 +43,8 @@ class Exploration:
             new_valve = Valve(self.descriptions[i])
             valves[new_valve.name] = new_valve
             if i == 0:
-                self.current_valve = new_valve
+                self.starting_valve = new_valve
         return valves
-    
-    def decrement_time(self):
-        self.time_remaining -= 1
-    
-    def move_to_new_valve(self, new_valve):
-        self.current_valve = new_valve
-        self.decrement_time()
-    
-    def open_current_valve(self):
-        self.current_valve.open_valve()
-        self.decrement_time()
     
     def determine_all_valves_worth_opening(self):
         worth_opening = []
@@ -70,7 +54,13 @@ class Exploration:
         return worth_opening
 
     def find_maximum_pressure(self):
-        pass
+        unopened_valves_worth_opening = self.determine_all_valves_worth_opening()
+        remaining_time = 30
+        maximum_pressure = 0
+        current_valve = self.starting_valve
+        while len(unopened_valves_worth_opening) != 0 and remaining_time > 0:
+            pass
+        return maximum_pressure
 
 def solve_problem():
     data = extract_data_from_file(16, False)
