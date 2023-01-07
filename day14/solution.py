@@ -44,6 +44,11 @@ class Sand:
     def __repr__(self):
         return f"{self.location}"
     
+    def fall_until_stopped_or_out_of_cave(self, other_points, min_x, min_y, max_x, max_y):
+        while self.is_falling and self.is_in_cave:
+            self.fall_down_one_unit(other_points)
+            self.check_if_still_in_cave(min_x, min_y, max_x, max_y)
+    
     def fall_down_one_unit(self, other_points):
         new_x = self.location.x
         new_y = self.location.y + 1
