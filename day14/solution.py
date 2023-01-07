@@ -127,6 +127,10 @@ class Cave:
     
     def __repr__(self):
         return f"({self.min_x}, {self.min_y}) -> ({self.max_x}, {self.min_y})\n({self.min_x}, {self.max_y}) -> ({self.max_x}, {self.max_y})"
+    
+    def calculate_total_sand_units_fallen_until_out_of_cave(self):
+        units = len(self.sand_points) - 1
+        return units
 
     def create_paths(self):
         paths = []
