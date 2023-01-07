@@ -82,9 +82,10 @@ class Cave:
     def __init__(self, description):
         self.descriptions = description.split("\n")
         self.paths = self.create_paths()
-        self.occupied_points = self.determine_occupied_points()
-        self.min_x = self.occupied_points[0].x
-        self.max_x = self.occupied_points[-1].x
+        self.rock_points = self.determine_rock_points()
+        self.occupied_points = self.create_occupied_points()
+        self.min_x = self.rock_points[0].x
+        self.max_x = self.rock_points[-1].x
         self.min_y = 0
         self.max_y = self.find_max_y()
     
@@ -98,16 +99,23 @@ class Cave:
             paths.append(new_path)
         return paths
     
-    def determine_occupied_points(self):
+    def determine_rock_points(self):
         points = []
         for path in self.paths:
             for point in path.all_points:
                 points.append(point)
         return sorted(points)
     
+    def create_occupied_points(self):
+        points = {}
+        for point in self.rock_points:
+            name = f"x{point.x}y{point.y}"
+            points[name] = point
+        return points
+    
     def find_max_y(self):
         y_values = []
-        for point in self.occupied_points:
+        for point in self.rock_points:
             y_values.append(point.y)
         sorted_y = sorted(y_values)
         return sorted_y[-1]
