@@ -135,6 +135,7 @@ class Cave:
     def add_sand_until_first_out_of_cave(self):
         while len(self.sand_points) == 0 or self.sand_points[-1].is_in_cave:
             new_sand = Sand()
+            new_sand.fall_until_stopped_or_out_of_cave(self.occupied_points, self.min_x, self.min_y, self.max_x, self.max_y)
             self.append_sand_to_both_points_trackers(new_sand)
     
     def append_sand_to_both_points_trackers(self, sand):
