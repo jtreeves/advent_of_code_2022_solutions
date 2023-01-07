@@ -82,9 +82,10 @@ class Cave:
     def __init__(self, description):
         self.descriptions = description.split("\n")
         self.paths = self.create_paths()
+        self.occupied_points = self.determine_occupied_points()
     
     def __repr__(self):
-        return f"{self.paths}"
+        return f"{self.occupied_points}: {len(self.occupied_points)}"
 
     def create_paths(self):
         paths = []
@@ -92,6 +93,13 @@ class Cave:
             new_path = Path(description)
             paths.append(new_path)
         return paths
+    
+    def determine_occupied_points(self):
+        points = []
+        for path in self.paths:
+            for point in path.all_points:
+                points.append(point)
+        return sorted(points)
 
 def solve_problem():
     data = extract_data_from_file(14, False)
