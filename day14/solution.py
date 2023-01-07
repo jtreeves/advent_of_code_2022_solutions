@@ -44,6 +44,28 @@ class Sand:
     def __repr__(self):
         return f"{self.location}"
     
+    def fall_down_one_unit(self, other_points):
+        new_x = self.location.x
+        new_y = self.location.y + 1
+        one_down = f"x{new_x}y{new_y}"
+        try:
+            other_points[one_down]
+            new_x -= 1
+            one_left = f"x{new_x}y{new_y}"
+            try:
+                other_points[one_left]
+                new_x += 2
+                one_right = f"x{new_x}y{new_y}"
+                try:
+                    other_points[one_right]
+                    self.is_falling = False
+                except KeyError:
+                    self.location = Point(new_x, new_y)
+            except KeyError:
+                self.location = Point(new_x, new_y)
+        except KeyError:
+            self.location = Point(new_x, new_y)
+    
     def check_if_still_in_cave(self, min_x, min_y, max_x, max_y):
         x = self.location.x
         y = self.location.y
