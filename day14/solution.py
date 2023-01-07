@@ -29,11 +29,11 @@ class Point:
     def __hash__(self):
         return hash((self.x, self.y))
     
-    def has_identical_x(self, other_point):
-        return self.x == other_point.x
+    def has_identical_x(self, other):
+        return self.x == other.x
     
-    def has_identical_y(self, other_point):
-        return self.y == other_point.y
+    def has_identical_y(self, other):
+        return self.y == other.y
 
 class Sand:
     def __init__(self):
