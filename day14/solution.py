@@ -2,6 +2,12 @@ class Point:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+    
+    def has_identical_x(self, other_point):
+        return self.x == other_point.x
+    
+    def has_identical_y(self, other_point):
+        return self.y == other_point.y
 
 class Sand:
     def __init__(self):
@@ -9,9 +15,9 @@ class Sand:
 
 class Path:
     def __init__(self, description):
-        self.description = description
+        self.anchor_points = description.split(" -> ")
 
-    def create_points(self):
+    def create_all_points(self):
         pass
 
 class Cave:
