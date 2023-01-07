@@ -38,6 +38,8 @@ class Point:
 class Sand:
     def __init__(self):
         self.location = Point(500, 0)
+        self.is_falling = True
+        self.is_in_cave = True
     
     def __repr__(self):
         return f"{self.location}"
