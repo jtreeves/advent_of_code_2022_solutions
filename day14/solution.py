@@ -120,6 +120,13 @@ class Cave:
         sorted_y = sorted(y_values)
         return sorted_y[-1]
 
+    def find_point_by_name(self, name):
+        try:
+            point = self.occupied_points[name]
+            return point
+        except KeyError:
+            return None
+
 def solve_problem():
     data = extract_data_from_file(14, False)
     cave = Cave(data)
