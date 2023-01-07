@@ -83,9 +83,13 @@ class Cave:
         self.descriptions = description.split("\n")
         self.paths = self.create_paths()
         self.occupied_points = self.determine_occupied_points()
+        self.min_x = self.occupied_points[0].x
+        self.max_x = self.occupied_points[-1].x
+        self.min_y = 0
+        self.max_y = self.find_max_y()
     
     def __repr__(self):
-        return f"{self.occupied_points}: {len(self.occupied_points)}"
+        return f"({self.min_x}, {self.min_y}) -> ({self.max_x}, {self.min_y})\n({self.min_x}, {self.max_y}) -> ({self.max_x}, {self.max_y})"
 
     def create_paths(self):
         paths = []
@@ -100,6 +104,13 @@ class Cave:
             for point in path.all_points:
                 points.append(point)
         return sorted(points)
+    
+    def find_max_y(self):
+        y_values = []
+        for point in self.occupied_points:
+            y_values.append(point.y)
+        sorted_y = sorted(y_values)
+        return sorted_y[-1]
 
 def solve_problem():
     data = extract_data_from_file(14, False)
