@@ -2,6 +2,9 @@ class Point:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+
+    def __repr__(self):
+        return f"({self.x}, {self.y})"
     
     def has_identical_x(self, other_point):
         return self.x == other_point.x
@@ -12,19 +15,50 @@ class Point:
 class Sand:
     def __init__(self):
         self.location = Point(500, 0)
+    
+    def __repr__(self):
+        return f"{self.location}"
 
 class Path:
     def __init__(self, description):
-        self.anchor_points = description.split(" -> ")
+        self.descriptions = description.split(" -> ")
+        self.anchor_points = self.create_anchor_points()
+        self.all_points = self.create_all_points()
+
+    def __repr__(self):
+        return f"{self.all_points[0]} -> {self.all_points[-1]}: {len(self.all_points)}"
+
+    def create_anchor_points(self):
+        points = []
+        for description in self.descriptions:
+            coordinates = description.split(",")
+            new_point = Point(coordinates[0], coordinates[1])
+            points.append(new_point)
+        return points
 
     def create_all_points(self):
-        pass
+        points = []
+        for i in range(len(self.anchor_points) - 1):
+            matching_x = self.anchor_points[i].has_identical_x(self.anchor_points[i + 1])
+            matching_y = self.anchor_points[i].has_identical_y(self.anchor_points[i + 1])
+            if matching_x:
+                for y in range(self.anchor_points[i].y, self.anchor_points[i + 1].y):
+                    new_point = Point(self.anchor_points[i].x, y)
+                    points.append(new_point)
+            elif matching_y:
+                for x in range(self.anchor_points[i + 1].x, self.anchor_points[i].x):
+                    new_point = Point(x, self.anchor_points[i].y)
+                    points.append(new_point)
+        return points
 
 class Cave:
     def __init__(self, description):
         self.descriptions = description.split("\n")
         self.paths = self.create_paths()
     
+    def __repr__(self):
+        return f"{self.paths}"
+
     def create_paths(self):
         paths = []
         for description in self.descriptions:
@@ -34,7 +68,8 @@ class Cave:
 
 def solve_problem():
     data = extract_data_from_file(14, False)
-    return data
+    cave = Cave(data)
+    return cave
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
