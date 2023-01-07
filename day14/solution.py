@@ -131,6 +131,16 @@ class Cave:
     def calculate_total_sand_units_fallen_until_out_of_cave(self):
         units = len(self.sand_points) - 1
         return units
+    
+    def add_sand_until_first_out_of_cave(self):
+        while len(self.sand_points) == 0 or self.sand_points[-1].is_in_cave:
+            new_sand = Sand()
+            self.append_sand_to_both_points_trackers(new_sand)
+    
+    def append_sand_to_both_points_trackers(self, sand):
+        name = f"x{sand.location.x}y{sand.location.y}"
+        self.occupied_points[name] = sand.location
+        self.sand_points.append(sand)
 
     def create_paths(self):
         paths = []
@@ -160,17 +170,12 @@ class Cave:
         sorted_y = sorted(y_values)
         return sorted_y[-1]
 
-    def find_point_by_name(self, name):
-        try:
-            point = self.occupied_points[name]
-            return point
-        except KeyError:
-            return None
-
 def solve_problem():
     data = extract_data_from_file(14, False)
     cave = Cave(data)
-    return cave
+    cave.add_sand_until_first_out_of_cave()
+    sands = cave.calculate_total_sand_units_fallen_until_out_of_cave()
+    return sands
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
