@@ -43,6 +43,12 @@ class Sand:
     
     def __repr__(self):
         return f"{self.location}"
+    
+    def check_if_still_in_cave(self, min_x, min_y, max_x, max_y):
+        x = self.location.x
+        y = self.location.y
+        if x < min_x or x > max_x or y < min_y or y > max_y:
+            self.is_in_cave = False
 
 class Path:
     def __init__(self, description):
