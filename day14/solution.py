@@ -1,14 +1,30 @@
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
 class Sand:
     def __init__(self):
-        pass
+        self.location = Point(500, 0)
 
 class Path:
-    def __init__(self):
+    def __init__(self, description):
+        self.description = description
+
+    def create_points(self):
         pass
 
 class Cave:
     def __init__(self, description):
         self.descriptions = description.split("\n")
+        self.paths = self.create_paths()
+    
+    def create_paths(self):
+        paths = []
+        for description in self.descriptions:
+            new_path = Path(description)
+            paths.append(new_path)
+        return paths
 
 def solve_problem():
     data = extract_data_from_file(14, False)
