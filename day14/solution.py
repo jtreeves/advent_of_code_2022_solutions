@@ -86,6 +86,7 @@ class Cave:
         self.paths = self.create_paths()
         self.rock_points = self.determine_rock_points()
         self.occupied_points = self.create_occupied_points()
+        self.sand_points = []
         self.min_x = self.rock_points[0].x
         self.max_x = self.rock_points[-1].x
         self.min_y = 0
