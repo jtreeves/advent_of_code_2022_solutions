@@ -32,7 +32,7 @@ class Path:
         points = []
         for description in self.descriptions:
             coordinates = description.split(",")
-            new_point = Point(coordinates[0], coordinates[1])
+            new_point = Point(int(coordinates[0]), int(coordinates[1]))
             points.append(new_point)
         return points
 
