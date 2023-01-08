@@ -80,6 +80,8 @@ class Valley:
             for x in range(self.width):
                 if Position(x, y) == self.traveler:
                     diagram += "T"
+                elif f"x{x}y{y}" == self.starting_position:
+                    diagram += "S"
                 elif f"x{x}y{y}" == self.ending_position:
                     diagram += "E"
                 elif Position(x, y) in self.blizzards:
@@ -89,6 +91,7 @@ class Valley:
                 else:
                     diagram += "."
             diagram += "\n"
+        diagram = diagram[:-1]
         return diagram
     
     def create_positions(self):
@@ -106,12 +109,16 @@ class Valley:
                 elif not wall and not empty:
                     self.blizzards.append(Blizzard(column, row, character))
 
+    def execute_multiple_moves(self, moves):
+        for _ in range(moves):
+            self.update_valley()
+
     def update_valley(self):
         self.update_blizzards()
         self.update_traveler()
 
     def update_blizzards(self):
-        for blizzard in self.blizzards():
+        for blizzard in self.blizzards:
             blizzard.update_position(self.height, self.width)
 
     def update_traveler(self):
@@ -120,6 +127,7 @@ class Valley:
 def solve_problem():
     data = extract_data_from_file(24, False)
     valley = Valley(data)
+    valley.execute_multiple_moves(4)
     return valley
 
 def extract_data_from_file(day_number, is_official):
