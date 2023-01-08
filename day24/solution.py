@@ -48,10 +48,10 @@ class Traveler(Position):
         super().__init__(x, y)
         self.moves = 0
 
-    def update_position(self, height, width, blizzards):
+    def update_position(self, height, width, blizzards, ending_position):
         new_x = self.x
         new_y = self.y
-        if new_y < height - 2 and Position(new_x, new_y + 1) not in blizzards:
+        if (f"x{new_x}y{new_y + 1}" == ending_position) or (new_y < height - 2 and Position(new_x, new_y + 1) not in blizzards):
             new_y += 1
         elif new_x < width - 2 and Position(new_x + 1, new_y) not in blizzards:
             new_x += 1
@@ -123,7 +123,7 @@ class Valley:
             blizzard.update_position(self.height, self.width)
 
     def update_traveler(self):
-        self.traveler.update_position(self.height, self.width, self.blizzards)
+        self.traveler.update_position(self.height, self.width, self.blizzards, self.ending_position)
     
     def check_if_traveler_exited(self):
         traveler_position = f"x{self.traveler.x}y{self.traveler.y}"
