@@ -71,53 +71,27 @@ class Blueprint:
             new_spec = Robot(description)
             specs.append(new_spec)
         return specs
-    
-    def check_if_can_make_geode_robot(self):
-        geode_requirements = self.robot_specs[3].requirements
-        ore_needed = geode_requirements[0].amount
-        obsidian_needed = geode_requirements[1].amount
-        if self.ore >= ore_needed and self.obsidian >= obsidian_needed:
-            return True
-        else:
-            return False
-    
-    def check_if_can_make_obsidian_robot(self):
-        obsidian_requirements = self.robot_specs[2].requirements
-        ore_needed = obsidian_requirements[0].amount
-        clay_needed = obsidian_requirements[1].amount
-        if self.ore >= ore_needed and self.clay >= clay_needed:
-            return True
-        else:
-            return False
-    
-    def check_if_can_make_clay_robot(self):
-        clay_requirements = self.robot_specs[1].requirements
-        ore_needed = clay_requirements[0].amount
-        if self.ore >= ore_needed:
-            return True
-        else:
-            return False
         
     def spend_one_minute(self):
-        can_geode = self.check_if_can_make_geode_robot()
-        can_obsidian = self.check_if_can_make_obsidian_robot()
-        can_clay = self.check_if_can_make_clay_robot()
-        if can_geode:
-            geode_requirements = self.robot_specs[3].requirements
-            ore_needed = geode_requirements[0].amount
-            obsidian_needed = geode_requirements[1].amount
-            self.ore -= ore_needed
-            self.obsidian -= obsidian_needed
-        elif can_obsidian:
-            obsidian_requirements = self.robot_specs[2].requirements
-            ore_needed = obsidian_requirements[0].amount
-            clay_needed = obsidian_requirements[1].amount
-            self.ore -= ore_needed
-            self.clay -= clay_needed
-        elif can_clay:
-            clay_requirements = self.robot_specs[1].requirements
-            ore_needed = clay_requirements[0].amount
-            self.ore -= ore_needed
+        geode_requirements = self.robot_specs[3].requirements
+        ore_needed_for_geode = geode_requirements[0].amount
+        obsidian_needed_for_geode = geode_requirements[1].amount
+        obsidian_requirements = self.robot_specs[2].requirements
+        ore_needed_for_obsidian = obsidian_requirements[0].amount
+        clay_needed_for_obsidian = obsidian_requirements[1].amount
+        clay_requirements = self.robot_specs[1].requirements
+        ore_needed_for_clay = clay_requirements[0].amount
+        should_geode = self.ore >= ore_needed_for_geode and self.obsidian >= obsidian_needed_for_geode
+        should_obsidian = self.ore >= ore_needed_for_obsidian and self.clay >= clay_needed_for_obsidian and self.obsidian + self.obsidian_robots < obsidian_needed_for_geode
+        should_clay = self.ore >= ore_needed_for_clay and self.clay + self.clay_robots < clay_needed_for_obsidian
+        if should_geode:
+            self.ore -= ore_needed_for_geode
+            self.obsidian -= obsidian_needed_for_geode
+        elif should_obsidian:
+            self.ore -= ore_needed_for_obsidian
+            self.clay -= clay_needed_for_obsidian
+        elif should_clay:
+            self.ore -= ore_needed_for_clay
         for _ in range(self.ore_robots):
             self.ore += 1
         for _ in range(self.clay_robots):
@@ -126,11 +100,11 @@ class Blueprint:
             self.obsidian += 1
         for _ in range(self.geode_robots):
             self.geodes += 1
-        if can_geode:
+        if should_geode:
             self.geode_robots += 1
-        elif can_obsidian:
+        elif should_obsidian:
             self.obsidian_robots += 1
-        elif can_clay:
+        elif should_clay:
             self.clay_robots += 1
 
     def spend_multiple_minutes(self, minutes):
