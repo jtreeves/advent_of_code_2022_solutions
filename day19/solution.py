@@ -82,8 +82,8 @@ class Blueprint:
         clay_requirements = self.robot_specs[1].requirements
         ore_needed_for_clay = clay_requirements[0].amount
         should_geode = self.ore >= ore_needed_for_geode and self.obsidian >= obsidian_needed_for_geode
-        should_obsidian = self.ore >= ore_needed_for_obsidian and self.clay >= clay_needed_for_obsidian and self.obsidian + self.obsidian_robots < obsidian_needed_for_geode
-        should_clay = self.ore >= ore_needed_for_clay and self.clay + self.clay_robots < clay_needed_for_obsidian
+        should_obsidian = self.ore >= ore_needed_for_obsidian and self.clay >= clay_needed_for_obsidian and self.obsidian + self.obsidian_robots * 2 < obsidian_needed_for_geode
+        should_clay = self.ore >= ore_needed_for_clay and self.clay + self.clay_robots * 2 < clay_needed_for_obsidian
         if should_geode:
             self.ore -= ore_needed_for_geode
             self.obsidian -= obsidian_needed_for_geode
@@ -116,6 +116,11 @@ class Blueprint:
             print(f"CLAY: {self.clay}")
             print(f"OBSIDIAN: {self.obsidian}")
             print(f"GEODES: {self.geodes}")
+            print("*********")
+            print(f"ORE ROBOTS: {self.ore_robots}")
+            print(f"CLAY ROBOTS: {self.clay_robots}")
+            print(f"OBSIDIAN ROBOTS: {self.obsidian_robots}")
+            print(f"GEODE ROBOTS: {self.geode_robots}")
 
 class Selection:
     def __init__(self, description):
