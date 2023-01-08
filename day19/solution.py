@@ -84,9 +84,9 @@ class Blueprint:
         ore_requirements = self.robot_specs[0].requirements
         ore_needed_for_ore = ore_requirements[0].amount
         should_geode = self.ore >= ore_needed_for_geode and self.obsidian >= obsidian_needed_for_geode
-        should_obsidian = self.ore >= ore_needed_for_obsidian and self.clay >= clay_needed_for_obsidian and self.obsidian + self.obsidian_robots < obsidian_needed_for_geode
-        should_clay = self.ore >= ore_needed_for_clay and self.clay + self.clay_robots < clay_needed_for_obsidian
-        should_ore = self.ore >= ore_needed_for_ore and self.ore + self.ore_robots < ore_needed_for_clay
+        should_obsidian = self.ore >= ore_needed_for_obsidian and self.clay >= clay_needed_for_obsidian and self.obsidian + self.obsidian_robots * 2 < obsidian_needed_for_geode
+        should_clay = self.ore >= ore_needed_for_clay and self.clay + self.clay_robots * 2 < clay_needed_for_obsidian
+        should_ore = self.ore >= ore_needed_for_ore and self.ore + self.ore_robots * 2 < ore_needed_for_clay
         if should_geode:
             self.ore -= ore_needed_for_geode
             self.obsidian -= obsidian_needed_for_geode
@@ -163,7 +163,7 @@ class Selection:
         return total
 
 def solve_problem():
-    data = extract_data_from_file(19, False)
+    data = extract_data_from_file(19, True)
     selection = Selection(data)
     total = selection.calculate_sum_of_quality_levels_on_interval(24)
     return total
