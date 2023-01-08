@@ -58,11 +58,23 @@ class Grid:
             new_sensor = Sensor(description)
             sensors.append(new_sensor)
         return sensors
+    
+    def determine_sensors_applicable_to_row(self, row):
+        applicable = []
+        for sensor in self.sensors:
+            sensor_range = sensor.maximum_range
+            sensor_row = sensor.location.y
+            sensor_min = sensor_row - sensor_range
+            sensor_max = sensor_row + sensor_range
+            if row in range(sensor_min, sensor_max + 1):
+                applicable.append(sensor)
+        return applicable
 
 def solve_problem():
     data = extract_data_from_file(15, False)
     grid = Grid(data)
-    return grid
+    applicables = grid.determine_sensors_applicable_to_row(10)
+    return applicables
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
