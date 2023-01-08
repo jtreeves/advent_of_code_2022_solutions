@@ -104,12 +104,26 @@ class Grid:
                 new_point = Point(x, row)
                 if new_point not in self.beacons:
                     beaconless_positions.add(new_point)
-        return len(beaconless_positions)
+        return list(beaconless_positions)
+    
+    def calculate_amount_of_beaconless_positions_in_row(self, row):
+        positions = self.determine_beaconless_positions_in_row(row)
+        return len(positions)
+    
+    def find_all_beaconless_positions(self, maximum_row):
+        all_positions = []
+        for row in range(maximum_row + 1):
+            row_positions = self.determine_beaconless_positions_in_row(row)
+            all_positions.extend(row_positions)
+        return all_positions
+
+    def find_only_position_for_missing_beacon(self):
+        return
 
 def solve_problem():
-    data = extract_data_from_file(15, True)
+    data = extract_data_from_file(15, False)
     grid = Grid(data)
-    positions = grid.determine_beaconless_positions_in_row(2000000)
+    positions = grid.find_all_beaconless_positions(20)
     return positions
 
 def extract_data_from_file(day_number, is_official):
