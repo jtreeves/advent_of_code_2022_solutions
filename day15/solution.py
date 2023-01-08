@@ -137,9 +137,9 @@ class Grid:
                     return key_point
 
 def solve_problem():
-    data = extract_data_from_file(15, False)
+    data = extract_data_from_file(15, True)
     grid = Grid(data)
-    position = grid.find_only_position_for_missing_beacon(20)
+    position = grid.find_only_position_for_missing_beacon(4000000)
     frequency = position.calculate_tuning_frequency()
     return frequency
 
