@@ -183,9 +183,9 @@ class Cave:
     
     def create_floor(self):
         floor_y = self.max_y + 2
-        x_range = self.max_x - self.min_x
-        floor_min_x = self.min_x - x_range
-        floor_max_x = self.max_x + x_range
+        x_range_incr = (self.max_x - self.min_x) * 10
+        floor_min_x = self.min_x - x_range_incr
+        floor_max_x = self.max_x + x_range_incr
         floor = []
         for x in range(floor_min_x, floor_max_x):
             new_point = Point(x, floor_y)
@@ -219,7 +219,7 @@ class Cave:
         return sorted_y[-1]
 
 def solve_problem(part):
-    data = extract_data_from_file(14, False)
+    data = extract_data_from_file(14, True)
     cave = Cave(data)
     if part == 1:
         cave.add_sand_until_first_out_of_cave()

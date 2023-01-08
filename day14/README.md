@@ -193,4 +193,4 @@ Using your scan, simulate the falling sand until the source of the sand becomes 
 
 ### Solution
 
-NOT YET SOLVED
+26283
