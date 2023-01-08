@@ -128,6 +128,13 @@ class Blueprint:
             print(f"CLAY ROBOTS: {self.clay_robots}")
             print(f"OBSIDIAN ROBOTS: {self.obsidian_robots}")
             print(f"GEODE ROBOTS: {self.geode_robots}")
+    
+    def calculate_quality_level_for_interval(self, minutes):
+        self.spend_multiple_minutes(minutes)
+        id_number = self.id
+        geodes = self.geodes
+        level = id_number * geodes
+        return level
 
 class Selection:
     def __init__(self, description):
@@ -147,12 +154,19 @@ class Selection:
             new_blueprint = Blueprint(option)
             blueprints.append(new_blueprint)
         return blueprints
+    
+    def calculate_sum_of_quality_levels_on_interval(self, minutes):
+        total = 0
+        for blueprint in self.blueprints:
+            level = blueprint.calculate_quality_level_for_interval(minutes)
+            total += level
+        return total
 
 def solve_problem():
     data = extract_data_from_file(19, False)
     selection = Selection(data)
-    selection.blueprints[0].spend_multiple_minutes(24)
-    return selection
+    total = selection.calculate_sum_of_quality_levels_on_interval(24)
+    return total
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
