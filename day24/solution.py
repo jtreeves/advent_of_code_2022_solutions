@@ -123,6 +123,13 @@ class Valley:
 
     def update_traveler(self):
         self.traveler.update_position(self.height, self.width, self.blizzards)
+    
+    def check_if_traveler_exited(self):
+        traveler_position = f"x{self.traveler.x}y{self.traveler.y}"
+        if traveler_position == self.ending_position:
+            return True
+        else:
+            return False
 
 def solve_problem():
     data = extract_data_from_file(24, False)
