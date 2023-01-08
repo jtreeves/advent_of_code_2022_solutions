@@ -1,15 +1,22 @@
 class Blueprint:
     def __init__(self, description):
         self.descriptions = description.split(": ")
+        self.robot_descriptions = self.descriptions[1].split(". ")
         self.id = self.extract_id()
+        self.ore_cost = self.extract_cost_ore_robot()
     
     def __repr__(self):
-        return f"{self.id}"
+        return f"{self.id}: {self.ore_cost} ore -> ORE"
 
     def extract_id(self):
         id_parts = self.descriptions[0].split(" ")
         id_number = int(id_parts[1])
         return id_number
+    
+    def extract_cost_ore_robot(self):
+        ore_descriptions = self.robot_descriptions[0].split("costs ")
+        ore_cost = int(ore_descriptions[1].split(" ")[0])
+        return ore_cost
 
 class Selection:
     def __init__(self, description):
