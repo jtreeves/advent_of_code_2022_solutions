@@ -91,7 +91,7 @@ class Blueprint:
             return False
     
     def check_if_can_make_clay_robot(self):
-        clay_requirements = self.robot_specs[2].requirements
+        clay_requirements = self.robot_specs[1].requirements
         ore_needed = clay_requirements[0].amount
         if self.ore >= ore_needed:
             return True
@@ -115,7 +115,7 @@ class Blueprint:
             self.ore -= ore_needed
             self.clay -= clay_needed
         elif can_clay:
-            clay_requirements = self.robot_specs[2].requirements
+            clay_requirements = self.robot_specs[1].requirements
             ore_needed = clay_requirements[0].amount
             self.ore -= ore_needed
         for _ in range(self.ore_robots):
@@ -135,7 +135,8 @@ class Blueprint:
 
     def spend_multiple_minutes(self, minutes):
         for _ in range(minutes):
-            print(f"MINUTE: {minutes + 1}")
+            print("////////")
+            print(f"MINUTE: {_ + 1}")
             self.spend_one_minute()
             print(f"ORE: {self.ore}")
             print(f"CLAY: {self.clay}")
@@ -151,7 +152,7 @@ class Selection:
         description = ""
         for blueprint in self.blueprints:
             description += f"{blueprint}\n"
-        description = description[:-2]
+        description = description[:-1]
         return description
 
     def create_blueprints(self):
@@ -164,7 +165,8 @@ class Selection:
 def solve_problem():
     data = extract_data_from_file(19, False)
     selection = Selection(data)
-    selection.blueprints[0].spend_multiple_minutes(5)
+    selection.blueprints[0].spend_multiple_minutes(24)
+    return selection
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
