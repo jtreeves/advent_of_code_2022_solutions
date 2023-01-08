@@ -1,28 +1,60 @@
+class Cost:
+    def __init__(self, mineral, amount):
+        self.mineral = mineral
+        self.amount = amount
+
+class Robot:
+    def __init__(self, description):
+        self.descriptions = description.split(" costs ")
+        self.type = self.extract_type()
+        self.requirements = self.extract_requirements()
+    
+    def extract_type(self):
+        type_half = self.descriptions[0]
+        robot_index = type_half.index("robot") - 1
+        type = type_half[5: robot_index]
+        return type
+
+    def extract_requirements(self):
+        requirements_half = self.descriptions[1]
+        elements = requirements_half.split(" and ")
+        requirements = []
+        for element in elements:
+            chunks = element.split(" ")
+            mineral = chunks[1].replace(".", "")
+            amount = int(chunks[0])
+            new_cost = Cost(mineral, amount)
+            requirements.append(new_cost)
+        return requirements
+
 class Blueprint:
     def __init__(self, description):
         self.descriptions = description.split(": ")
-        self.robot_descriptions = self.descriptions[1].split(". ")
         self.id = self.extract_id()
-        self.ore_cost = self.extract_cost_ore_robot()
-        self.clay_cost = self.extract_cost_clay_robot()
+        self.robot_descriptions = self.descriptions[1].split(". ")
+        self.robot_specs = self.determine_all_robot_specs()
     
     def __repr__(self):
-        return f"{self.id}: {self.ore_cost} ore -> ORE"
+        description = f"{self.id}: "
+        for spec in self.robot_specs:
+            for cost in spec.requirements:
+                description += f"{cost.amount} {cost.mineral} + "
+            description = description[:-2]
+            description += f"-> {spec.type.upper()} // "
+        description = description[:-4]
+        return description
 
     def extract_id(self):
         id_parts = self.descriptions[0].split(" ")
         id_number = int(id_parts[1])
         return id_number
     
-    def extract_cost_ore_robot(self):
-        ore_descriptions = self.robot_descriptions[0].split("costs ")
-        ore_cost = int(ore_descriptions[1].split(" ")[0])
-        return ore_cost
-    
-    def extract_cost_clay_robot(self):
-        clay_descriptions = self.robot_descriptions[1].split("costs ")
-        clay_cost = int(clay_descriptions[1].split(" ")[0])
-        return clay_cost
+    def determine_all_robot_specs(self):
+        specs = []
+        for description in self.robot_descriptions:
+            new_spec = Robot(description)
+            specs.append(new_spec)
+        return specs
 
 class Selection:
     def __init__(self, description):
