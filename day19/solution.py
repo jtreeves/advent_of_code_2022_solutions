@@ -2,6 +2,9 @@ class Cost:
     def __init__(self, mineral, amount):
         self.mineral = mineral
         self.amount = amount
+    
+    def __repr__(self):
+        return f"{self.amount} {self.mineral}"
 
 class Robot:
     def __init__(self, description):
@@ -9,6 +12,14 @@ class Robot:
         self.type = self.extract_type()
         self.requirements = self.extract_requirements()
     
+    def __repr__(self):
+        description = ""
+        for cost in self.requirements:
+            description += f"{cost} + "
+        description = description[:-2]
+        description += f"-> {self.type.upper()}"
+        return description
+
     def extract_type(self):
         type_half = self.descriptions[0]
         robot_index = type_half.index("robot") - 1
@@ -37,10 +48,7 @@ class Blueprint:
     def __repr__(self):
         description = f"{self.id}: "
         for spec in self.robot_specs:
-            for cost in spec.requirements:
-                description += f"{cost.amount} {cost.mineral} + "
-            description = description[:-2]
-            description += f"-> {spec.type.upper()} // "
+            description += f"{spec} // "
         description = description[:-4]
         return description
 
@@ -62,7 +70,11 @@ class Selection:
         self.blueprints = self.create_blueprints()
     
     def __repr__(self):
-        return f"{self.blueprints}"
+        description = ""
+        for blueprint in self.blueprints:
+            description += f"{blueprint}\n"
+        description = description[:-2]
+        return description
 
     def create_blueprints(self):
         blueprints = []
