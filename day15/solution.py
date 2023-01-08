@@ -123,14 +123,19 @@ class Grid:
         all_positions = beacon_positions + beaconless_positions
         return all_positions
 
-    def find_only_position_for_missing_beacon(self):
-        return
+    def find_only_position_for_missing_beacon(self, maximum):
+        positions = self.list_all_beacons_and_beaconless_positions(maximum)
+        for y in range(maximum + 1):
+            for x in range(maximum + 1):
+                key_point = Point(x, y)
+                if key_point not in positions:
+                    return key_point
 
 def solve_problem():
     data = extract_data_from_file(15, False)
     grid = Grid(data)
-    positions = grid.list_all_beacons_and_beaconless_positions(20)
-    return positions
+    position = grid.find_only_position_for_missing_beacon(20)
+    return position
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
