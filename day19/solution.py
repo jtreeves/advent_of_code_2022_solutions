@@ -1,10 +1,30 @@
 class Blueprint:
     def __init__(self, description):
-        self.description = description
+        self.descriptions = description.split(": ")
+        self.id = self.extract_id()
+    
+    def __repr__(self):
+        return f"{self.id}"
+
+    def extract_id(self):
+        id_parts = self.descriptions[0].split(" ")
+        id_number = int(id_parts[1])
+        return id_number
 
 class Selection:
     def __init__(self, description):
         self.options = description.split("\n")
+        self.blueprints = self.create_blueprints()
+    
+    def __repr__(self):
+        return f"{self.blueprints}"
+
+    def create_blueprints(self):
+        blueprints = []
+        for option in self.options:
+            new_blueprint = Blueprint(option)
+            blueprints.append(new_blueprint)
+        return blueprints
 
 def solve_problem():
     data = extract_data_from_file(19, False)
