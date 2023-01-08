@@ -6,6 +6,18 @@ class Point:
     def __repr__(self):
         return f"({self.x}, {self.y})"
 
+    def __eq__(self, other):
+        if isinstance(other, Point):
+            if self.x == other.x and self.y == other.y:
+                return True
+            else:
+                return False
+        else:
+            return False
+    
+    def __hash__(self):
+        return hash((self.x, self.y))
+
     def calculate_distance(self, other_point):
         horizontal = abs(self.x - other_point.x)
         vertical = abs(self.y - other_point.y)
@@ -48,6 +60,7 @@ class Grid:
     def __init__(self, description):
         self.descriptions = description.split("\n")
         self.sensors = self.create_sensors()
+        self.beacons = self.list_all_beacons()
     
     def __repr__(self):
         return f"{self.sensors}"
@@ -58,6 +71,12 @@ class Grid:
             new_sensor = Sensor(description)
             sensors.append(new_sensor)
         return sensors
+    
+    def list_all_beacons(self):
+        beacons = set()
+        for sensor in self.sensors:
+            beacons.add(sensor.nearest_beacon)
+        return list(beacons)
     
     def determine_sensors_applicable_to_row(self, row):
         applicable = []
