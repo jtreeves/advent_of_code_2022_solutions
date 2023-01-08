@@ -44,6 +44,10 @@ class Blizzard(Position):
         self.y = new_y
 
 class Traveler(Position):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.moves = 0
+
     def update_position(self, height, width, blizzards):
         new_x = self.x
         new_y = self.y
@@ -52,6 +56,7 @@ class Traveler(Position):
         elif new_x < width - 2 and Position(new_x + 1, new_y) not in blizzards:
             new_x += 1
         elif Position(new_x, new_y) not in blizzards:
+            self.moves += 1
             return
         elif new_x > 1 and Position(new_x - 1, new_y) not in blizzards:
             new_x -= 1
@@ -59,6 +64,7 @@ class Traveler(Position):
             new_y -= 1
         self.x = new_x
         self.y = new_y
+        self.moves += 1
 
 class Valley:
     def __init__(self, description):
