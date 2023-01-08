@@ -23,6 +23,11 @@ class Point:
         vertical = abs(self.y - other.y)
         distance = horizontal + vertical
         return distance
+    
+class Beacon(Point):
+    def calculate_tuning_frequency(self):
+        frequency = self.x * 4000000 + self.y
+        return frequency
 
 class Sensor:
     def __init__(self, description):
@@ -49,7 +54,7 @@ class Sensor:
         y_parts = beacon_descriptions[1].split("=")
         x = int(x_parts[1])
         y = int(y_parts[1])
-        beacon = Point(x, y)
+        beacon = Beacon(x, y)
         return beacon
     
     def determine_maximum_range(self):
@@ -127,7 +132,7 @@ class Grid:
         positions = self.list_all_beacons_and_beaconless_positions(maximum)
         for y in range(maximum + 1):
             for x in range(maximum + 1):
-                key_point = Point(x, y)
+                key_point = Beacon(x, y)
                 if key_point not in positions:
                     return key_point
 
@@ -135,7 +140,8 @@ def solve_problem():
     data = extract_data_from_file(15, False)
     grid = Grid(data)
     position = grid.find_only_position_for_missing_beacon(20)
-    return position
+    frequency = position.calculate_tuning_frequency()
+    return frequency
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
