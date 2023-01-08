@@ -19,6 +19,9 @@ class Sensor:
         self.nearest_beacon = self.determine_nearest_beacon()
         self.maximum_range = self.determine_maximum_range()
     
+    def __repr__(self):
+        return f"{self.location}: {self.maximum_range}"
+
     def determine_location(self):
         sensor_descriptions = self.descriptions[0].split(", ")
         x_parts = sensor_descriptions[0].split("=")
@@ -44,6 +47,17 @@ class Sensor:
 class Grid:
     def __init__(self, description):
         self.descriptions = description.split("\n")
+        self.sensors = self.create_sensors()
+    
+    def __repr__(self):
+        return f"{self.sensors}"
+
+    def create_sensors(self):
+        sensors = []
+        for description in self.descriptions:
+            new_sensor = Sensor(description)
+            sensors.append(new_sensor)
+        return sensors
 
 def solve_problem():
     data = extract_data_from_file(15, False)
