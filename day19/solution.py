@@ -81,9 +81,12 @@ class Blueprint:
         clay_needed_for_obsidian = obsidian_requirements[1].amount
         clay_requirements = self.robot_specs[1].requirements
         ore_needed_for_clay = clay_requirements[0].amount
+        ore_requirements = self.robot_specs[0].requirements
+        ore_needed_for_ore = ore_requirements[0].amount
         should_geode = self.ore >= ore_needed_for_geode and self.obsidian >= obsidian_needed_for_geode
-        should_obsidian = self.ore >= ore_needed_for_obsidian and self.clay >= clay_needed_for_obsidian and self.obsidian + self.obsidian_robots * 2 < obsidian_needed_for_geode
-        should_clay = self.ore >= ore_needed_for_clay and self.clay + self.clay_robots * 2 < clay_needed_for_obsidian
+        should_obsidian = self.ore >= ore_needed_for_obsidian and self.clay >= clay_needed_for_obsidian and self.obsidian + self.obsidian_robots < obsidian_needed_for_geode
+        should_clay = self.ore >= ore_needed_for_clay and self.clay + self.clay_robots < clay_needed_for_obsidian
+        should_ore = self.ore >= ore_needed_for_ore and self.ore + self.ore_robots < ore_needed_for_clay
         if should_geode:
             self.ore -= ore_needed_for_geode
             self.obsidian -= obsidian_needed_for_geode
@@ -92,6 +95,8 @@ class Blueprint:
             self.clay -= clay_needed_for_obsidian
         elif should_clay:
             self.ore -= ore_needed_for_clay
+        elif should_ore:
+            self.ore -= ore_needed_for_ore
         for _ in range(self.ore_robots):
             self.ore += 1
         for _ in range(self.clay_robots):
@@ -106,6 +111,8 @@ class Blueprint:
             self.obsidian_robots += 1
         elif should_clay:
             self.clay_robots += 1
+        elif should_ore:
+            self.ore_robots += 1
 
     def spend_multiple_minutes(self, minutes):
         for _ in range(minutes):
