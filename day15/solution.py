@@ -107,9 +107,9 @@ class Grid:
         return len(beaconless_positions)
 
 def solve_problem():
-    data = extract_data_from_file(15, False)
+    data = extract_data_from_file(15, True)
     grid = Grid(data)
-    positions = grid.determine_beaconless_positions_in_row(10)
+    positions = grid.determine_beaconless_positions_in_row(2000000)
     return positions
 
 def extract_data_from_file(day_number, is_official):
