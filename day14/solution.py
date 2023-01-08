@@ -65,13 +65,10 @@ class Sand:
                     other_points[one_right]
                     self.is_falling = False
                 except KeyError:
-                    print("RIGHT")
                     self.location = Point(new_x, new_y)
             except KeyError:
-                print("LEFT")
                 self.location = Point(new_x, new_y)
         except KeyError:
-            print("FALL STRAIGHT DOWN")
             self.location = Point(new_x, new_y)
     
     def check_if_still_in_cave(self, min_x, min_y, max_x, max_y):
@@ -107,11 +104,19 @@ class Path:
             points.add(left_endpoint)
             points.add(right_endpoint)
             if matching_x:
-                for y in range(left_endpoint.y, right_endpoint.y):
+                left_y = left_endpoint.y
+                right_y = right_endpoint.y
+                first_y = left_y if left_y < right_y else right_y
+                second_y = right_y if first_y == left_y else left_y
+                for y in range(first_y, second_y):
                     new_point = Point(left_endpoint.x, y)
                     points.add(new_point)
             elif matching_y:
-                for x in range(right_endpoint.x, left_endpoint.x):
+                left_x = left_endpoint.x
+                right_x = right_endpoint.x
+                first_x = left_x if left_x < right_x else right_x
+                second_x = right_x if first_x == left_x else left_x
+                for x in range(first_x, second_x):
                     new_point = Point(x, left_endpoint.y)
                     points.add(new_point)
         return sorted(points)
@@ -145,10 +150,8 @@ class Cave:
     
     def add_sand_until_first_out_of_cave(self):
         while len(self.sand_points) == 0 or self.sand_points[-1].is_in_cave:
-            print(self.sand_points)
             new_sand = Sand()
             new_sand.fall_until_stopped_or_out_of_cave(self.occupied_points, self.min_x, self.min_y, self.max_x, self.max_y)
-            print(new_sand)
             self.append_sand_to_both_points_trackers(new_sand)
     
     def append_sand_to_both_points_trackers(self, sand):
@@ -185,11 +188,10 @@ class Cave:
         return sorted_y[-1]
 
 def solve_problem():
-    data = extract_data_from_file(14, False)
+    data = extract_data_from_file(14, True)
     cave = Cave(data)
     cave.add_sand_until_first_out_of_cave()
     sands = cave.calculate_total_sand_units_fallen_until_out_of_cave()
-    print(cave)
     return sands
 
 def extract_data_from_file(day_number, is_official):
