@@ -12,11 +12,34 @@ class Point:
         distance = horizontal + vertical
         return distance
 
-class Sensor(Point):
-    pass
-
-class Beacon(Point):
-    pass
+class Sensor:
+    def __init__(self, description):
+        self.descriptions = description.split(": ")
+        self.location = self.determine_location()
+        self.nearest_beacon = self.determine_nearest_beacon()
+        self.maximum_range = self.determine_maximum_range()
+    
+    def determine_location(self):
+        sensor_descriptions = self.descriptions[0].split(", ")
+        x_parts = sensor_descriptions[0].split("=")
+        y_parts = sensor_descriptions[1].split("=")
+        x = int(x_parts[1])
+        y = int(y_parts[1])
+        location = Point(x, y)
+        return location
+    
+    def determine_nearest_beacon(self):
+        beacon_descriptions = self.descriptions[1].split(", ")
+        x_parts = beacon_descriptions[0].split("=")
+        y_parts = beacon_descriptions[1].split("=")
+        x = int(x_parts[1])
+        y = int(y_parts[1])
+        beacon = Point(x, y)
+        return beacon
+    
+    def determine_maximum_range(self):
+        maximum_range = self.location.calculate_distance(self.nearest_beacon)
+        return maximum_range
 
 class Grid:
     def __init__(self, description):
