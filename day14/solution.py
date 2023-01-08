@@ -166,6 +166,17 @@ class Cave:
             paths.append(new_path)
         return paths
     
+    def create_floor(self):
+        floor_y = self.max_y + 2
+        x_range = self.max_x - self.min_x
+        floor_min_x = self.min_x - x_range
+        floor_max_x = self.max_x + x_range
+        floor = []
+        for x in range(floor_min_x, floor_max_x):
+            new_point = Point(x, floor_y)
+            floor.append(new_point)
+        return floor
+    
     def determine_rock_points(self):
         points = set()
         for path in self.paths:
@@ -187,11 +198,14 @@ class Cave:
         sorted_y = sorted(y_values)
         return sorted_y[-1]
 
-def solve_problem():
+def solve_problem(part):
     data = extract_data_from_file(14, True)
     cave = Cave(data)
-    cave.add_sand_until_first_out_of_cave()
-    sands = cave.calculate_total_sand_units_fallen_until_out_of_cave()
+    if part == 1:
+        cave.add_sand_until_first_out_of_cave()
+        sands = cave.calculate_total_sand_units_fallen_until_out_of_cave()
+    else:
+        sands = 0  
     return sands
 
 def extract_data_from_file(day_number, is_official):
@@ -204,5 +218,5 @@ def extract_data_from_file(day_number, is_official):
     file.close()
     return data
 
-result = solve_problem()
+result = solve_problem(1)
 print(result)
