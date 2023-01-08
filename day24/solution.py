@@ -109,9 +109,10 @@ class Valley:
                 elif not wall and not empty:
                     self.blizzards.append(Blizzard(column, row, character))
 
-    def execute_multiple_moves(self, moves):
-        for _ in range(moves):
+    def determine_how_long_for_traveler_to_exit(self):
+        while not self.check_if_traveler_exited():
             self.update_valley()
+        return self.traveler.moves
 
     def update_valley(self):
         self.update_blizzards()
@@ -134,8 +135,8 @@ class Valley:
 def solve_problem():
     data = extract_data_from_file(24, False)
     valley = Valley(data)
-    valley.execute_multiple_moves(4)
-    return valley
+    moves = valley.determine_how_long_for_traveler_to_exit()
+    return moves
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
