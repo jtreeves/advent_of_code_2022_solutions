@@ -18,9 +18,9 @@ class Point:
     def __hash__(self):
         return hash((self.x, self.y))
 
-    def calculate_distance(self, other_point):
-        horizontal = abs(self.x - other_point.x)
-        vertical = abs(self.y - other_point.y)
+    def calculate_distance(self, other):
+        horizontal = abs(self.x - other.x)
+        vertical = abs(self.y - other.y)
         distance = horizontal + vertical
         return distance
 
@@ -88,12 +88,29 @@ class Grid:
             if row in range(sensor_min, sensor_max + 1):
                 applicable.append(sensor)
         return applicable
+    
+    def determine_beaconless_positions_in_row(self, row):
+        beaconless_positions = set()
+        sensors = self.determine_sensors_applicable_to_row(row)
+        for sensor in sensors:
+            sensor_range = sensor.maximum_range
+            sensor_row = sensor.location.y
+            sensor_column = sensor.location.x
+            difference = abs(sensor_row - row)
+            overflow = sensor_range - difference
+            x_min = sensor_column - overflow
+            x_max = sensor_column + overflow
+            for x in range(x_min, x_max + 1):
+                new_point = Point(x, row)
+                if new_point not in self.beacons:
+                    beaconless_positions.add(new_point)
+        return len(beaconless_positions)
 
 def solve_problem():
     data = extract_data_from_file(15, False)
     grid = Grid(data)
-    applicables = grid.determine_sensors_applicable_to_row(10)
-    return applicables
+    positions = grid.determine_beaconless_positions_in_row(10)
+    return positions
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
