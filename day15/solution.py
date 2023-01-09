@@ -61,6 +61,13 @@ class Sensor:
         maximum_range = self.location.calculate_distance(self.nearest_beacon)
         return maximum_range
     
+    def check_if_in_range(self, other):
+        distance = self.location.calculate_distance(other)
+        if distance <= self.maximum_range:
+            return True
+        else:
+            return False
+    
     def create_diamond_edges(self):
         edges = []
         border = self.maximum_range + 1
@@ -129,36 +136,30 @@ class Grid:
     def calculate_amount_of_beaconless_positions_in_row(self, row):
         positions = self.determine_beaconless_positions_in_row(row)
         return len(positions)
-    
-    def find_all_beaconless_positions(self, maximum_row):
-        all_positions = []
-        for row in range(maximum_row + 1):
-            row_positions = self.determine_beaconless_positions_in_row(row)
-            all_positions.extend(row_positions)
-        return all_positions
-
-    def list_all_beacons_and_beaconless_positions(self, maximum_row):
-        beacon_positions = self.beacons
-        beaconless_positions = self.find_all_beaconless_positions(maximum_row)
-        all_positions = beacon_positions + beaconless_positions
-        return all_positions
 
     def find_only_position_for_missing_beacon(self, maximum):
-        positions = self.list_all_beacons_and_beaconless_positions(maximum)
-        for y in range(maximum + 1):
-            for x in range(maximum + 1):
-                key_point = Beacon(x, y)
-                if key_point not in positions:
-                    return key_point
+        for sensor in self.sensors:
+            edges = sensor.create_diamond_edges()
+            for edge in edges:
+                if edge.x < 0 or edge.x > maximum or edge.y < 0 or edge.y > maximum:
+                    continue
+                else:
+                    not_in_ranges = []
+                    for testing_sensor in self.sensors:
+                        test_in_range = testing_sensor.check_if_in_range(edge)
+                        if not test_in_range:
+                            not_in_ranges.append(test_in_range)
+                    if len(not_in_ranges) == len(self.sensors):
+                        return Beacon(edge.x, edge.y)
+                    else:
+                        continue
 
 def solve_problem():
-    data = extract_data_from_file(15, False)
+    data = extract_data_from_file(15, True)
     grid = Grid(data)
-    edges = grid.sensors[6].create_diamond_edges()
-    print(edges)
-    # position = grid.find_only_position_for_missing_beacon(4000000)
-    # frequency = position.calculate_tuning_frequency()
-    # return frequency
+    position = grid.find_only_position_for_missing_beacon(20)
+    frequency = position.calculate_tuning_frequency()
+    return frequency
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
