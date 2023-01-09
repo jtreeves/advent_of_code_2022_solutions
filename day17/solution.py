@@ -52,7 +52,7 @@ class Chamber:
                 ending_height = record["height"]
         initial_accumulation = quotient * amplitude
         additional_accumulation = ending_height - starting_height
-        total_accumulation = initial_accumulation + additional_accumulation
+        total_accumulation = initial_accumulation + additional_accumulation - 1
         return total_accumulation
 
     def determine_cycle(self):
