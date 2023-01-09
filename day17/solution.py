@@ -43,13 +43,19 @@ class Chamber:
     
     def predict_height_for_rocks(self, rocks, period, amplitude, starting, history):
         quotient = rocks // period
+        print(f"QUOTIENT: {quotient}")
         remainder = rocks % period
+        print(f"REMAINDER: {remainder}")
         starting_rocks = history[starting]["rocks"]
         starting_height = history[starting]["height"]
         ending_rocks = starting_rocks + remainder
         for record in history.values():
             if record["rocks"] == ending_rocks:
                 ending_height = record["height"]
+        print(f"STARTING ROCKS: {starting_rocks}")
+        print(f"STARTING HEIGHT: {starting_height}")
+        print(f"ENDING ROCKS: {ending_rocks}")
+        print(f"ENDING HEIGHT: {ending_height}")
         initial_accumulation = quotient * amplitude
         additional_accumulation = ending_height - starting_height - 1
         total_accumulation = initial_accumulation + additional_accumulation
@@ -57,6 +63,7 @@ class Chamber:
 
     def determine_cycle(self):
         jet_cycle_length = len(self.jet_pattern)
+        print(f"JET CYCLE LENGTH: {jet_cycle_length}")
         history = {}
         match = False
         while not match:
@@ -65,6 +72,7 @@ class Chamber:
             current_height = self.height
             current_rock_count = len(history.keys()) + 1
             name = f"j{current_jet_index}r{current_rock_type}"
+            print(f"NAME: {name}")
             records = {
                 "height": current_height,
                 "rocks": current_rock_count
@@ -245,13 +253,11 @@ class Rock:
         return False
 
 def solve_problem():
-    data = extract_data_from_file(17, False)
+    data = extract_data_from_file(17, True)
     chamber = Chamber(data)
     cycle = chamber.determine_cycle()
+    print(f"CYCLE: {cycle}")
     height = chamber.predict_height_for_rocks(1000000000000, cycle["period"], cycle["amplitude"], cycle["starting"], cycle["history"])
-    # for i in range(1000000000000):
-    #     chamber.drop_new_rock()
-    #     print(f"DROPPING ROCK {i + 1}")
     return height
 
 def extract_data_from_file(day_number, is_official):
