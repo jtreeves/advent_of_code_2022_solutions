@@ -138,7 +138,6 @@ def execute_full_round_with_alternative(monkeys, lcm):
 
 def execute_multiple_rounds_with_alternative(rounds, monkeys, lcm):
     for _ in range(rounds):
-        print(f"EXECUTING ROUND {_ + 1}")
         execute_full_round_with_alternative(monkeys, lcm)
 
 def calculate_monkey_business(monkeys):
@@ -160,7 +159,7 @@ def find_lowest_common_multiple(monkeys):
     return multiple
 
 def solve_problem():
-    data = extract_data_from_file(11, False)
+    data = extract_data_from_file(11, True)
     monkey_descriptions = list_all_monkey_descriptions(data)
     monkeys = create_all_monkeys(monkey_descriptions)
     lcm = find_lowest_common_multiple(monkeys)
@@ -191,3 +190,6 @@ def extract_data_from_file(day_number, is_official):
 
 result = solve_problem()
 print(result)
+
+# Got tip to use modulo with LCM (aka, Chinese Remainder Theorem) for part 2 here:
+# https://www.reddit.com/r/adventofcode/comments/zifqmh/comment/j0avpoa/?utm_source=reddit&utm_medium=web2x&context=3
