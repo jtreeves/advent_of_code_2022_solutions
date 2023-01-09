@@ -56,18 +56,20 @@ class Chamber:
                 "rocks": current_rock_count
             }
             try:
-                history[name]
-                match = True
-                return {
-                    "history": history,
-                    "cycle_mark": {
-                        "name": name,
-                        "records": records
-                    }
+                original = history[name]
+                period = records["rocks"] - original["rocks"]
+                amplitude = records["height"] - original["height"]
+                analysis = {
+                    "period": period,
+                    "amplitude": amplitude,
+                    "starting": name,
+                    "history": history
                 }
+                match = True
             except KeyError:
                 history[name] = records
                 self.drop_new_rock()
+        return analysis
 
     def drop_new_rock(self):
         new_rock = Rock(self.next_rock_type, self.height)
@@ -229,15 +231,20 @@ class Rock:
         return False
 
 def solve_problem():
-    data = extract_data_from_file(17)
+    data = extract_data_from_file(17, False)
     chamber = Chamber(data)
-    for i in range(1000000000000):
-        chamber.drop_new_rock()
-        print(f"DROPPING ROCK {i + 1}")
-    return chamber.height
+    cycle = chamber.determine_cycle()
+    # for i in range(1000000000000):
+    #     chamber.drop_new_rock()
+    #     print(f"DROPPING ROCK {i + 1}")
+    return cycle
 
-def extract_data_from_file(day_number):
-    file = open(f"day{day_number}/data.txt", "r")
+def extract_data_from_file(day_number, is_official):
+    if is_official:
+        name = "data"
+    else:
+        name = "practice"
+    file = open(f"day{day_number}/{name}.txt", "r")
     data = file.read()
     file.close()
     return data
