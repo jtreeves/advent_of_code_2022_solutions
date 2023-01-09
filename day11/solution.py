@@ -82,6 +82,10 @@ class Monkey:
         rounded_down = math.floor(division_result)
         return rounded_down
 
+    def alternative_lower_worry_level_after(self, element, lcm):
+        remainder = element % lcm
+        return remainder
+
     def test_divisibility(self, element):
         if element % self.divisible == 0:
             return True
@@ -104,20 +108,21 @@ class Monkey:
         while len(self.current_items):
             self.inspect_element(other_monkeys)
 
-    def inspect_element_without_lowering(self, other_monkeys):
+    def inspect_element_with_alternative(self, other_monkeys, lcm):
         element = self.current_items.pop(0)
         updated_worry = self.update_worry_level_initally(element)
-        divisible = self.test_divisibility(updated_worry)
+        lowered_worry = self.alternative_lower_worry_level_after(updated_worry, lcm)
+        divisible = self.test_divisibility(lowered_worry)
         if divisible:
             monkey_to_receive = self.true_throw_name
         else:
             monkey_to_receive = self.false_throw_name
-        other_monkeys[monkey_to_receive].current_items.append(updated_worry)
+        other_monkeys[monkey_to_receive].current_items.append(lowered_worry)
         self.inspected_items += 1
 
-    def inspect_all_elements_in_round_without_lowering(self, other_monkeys):
+    def inspect_all_elements_in_round_with_alternative(self, other_monkeys, lcm):
         while len(self.current_items):
-            self.inspect_element_without_lowering(other_monkeys)
+            self.inspect_element_with_alternative(other_monkeys, lcm)
 
 def execute_full_round(monkeys):
     for monkey in monkeys.values():
@@ -127,14 +132,14 @@ def execute_multiple_rounds(rounds, monkeys):
     for _ in range(rounds):
         execute_full_round(monkeys)
 
-def execute_full_round_without_lowering(monkeys):
+def execute_full_round_with_alternative(monkeys, lcm):
     for monkey in monkeys.values():
-        monkey.inspect_all_elements_in_round_without_lowering(monkeys)
+        monkey.inspect_all_elements_in_round_with_alternative(monkeys, lcm)
 
-def execute_multiple_rounds_without_lowering(rounds, monkeys):
-    for i in range(rounds):
-        print(f"EXECUTING ROUND {i + 1}")
-        execute_full_round_without_lowering(monkeys)
+def execute_multiple_rounds_with_alternative(rounds, monkeys, lcm):
+    for _ in range(rounds):
+        print(f"EXECUTING ROUND {_ + 1}")
+        execute_full_round_with_alternative(monkeys, lcm)
 
 def calculate_monkey_business(monkeys):
     inspections = []
@@ -147,11 +152,19 @@ def calculate_monkey_business(monkeys):
         product *= inspection
     return product
 
+def find_lowest_common_multiple(monkeys):
+    multiple = 1
+    for monkey in monkeys.values():
+        divisor = monkey.divisible
+        multiple *= divisor
+    return multiple
+
 def solve_problem():
     data = extract_data_from_file(11, False)
     monkey_descriptions = list_all_monkey_descriptions(data)
     monkeys = create_all_monkeys(monkey_descriptions)
-    execute_multiple_rounds_without_lowering(10000, monkeys)
+    lcm = find_lowest_common_multiple(monkeys)
+    execute_multiple_rounds_with_alternative(10000, monkeys, lcm)
     business = calculate_monkey_business(monkeys)
     return business
 
