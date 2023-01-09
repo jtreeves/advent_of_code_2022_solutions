@@ -60,6 +60,21 @@ class Sensor:
     def determine_maximum_range(self):
         maximum_range = self.location.calculate_distance(self.nearest_beacon)
         return maximum_range
+    
+    def create_diamond_edges(self):
+        edges = []
+        border = self.maximum_range + 1
+        max_x = self.location.x + border
+        max_y = self.location.y + border
+        min_x = self.location.x - border
+        min_y = self.location.y - border
+        for x in range(min_x, max_x + 1):
+            for y in range(min_y, max_y + 1):
+                possible_edge = Point(x, y)
+                distance = self.location.calculate_distance(possible_edge)
+                if distance == border:
+                    edges.append(possible_edge)
+        return edges
 
 class Grid:
     def __init__(self, description):
@@ -137,11 +152,13 @@ class Grid:
                     return key_point
 
 def solve_problem():
-    data = extract_data_from_file(15, True)
+    data = extract_data_from_file(15, False)
     grid = Grid(data)
-    position = grid.find_only_position_for_missing_beacon(4000000)
-    frequency = position.calculate_tuning_frequency()
-    return frequency
+    edges = grid.sensors[6].create_diamond_edges()
+    print(edges)
+    # position = grid.find_only_position_for_missing_beacon(4000000)
+    # frequency = position.calculate_tuning_frequency()
+    # return frequency
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
