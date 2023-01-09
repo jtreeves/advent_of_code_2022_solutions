@@ -41,6 +41,34 @@ class Chamber:
         for i in range(7):
             self.spaces.append(Coordinate(i + 1, 0))
     
+    def determine_cycle(self):
+        jet_cycle_length = len(self.jet_pattern)
+        history = {}
+        match = False
+        while not match:
+            current_jet_index = self.current_iteration % jet_cycle_length
+            current_rock_type = self.next_rock_type
+            current_height = self.height
+            current_rock_count = self.current_iteration
+            name = f"j{current_jet_index}r{current_rock_type}"
+            records = {
+                "height": current_height,
+                "rocks": current_rock_count
+            }
+            try:
+                history[name]
+                match = True
+                return {
+                    "history": history,
+                    "cycle_mark": {
+                        "name": name,
+                        "records": records
+                    }
+                }
+            except KeyError:
+                history[name] = records
+                self.drop_new_rock()
+
     def drop_new_rock(self):
         new_rock = Rock(self.next_rock_type, self.height)
         self.let_rock_fall_to_rest(new_rock)
