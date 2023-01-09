@@ -41,6 +41,20 @@ class Chamber:
         for i in range(7):
             self.spaces.append(Coordinate(i + 1, 0))
     
+    def predict_height_for_rocks(self, rocks, period, amplitude, starting, history):
+        quotient = rocks // period
+        remainder = rocks % period
+        starting_rocks = history[starting]["rocks"]
+        starting_height = history[starting]["height"]
+        ending_rocks = starting_rocks + remainder
+        for record in history.values():
+            if record["rocks"] == ending_rocks:
+                ending_height = record["height"]
+        initial_accumulation = quotient * amplitude
+        additional_accumulation = ending_height - starting_height
+        total_accumulation = initial_accumulation + additional_accumulation
+        return total_accumulation
+
     def determine_cycle(self):
         jet_cycle_length = len(self.jet_pattern)
         history = {}
@@ -234,10 +248,11 @@ def solve_problem():
     data = extract_data_from_file(17, False)
     chamber = Chamber(data)
     cycle = chamber.determine_cycle()
+    height = chamber.predict_height_for_rocks(1000000000000, cycle["period"], cycle["amplitude"], cycle["starting"], cycle["history"])
     # for i in range(1000000000000):
     #     chamber.drop_new_rock()
     #     print(f"DROPPING ROCK {i + 1}")
-    return cycle
+    return height
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
