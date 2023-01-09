@@ -63,7 +63,7 @@ class Chamber:
             current_jet_index = self.current_iteration % jet_cycle_length
             current_rock_type = self.next_rock_type
             current_height = self.height
-            current_rock_count = self.current_iteration
+            current_rock_count = len(history.keys())
             name = f"j{current_jet_index}r{current_rock_type}"
             records = {
                 "height": current_height,
