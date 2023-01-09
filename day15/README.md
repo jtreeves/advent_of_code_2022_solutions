@@ -131,4 +131,4 @@ Find the only possible position for the distress beacon. What is its tuning freq
 
 ### Solution
 
-NOT YET SOLVED
+13267474686239
