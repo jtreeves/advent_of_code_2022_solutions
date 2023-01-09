@@ -97,13 +97,11 @@ class Monkey:
             monkey_to_receive = self.true_throw_name
         else:
             monkey_to_receive = self.false_throw_name
-        for other_monkey in other_monkeys:
-            if other_monkey.name == monkey_to_receive:
-                other_monkey.current_items.append(lowered_worry)
+        other_monkeys[monkey_to_receive].current_items.append(lowered_worry)
         self.inspected_items += 1
 
     def inspect_all_elements_in_round(self, other_monkeys):
-        while (len(self.current_items)):
+        while len(self.current_items):
             self.inspect_element(other_monkeys)
 
     def inspect_element_without_lowering(self, other_monkeys):
@@ -114,17 +112,15 @@ class Monkey:
             monkey_to_receive = self.true_throw_name
         else:
             monkey_to_receive = self.false_throw_name
-        for other_monkey in other_monkeys:
-            if other_monkey.name == monkey_to_receive:
-                other_monkey.current_items.append(updated_worry)
+        other_monkeys[monkey_to_receive].current_items.append(updated_worry)
         self.inspected_items += 1
 
     def inspect_all_elements_in_round_without_lowering(self, other_monkeys):
-        while (len(self.current_items)):
+        while len(self.current_items):
             self.inspect_element_without_lowering(other_monkeys)
 
 def execute_full_round(monkeys):
-    for monkey in monkeys:
+    for monkey in monkeys.values():
         monkey.inspect_all_elements_in_round(monkeys)
 
 def execute_multiple_rounds(rounds, monkeys):
@@ -132,7 +128,7 @@ def execute_multiple_rounds(rounds, monkeys):
         execute_full_round(monkeys)
 
 def execute_full_round_without_lowering(monkeys):
-    for monkey in monkeys:
+    for monkey in monkeys.values():
         monkey.inspect_all_elements_in_round_without_lowering(monkeys)
 
 def execute_multiple_rounds_without_lowering(rounds, monkeys):
@@ -142,7 +138,7 @@ def execute_multiple_rounds_without_lowering(rounds, monkeys):
 
 def calculate_monkey_business(monkeys):
     inspections = []
-    for monkey in monkeys:
+    for monkey in monkeys.values():
         inspections.append(monkey.inspected_items)
     inspections.sort()
     most_active = inspections[-2:]
@@ -152,7 +148,7 @@ def calculate_monkey_business(monkeys):
     return product
 
 def solve_problem():
-    data = extract_data_from_file(11)
+    data = extract_data_from_file(11, False)
     monkey_descriptions = list_all_monkey_descriptions(data)
     monkeys = create_all_monkeys(monkey_descriptions)
     execute_multiple_rounds_without_lowering(10000, monkeys)
@@ -160,18 +156,22 @@ def solve_problem():
     return business
 
 def create_all_monkeys(descriptions):
-    monkeys = []
+    monkeys = {}
     for description in descriptions:
         new_monkey = Monkey(description)
-        monkeys.append(new_monkey)
+        monkeys[new_monkey.name] = new_monkey
     return monkeys
 
 def list_all_monkey_descriptions(instructions):
     monkeys = instructions.split("\n\n")
     return monkeys
 
-def extract_data_from_file(day_number):
-    file = open(f"day{day_number}/data.txt", "r")
+def extract_data_from_file(day_number, is_official):
+    if is_official:
+        name = "data"
+    else:
+        name = "practice"
+    file = open(f"day{day_number}/{name}.txt", "r")
     data = file.read()
     file.close()
     return data
