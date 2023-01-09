@@ -42,12 +42,14 @@ class Chamber:
             self.spaces.append(Coordinate(i + 1, 0))
     
     def predict_height_for_rocks(self, rocks, period, amplitude, starting, history):
-        quotient = rocks // period
-        print(f"QUOTIENT: {quotient}")
-        remainder = rocks % period
-        print(f"REMAINDER: {remainder}")
         starting_rocks = history[starting]["rocks"]
         starting_height = history[starting]["height"]
+        rocks_difference = rocks - starting_rocks
+        print(f"ROCKS DIFFERENCE: {rocks_difference}")
+        quotient = rocks_difference // period
+        print(f"QUOTIENT: {quotient}")
+        remainder = rocks_difference % period
+        print(f"REMAINDER: {remainder}")
         ending_rocks = starting_rocks + remainder
         for record in history.values():
             if record["rocks"] == ending_rocks:
@@ -57,8 +59,7 @@ class Chamber:
         print(f"ENDING ROCKS: {ending_rocks}")
         print(f"ENDING HEIGHT: {ending_height}")
         initial_accumulation = quotient * amplitude
-        additional_accumulation = ending_height - starting_height - 1
-        total_accumulation = initial_accumulation + additional_accumulation
+        total_accumulation = initial_accumulation + ending_height
         return total_accumulation
 
     def determine_cycle(self):
@@ -253,7 +254,7 @@ class Rock:
         return False
 
 def solve_problem():
-    data = extract_data_from_file(17, True)
+    data = extract_data_from_file(17, False)
     chamber = Chamber(data)
     cycle = chamber.determine_cycle()
     print(f"CYCLE: {cycle}")
