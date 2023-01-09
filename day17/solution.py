@@ -51,8 +51,8 @@ class Chamber:
             if record["rocks"] == ending_rocks:
                 ending_height = record["height"]
         initial_accumulation = quotient * amplitude
-        additional_accumulation = ending_height - starting_height
-        total_accumulation = initial_accumulation + additional_accumulation - 1
+        additional_accumulation = ending_height - starting_height - 1
+        total_accumulation = initial_accumulation + additional_accumulation
         return total_accumulation
 
     def determine_cycle(self):
@@ -63,7 +63,7 @@ class Chamber:
             current_jet_index = self.current_iteration % jet_cycle_length
             current_rock_type = self.next_rock_type
             current_height = self.height
-            current_rock_count = len(history.keys())
+            current_rock_count = len(history.keys()) + 1
             name = f"j{current_jet_index}r{current_rock_type}"
             records = {
                 "height": current_height,
