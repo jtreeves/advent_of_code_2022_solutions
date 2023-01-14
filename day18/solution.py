@@ -1,9 +1,28 @@
+class Cube:
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+    
+    def __repr__(self):
+        return f"({self.x}, {self.y}, {self.z})"
+    
+    def __eq__(self, other):
+        if self.x == other.x and self.y == other.y and self.z == other.z:
+            return True
+        else:
+            return False
+    
+    def __hash__(self):
+        return hash((self.x, self.y, self.z))
+
 def solve_problem():
-    data = extract_data_from_file(18, True)
+    data = extract_data_from_file(18, False)
     instructions = list_all_cube_central_coordinates(data)
     cubes = generate_all_cubes(instructions)
-    surface_area = calculate_total_surface_area(cubes)
-    return surface_area
+    # surface_area = calculate_total_surface_area(cubes)
+    outer_area = calculate_outer_surface_area(cubes)
+    return outer_area
 
 def calculate_total_surface_area(cubes):
     surface_area = 0
@@ -47,15 +66,15 @@ def calculate_outer_surface_area(cubes):
     return outer_area
 
 def find_neighbors(cube):
-    x = cube[0]
-    y = cube[1]
-    z = cube[2]
-    x_up = [x + 1, y, z]
-    x_down = [x - 1, y, z]
-    y_up = [x, y + 1, z]
-    y_down = [x, y - 1, z]
-    z_up = [x, y, z + 1]
-    z_down = [x, y, z - 1]
+    x = cube.x
+    y = cube.y
+    z = cube.z
+    x_up = Cube(x + 1, y, z)
+    x_down = Cube(x - 1, y, z)
+    y_up = Cube(x, y + 1, z)
+    y_down = Cube(x, y - 1, z)
+    z_up = Cube(x, y, z + 1)
+    z_down = Cube(x, y, z - 1)
     neighbors = [
         x_up,
         x_down,
@@ -67,7 +86,7 @@ def find_neighbors(cube):
     return neighbors
 
 def check_if_in_scope(cube, extrema):
-    if extrema["min"][0] <= cube[0] <= extrema["max"][0] and extrema["min"][1] <= cube[1] <= extrema["max"][1] and extrema["min"][2] <= cube[2] <= extrema["max"][2]:
+    if extrema["min"].x <= cube.x <= extrema["max"].x and extrema["min"].y <= cube.y <= extrema["max"].y and extrema["min"].z <= cube.z <= extrema["max"].z:
         return True
     else:
         return False
@@ -80,20 +99,20 @@ def find_maxima_and_minima(cubes):
     min_y = float('inf')
     min_z = float('inf')
     for cube in cubes:
-        if cube[0] > max_x:
-            max_x = cube[0]
-        if cube[0] < min_x:
-            min_x = cube[0]
-        if cube[1] > max_y:
-            max_y = cube[1]
-        if cube[1] < min_y:
-            min_y = cube[1]
-        if cube[2] > max_z:
-            max_z = cube[2]
-        if cube[2] < min_z:
-            min_z = cube[2]
-    maximum = [max_x, max_y, max_z]
-    minimum = [min_x, min_y, min_z]
+        if cube.x > max_x:
+            max_x = cube.x
+        if cube.x < min_x:
+            min_x = cube.x
+        if cube.y > max_y:
+            max_y = cube.y
+        if cube.y < min_y:
+            min_y = cube.y
+        if cube.z > max_z:
+            max_z = cube.z
+        if cube.z < min_z:
+            min_z = cube.z
+    maximum = Cube(max_x, max_y, max_z)
+    minimum = Cube(min_x, min_y, min_z)
     extrema = {
         "max": maximum,
         "min": minimum
@@ -122,7 +141,7 @@ def convert_string_coordinates(string_coordinates):
     for coordinate in coordinates:
         numbered_coordinate = int(coordinate)
         final_coordinates.append(numbered_coordinate)
-    return final_coordinates
+    return Cube(final_coordinates[0], final_coordinates[1], final_coordinates[2])
 
 def list_all_cube_central_coordinates(data):
     partitioned = data.split("\n")
