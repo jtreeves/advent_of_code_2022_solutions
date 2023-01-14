@@ -43,6 +43,8 @@ class Directory:
 class Terminal:
     def __init__(self, history):
         self.output = history.split("\n")
+        self.all_directories = []
+        self.current_directory = None
     
     def __repr__(self):
         return f"OUTPUT: {len(self.output)}"
@@ -56,6 +58,21 @@ class Terminal:
         first_characters = self.output[line][0:3]
         is_directory = first_characters == "dir"
         return is_directory
+    
+    def set_current_directory(self, directory):
+        self.current_directory = directory
+    
+    def add_directory(self, directory):
+        self.all_directories.append(directory)
+    
+    def read_output_to_create_directories(self):
+        for line in self.output:
+            if line[0:4] == "$ cd":
+                parts = line.split(" ")
+                name = parts[2]
+                new_directory = Directory(name)
+                self.set_current_directory(new_directory)
+                self.add_directory(new_directory)
 
 def sum_all_directories(directories):
     total = 0
