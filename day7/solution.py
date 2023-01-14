@@ -119,13 +119,28 @@ class Terminal:
         all_directories = self.root_directory.list_all_subdirectories()
         all_directories.append(root)
         return all_directories
+    
+    def trim_excessive_directories(self):
+        directories = self.list_all_directories()
+        trimmed = []
+        for _, size in directories:
+            if size <= 100000:
+                trimmed.append(size)
+        return trimmed
+    
+    def calculate_total_size_of_small_directories(self):
+        sizes = self.trim_excessive_directories()
+        total = 0
+        for size in sizes:
+            total += size
+        return total
 
 def solve_problem():
     data = extract_data_from_file(7, False)
     terminal = Terminal(data)
     terminal.read_output_to_create_directories()
-    directories = terminal.list_all_directories()
-    return directories
+    size = terminal.calculate_total_size_of_small_directories()
+    return size
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
