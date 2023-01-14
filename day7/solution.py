@@ -18,7 +18,12 @@ class Directory:
         self.parent_directory = None
     
     def __repr__(self):
-        return f"DIR {self.name}: {len(self.directories)}"
+        hierarchy = f"- {self.name} (dir)\n"
+        for file in self.files:
+            hierarchy += f"  - {file.name} (file)"
+        for directory in self.directories:
+            hierarchy += f"  - {directory.name} (dir)"
+        return hierarchy
     
     def add_file(self, file):
         self.files.append(file)
@@ -34,6 +39,23 @@ class Directory:
         for directory in self.directories:
             total += directory.calculate_size()
         return total
+
+class Terminal:
+    def __init__(self, history):
+        self.output = history.split("\n")
+    
+    def __repr__(self):
+        return f"OUTPUT: {len(self.output)}"
+
+    def check_if_command(self, line):
+        first_character = self.output[line][0]
+        is_command = first_character == "$"
+        return is_command
+
+    def check_if_directory(self, line):
+        first_characters = self.output[line][0:3]
+        is_directory = first_characters == "dir"
+        return is_directory
 
 def sum_all_directories(directories):
     total = 0
@@ -198,31 +220,10 @@ def get_file_name_and_size(line):
         "size": size
     }
 
-def check_if_command(line):
-    first_character = line[0]
-    is_command = first_character == "$"
-    return is_command
-
-def check_if_directory(line):
-    first_characters = line[0:3]
-    is_directory = first_characters == "dir"
-    return is_directory
-
-def convert_multiline_string_to_array(multiline_string):
-    rows = []
-    while len(multiline_string):
-        first_line_break = multiline_string.find("\n")
-        if first_line_break != -1:
-            content_before = multiline_string[0:first_line_break]
-            rows.append(content_before)
-            multiline_string = multiline_string[first_line_break+1:]
-        else:
-            rows.append(multiline_string)
-            multiline_string = ""
-    return rows
 
 def solve_problem():
     data = extract_data_from_file(7, False)
+    terminal = Terminal(data)
     contents = extract_contents_of_directories(data)
     sizes = determine_total_sizes_of_all_directories(contents)
     filtered_sizes = filter_out_too_large_directories(sizes)
