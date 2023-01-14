@@ -28,7 +28,24 @@ def check_if_cubes_touching(first_cube, second_cube):
         return False
 
 def find_neighbors(cube):
-    return
+    x = cube[0]
+    y = cube[1]
+    z = cube[2]
+    x_up = [x + 1, y, z]
+    x_down = [x - 1, y, z]
+    y_up = [x, y + 1, z]
+    y_down = [x, y - 1, z]
+    z_up = [x, y, z + 1]
+    z_down = [x, y, z - 1]
+    neighbors = [
+        x_up,
+        x_down,
+        y_up,
+        y_down,
+        z_up,
+        z_down,
+    ]
+    return neighbors
 
 def check_if_in_scope(cube, extrema):
     if extrema["min"][0] <= cube[0] <= extrema["max"][0] and extrema["min"][1] <= cube[1] <= extrema["max"][1] and extrema["min"][2] <= cube[2] <= extrema["max"][2]:
