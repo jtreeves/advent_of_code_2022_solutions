@@ -27,6 +27,36 @@ def check_if_cubes_touching(first_cube, second_cube):
     else:
         return False
 
+def find_neighbors(cube):
+    return
+
+def find_maxima_and_minima(cubes):
+    max_x = -float('inf')
+    max_y = -float('inf')
+    max_z = -float('inf')
+    min_x = float('inf')
+    min_y = float('inf')
+    min_z = float('inf')
+    for cube in cubes:
+        if cube[0] > max_x:
+            max_x = cube[0]
+        if cube[0] < min_x:
+            min_x = cube[0]
+        if cube[1] > max_y:
+            max_y = cube[1]
+        if cube[1] < min_y:
+            min_y = cube[1]
+        if cube[2] > max_z:
+            max_z = cube[2]
+        if cube[2] < min_z:
+            min_z = cube[2]
+    maximum = [max_x, max_y, max_z]
+    minimum = [min_x, min_y, min_z]
+    return {
+        "max": maximum,
+        "min": minimum
+    }
+
 def calculate_distance_between_cubes(first_cube, second_cube):
     summed_deltas = 0
     for i in range(len(first_cube)):
