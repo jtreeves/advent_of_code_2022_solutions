@@ -30,6 +30,29 @@ class Coordinate:
         else:
             return False
 
+class Floor:
+    def __init__(self):
+        self.a = 0
+        self.b = 0
+        self.c = 0
+        self.d = 0
+        self.e = 0
+        self.f = 0
+        self.g = 0
+    
+    def __repr__(self):
+        return f"a{self.a}b{self.b}c{self.c}d{self.d}e{self.e}f{self.f}g{self.g}"
+    
+    def hash_columns(self, main_height):
+        a_diff = main_height - self.a
+        b_diff = main_height - self.b
+        c_diff = main_height - self.c
+        d_diff = main_height - self.d
+        e_diff = main_height - self.e
+        f_diff = main_height - self.f
+        g_diff = main_height - self.g
+        return f"a{a_diff}b{b_diff}c{c_diff}d{d_diff}e{e_diff}f{f_diff}g{g_diff}"
+
 class Chamber:
     def __init__(self, pattern):
         self.jet_pattern = pattern
@@ -38,6 +61,7 @@ class Chamber:
         self.next_rock_type = 1
         self.current_iteration = 0
         self.next_jet_blow = self.jet_pattern[self.current_iteration]
+        self.floor = Floor()
         for i in range(7):
             self.spaces.append(Coordinate(i + 1, 0))
     
@@ -72,7 +96,9 @@ class Chamber:
             current_rock_type = self.next_rock_type
             current_height = self.height
             current_rock_count = len(history.keys()) + 1
-            name = f"j{current_jet_index}r{current_rock_type}"
+            current_surface = self.floor.hash_columns(current_height)
+            name = f"J{current_jet_index}R{current_rock_type}S{current_surface}"
+            print(f"FLOOR: {self.floor}")
             print(f"NAME: {name}")
             records = {
                 "height": current_height,
@@ -98,6 +124,7 @@ class Chamber:
         new_rock = Rock(self.next_rock_type, self.height)
         self.let_rock_fall_to_rest(new_rock)
         self.add_rock_to_spaces(new_rock)
+        self.add_rock_to_floor_columns(new_rock)
         self.update_height(new_rock)
         self.increment_new_rock_type()
 
@@ -138,15 +165,30 @@ class Chamber:
         for point in rock.shape:
             self.spaces.append(point)
 
+    def add_rock_to_floor_columns(self, rock):
+        for point in rock.shape:
+            match point.x:
+                case 1:
+                    self.floor.a += 1
+                case 2:
+                    self.floor.b += 1
+                case 3:
+                    self.floor.c += 1
+                case 4:
+                    self.floor.d += 1
+                case 5:
+                    self.floor.e += 1
+                case 6:
+                    self.floor.f += 1
+                case 7:
+                    self.floor.g += 1
+
 class Rock:
     def __init__(self, type, height):
         if type == 1:
             self.shape = []
             for i in range(4):
                 self.shape.append(Coordinate(i + 3, height + 4))
-            self.left_border = [self.shape[0]]
-            self.right_border = [self.shape[3]]
-            self.bottom_border = self.shape
         elif type == 2:
             self.shape = [
                 Coordinate(4, height + 4),
@@ -154,21 +196,6 @@ class Rock:
                 Coordinate(4, height + 5),
                 Coordinate(5, height + 5),
                 Coordinate(4, height + 6),
-            ]
-            self.left_border = [
-                self.shape[0],
-                self.shape[1],
-                self.shape[4],
-            ]
-            self.right_border = [
-                self.shape[0],
-                self.shape[3],
-                self.shape[4],
-            ]
-            self.bottom_border = [
-                self.shape[0],
-                self.shape[1],
-                self.shape[3],
             ]
         elif type == 3:
             self.shape = [
@@ -178,16 +205,10 @@ class Rock:
                 Coordinate(5, height + 5),
                 Coordinate(5, height + 6),
             ]
-            self.left_border = [self.shape[0]]
-            self.right_border = self.shape[2:]
-            self.bottom_border = self.shape[:3]
         elif type == 4:
             self.shape = []
             for i in range(4):
                 self.shape.append(Coordinate(3, height + i + 4))
-            self.left_border = self.shape
-            self.right_border = self.shape
-            self.bottom_border = [self.shape[0]]
         else:
             self.shape = [
                 Coordinate(3, height + 4),
@@ -195,15 +216,6 @@ class Rock:
                 Coordinate(3, height + 5),
                 Coordinate(4, height + 5),
             ]
-            self.left_border = [
-                self.shape[0],
-                self.shape[2]
-            ]
-            self.right_border = [
-                self.shape[1],
-                self.shape[3]
-            ]
-            self.bottom_border = self.shape[:2]
 
     def blown_left(self, other_points):
         if not self.touching_left_wall() and not self.touching_rock_to_left(other_points):
@@ -258,7 +270,7 @@ def solve_problem():
     chamber = Chamber(data)
     cycle = chamber.determine_cycle()
     print(f"CYCLE: {cycle}")
-    height = chamber.predict_height_for_rocks(1000000000000, cycle["period"], cycle["amplitude"], cycle["starting"], cycle["history"])
+    height = chamber.predict_height_for_rocks(2022, cycle["period"], cycle["amplitude"], cycle["starting"], cycle["history"])
     return height
 
 def extract_data_from_file(day_number, is_official):
