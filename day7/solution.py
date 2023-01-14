@@ -15,6 +15,26 @@ class Directory:
         self.name = name
         self.files = []
         self.directories = []
+        self.parent_directory = None
+    
+    def __repr__(self):
+        return f"DIR {self.name}: {len(self.directories)}"
+    
+    def add_file(self, file):
+        self.files.append(file)
+    
+    def add_directory(self, other_directory):
+        self.directories.append(other_directory)
+        other_directory.parent_directory = self
+    
+    def calculate_size(self):
+        total = 0
+        for file in self.files:
+            total += file.size
+        for directory in self.directories:
+            for file in directory.files:
+                total += file.size
+        return total
 
 def sum_all_directories(directories):
     total = 0
