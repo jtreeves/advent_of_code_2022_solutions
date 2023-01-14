@@ -158,11 +158,15 @@ class Terminal:
         return directories[0]
 
 def solve_problem():
-    data = extract_data_from_file(7, False)
+    data = extract_data_from_file(7, True)
     terminal = Terminal(data)
     terminal.read_output_to_create_directories()
-    size = terminal.determine_smallest_directory_to_delete_to_upgrade()
-    return size
+    total_of_small_directories = terminal.calculate_total_size_of_small_directories()
+    smallest_to_upgrade = terminal.determine_smallest_directory_to_delete_to_upgrade()
+    return {
+        "part1": total_of_small_directories,
+        "part2": smallest_to_upgrade
+    }
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
