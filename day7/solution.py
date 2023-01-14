@@ -10,26 +10,48 @@ class File:
     def __repr__(self):
         return f"{self.name}: {self.size}"
 
+    def __eq__(self, other):
+        if self.name == other.name:
+            return True
+        else:
+            return False
+    
+    def __hash__(self):
+        return hash((self.name, self.size))
+
 class Directory:
     def __init__(self, name):
         self.name = name
-        self.files = []
-        self.directories = []
+        self.files = set()
+        self.directories = set()
         self.parent_directory = None
     
     def __repr__(self):
         hierarchy = f"- {self.name} (dir)\n"
         for file in self.files:
-            hierarchy += f"  - {file.name} (file)"
+            hierarchy += f"  - {file.name} (file)\n"
         for directory in self.directories:
-            hierarchy += f"  - {directory.name} (dir)"
+            hierarchy += f"  - {directory.name} (dir)\n"
+        hierarchy = hierarchy[:-1]
         return hierarchy
     
+    def __eq__(self, other):
+        if isinstance(other, Directory):
+            if self.name == other.name:
+                return True
+            else:
+                return False
+        else:
+            return False
+    
+    def __hash__(self):
+        return hash((self.name, self.parent_directory))
+
     def add_file(self, file):
-        self.files.append(file)
+        self.files.add(file)
     
     def add_directory(self, other_directory):
-        self.directories.append(other_directory)
+        self.directories.add(other_directory)
         other_directory.parent_directory = self
     
     def calculate_size(self):
@@ -245,6 +267,7 @@ class Terminal:
 def solve_problem():
     data = extract_data_from_file(7, False)
     terminal = Terminal(data)
+    terminal.read_output_to_create_directories()
     root_directory = terminal.root_directory
     # contents = extract_contents_of_directories(data)
     # sizes = determine_total_sizes_of_all_directories(contents)
