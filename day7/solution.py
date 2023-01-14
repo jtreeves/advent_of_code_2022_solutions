@@ -80,7 +80,7 @@ class Terminal:
         self.current_directory = None
     
     def __repr__(self):
-        return f"OUTPUT: {len(self.output)}"
+        return f"{self.root_directory}"
     
     def set_current_directory(self, directory):
         self.current_directory = directory

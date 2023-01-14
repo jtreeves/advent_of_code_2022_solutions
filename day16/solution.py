@@ -32,6 +32,7 @@ class Valve:
 class Exploration:
     def __init__(self, data):
         self.descriptions = data.split("\n")
+        self.starting_valve = None
         self.valves = self.create_valves()
 
     def __repr__(self):
@@ -54,9 +55,11 @@ class Exploration:
         return worth_opening
     
     def find_valve_by_name(self, name):
-        for valve in self.valves.values():
-            if valve.name == name:
-                return valve
+        try:
+            valve = self.valves[name]
+            return valve
+        except KeyError:
+            return None
 
     def find_maximum_pressure(self):
         unopened_valves_worth_opening = self.determine_all_valves_worth_opening()
