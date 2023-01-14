@@ -159,3 +159,6 @@ def extract_data_from_file(day_number, is_official):
 
 result = solve_problem()
 print(result)
+
+# Idea for BFS approach to solve part 2:
+# https://github.com/silentw0lf/advent_of_code_2022/blob/main/18/solve.py
