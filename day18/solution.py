@@ -17,7 +17,7 @@ class Cube:
         return hash((self.x, self.y, self.z))
 
 def solve_problem():
-    data = extract_data_from_file(18, False)
+    data = extract_data_from_file(18, True)
     instructions = list_all_cube_central_coordinates(data)
     cubes = generate_all_cubes(instructions)
     # surface_area = calculate_total_surface_area(cubes)
@@ -111,8 +111,8 @@ def find_maxima_and_minima(cubes):
             max_z = cube.z
         if cube.z < min_z:
             min_z = cube.z
-    maximum = Cube(max_x, max_y, max_z)
-    minimum = Cube(min_x, min_y, min_z)
+    maximum = Cube(max_x + 1, max_y + 1, max_z + 1)
+    minimum = Cube(min_x - 1, min_y -1 , min_z - 1)
     extrema = {
         "max": maximum,
         "min": minimum
