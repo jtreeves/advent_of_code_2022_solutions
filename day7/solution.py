@@ -2,13 +2,19 @@ import copy
 
 directory_names = []
 
-def solve_problem():
-    data = extract_data_from_file(7)
-    contents = extract_contents_of_directories(data)
-    sizes = determine_total_sizes_of_all_directories(contents)
-    filtered_sizes = filter_out_too_large_directories(sizes)
-    total = sum_all_directories(filtered_sizes)
-    return total
+class File:
+    def __init__(self, name, size):
+        self.name = name
+        self.size = size
+    
+    def __repr__(self):
+        return f"{self.name}: {self.size}"
+
+class Directory:
+    def __init__(self, name):
+        self.name = name
+        self.files = []
+        self.directories = []
 
 def sum_all_directories(directories):
     total = 0
@@ -196,8 +202,20 @@ def convert_multiline_string_to_array(multiline_string):
             multiline_string = ""
     return rows
 
-def extract_data_from_file(day_number):
-    file = open(f"day{day_number}/data.txt", "r")
+def solve_problem():
+    data = extract_data_from_file(7, False)
+    contents = extract_contents_of_directories(data)
+    sizes = determine_total_sizes_of_all_directories(contents)
+    filtered_sizes = filter_out_too_large_directories(sizes)
+    total = sum_all_directories(filtered_sizes)
+    return total
+
+def extract_data_from_file(day_number, is_official):
+    if is_official:
+        name = "data"
+    else:
+        name = "practice"
+    file = open(f"day{day_number}/{name}.txt", "r")
     data = file.read()
     file.close()
     return data
