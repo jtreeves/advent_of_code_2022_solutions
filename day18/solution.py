@@ -20,9 +20,12 @@ def solve_problem():
     data = extract_data_from_file(18, True)
     instructions = list_all_cube_central_coordinates(data)
     cubes = generate_all_cubes(instructions)
-    # surface_area = calculate_total_surface_area(cubes)
+    surface_area = calculate_total_surface_area(cubes)
     outer_area = calculate_outer_surface_area(cubes)
-    return outer_area
+    return {
+        "part1": surface_area,
+        "part2": outer_area
+    }
 
 def calculate_total_surface_area(cubes):
     surface_area = 0
@@ -120,12 +123,14 @@ def find_maxima_and_minima(cubes):
     return extrema
 
 def calculate_distance_between_cubes(first_cube, second_cube):
-    summed_deltas = 0
-    for i in range(len(first_cube)):
-        delta = first_cube[i] - second_cube[i]
-        delta_squared = delta ** 2
-        summed_deltas += delta_squared
-    distance = summed_deltas ** (1/2)
+    x_delta = first_cube.x - second_cube.x
+    x_squared = x_delta ** 2
+    y_delta = first_cube.y - second_cube.y
+    y_squared = y_delta ** 2
+    z_delta = first_cube.z - second_cube.z
+    z_squared = z_delta ** 2
+    summed_squares = x_squared + y_squared + z_squared
+    distance = summed_squares ** (1/2)
     return distance
 
 def generate_all_cubes(instructions):
