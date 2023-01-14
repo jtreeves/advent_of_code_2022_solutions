@@ -55,6 +55,16 @@ class Directory:
             if directory.name == name:
                 return directory
     
+    def list_all_subdirectories(self):
+        subdirectories = []
+        for directory in self.directories:
+            name = directory.name
+            size = directory.calculate_size()
+            subdirectories.append((name, size))
+            if directory.directories:
+                subdirectories.extend(directory.list_all_subdirectories())
+        return subdirectories
+    
     def calculate_size(self):
         total = 0
         for file in self.files:
@@ -77,8 +87,6 @@ class Terminal:
     
     def read_output_to_create_directories(self):
         for line in self.output:
-            print("****** NEW LINE")
-            print(f"CURRENT DIRECTORY: {self.current_directory}")
             parts = line.split(" ")
             if line[0:4] == "$ cd":
                 name = parts[2]
@@ -91,7 +99,6 @@ class Terminal:
                         self.root_directory = new_directory
                         self.set_current_directory(new_directory)
                 else:
-                    print("CD BACK")
                     self.set_current_directory(self.current_directory.parent_directory)
             elif line[0:4] == "$ ls":
                 continue
@@ -99,20 +106,26 @@ class Terminal:
                 name = parts[1]
                 new_directory = Directory(name)
                 self.current_directory.add_directory(new_directory)
-                print(new_directory)
             else:
                 size = int(parts[0])
                 name = parts[1]
                 new_file = File(name, size)
                 self.current_directory.add_file(new_file)
-                print(new_file)
+    
+    def list_all_directories(self):
+        root_directory_name = self.root_directory.name
+        root_directory_size = self.root_directory.calculate_size()
+        root = (root_directory_name, root_directory_size)
+        all_directories = self.root_directory.list_all_subdirectories()
+        all_directories.append(root)
+        return all_directories
 
 def solve_problem():
     data = extract_data_from_file(7, False)
     terminal = Terminal(data)
     terminal.read_output_to_create_directories()
-    root_directory = terminal.root_directory
-    return list(root_directory.directories)[0].calculate_size()
+    directories = terminal.list_all_directories()
+    return directories
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
