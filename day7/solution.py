@@ -136,7 +136,7 @@ class Terminal:
         return total
 
 def solve_problem():
-    data = extract_data_from_file(7, False)
+    data = extract_data_from_file(7, True)
     terminal = Terminal(data)
     terminal.read_output_to_create_directories()
     size = terminal.calculate_total_size_of_small_directories()
@@ -154,3 +154,7 @@ def extract_data_from_file(day_number, is_official):
 
 result = solve_problem()
 print(result)
+
+# Idea to use classes from Patrick Clements
+# Idea to organize classes around File and Directory:
+# https://aoc.just2good.co.uk/2022/7
