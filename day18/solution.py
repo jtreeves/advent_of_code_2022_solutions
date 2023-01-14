@@ -27,6 +27,25 @@ def check_if_cubes_touching(first_cube, second_cube):
     else:
         return False
 
+def calculate_outer_surface_area(cubes):
+    outer_area = 0
+    extrema = find_maxima_and_minima(cubes)
+    visited_cubes = set()
+    queue = [extrema["max"]]
+    while queue:
+        current_cube = queue.pop(0)
+        if current_cube in visited_cubes:
+            continue
+        elif current_cube in cubes:
+            outer_area += 1
+        else:
+            visited_cubes.add(current_cube)
+            neighbors = find_neighbors(current_cube)
+            for neighbor in neighbors:
+                if check_if_in_scope(neighbor, extrema):
+                    queue.append(neighbor)
+    return outer_area
+
 def find_neighbors(cube):
     x = cube[0]
     y = cube[1]
