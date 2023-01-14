@@ -134,12 +134,20 @@ class Terminal:
         for size in sizes:
             total += size
         return total
+    
+    def calculate_space_to_delete_in_order_to_upgrade(self):
+        total_diskspace = 70000000
+        required_space = 30000000
+        used_space = self.root_directory.calculate_size()
+        unused_space = total_diskspace - used_space
+        needed_space = required_space - unused_space
+        return needed_space
 
 def solve_problem():
-    data = extract_data_from_file(7, True)
+    data = extract_data_from_file(7, False)
     terminal = Terminal(data)
     terminal.read_output_to_create_directories()
-    size = terminal.calculate_total_size_of_small_directories()
+    size = terminal.calculate_space_to_delete_in_order_to_upgrade()
     return size
 
 def extract_data_from_file(day_number, is_official):
