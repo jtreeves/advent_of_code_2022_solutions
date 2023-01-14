@@ -143,12 +143,21 @@ class Terminal:
         needed_space = required_space - unused_space
         return needed_space
 
+    def determine_directories_large_enough_to_free_up_enough_space_for_upgrade(self):
+        needed_space = self.calculate_space_to_delete_in_order_to_upgrade()
+        all_directories = self.list_all_directories()
+        large_enough_directories = []
+        for _, size in all_directories:
+            if size >= needed_space:
+                large_enough_directories.append(size)
+        return large_enough_directories
+
 def solve_problem():
     data = extract_data_from_file(7, False)
     terminal = Terminal(data)
     terminal.read_output_to_create_directories()
-    size = terminal.calculate_space_to_delete_in_order_to_upgrade()
-    return size
+    directories = terminal.determine_directories_large_enough_to_free_up_enough_space_for_upgrade()
+    return directories
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
