@@ -151,13 +151,18 @@ class Terminal:
             if size >= needed_space:
                 large_enough_directories.append(size)
         return large_enough_directories
+    
+    def determine_smallest_directory_to_delete_to_upgrade(self):
+        directories = self.determine_directories_large_enough_to_free_up_enough_space_for_upgrade()
+        directories.sort()
+        return directories[0]
 
 def solve_problem():
     data = extract_data_from_file(7, False)
     terminal = Terminal(data)
     terminal.read_output_to_create_directories()
-    directories = terminal.determine_directories_large_enough_to_free_up_enough_space_for_upgrade()
-    return directories
+    size = terminal.determine_smallest_directory_to_delete_to_upgrade()
+    return size
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
