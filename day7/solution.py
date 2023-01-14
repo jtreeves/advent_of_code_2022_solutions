@@ -32,8 +32,7 @@ class Directory:
         for file in self.files:
             total += file.size
         for directory in self.directories:
-            for file in directory.files:
-                total += file.size
+            total += directory.calculate_size()
         return total
 
 def sum_all_directories(directories):
