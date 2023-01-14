@@ -56,4 +56,4 @@ What is the exterior surface area of your scanned lava droplet?
 
 ### Solution
 
-NOT YET SOLVED
+2452
