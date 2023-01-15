@@ -86,9 +86,9 @@ class Blueprint:
         obsidian_for_geode = self.robot_specs[3].requirements[1].amount
         return obsidian_for_geode
     
-    def optimize_geodes(self):
+    def optimize_geodes(self, minutes):
         most_geodes = 0
-        initial_state = State(24, 0, 0, 0, 0, 1, 0, 0, 0)
+        initial_state = State(minutes, 0, 0, 0, 0, 1, 0, 0, 0)
         queue = [initial_state]
         tried_options = set()
         max_ore_cost = self.find_max_ore_cost()
@@ -97,8 +97,9 @@ class Blueprint:
         while queue:
             current_state = queue.pop(0)
             most_geodes = max(most_geodes, current_state.geodes)
-            print(f"CURRENT STATE: {current_state}")
-            print(f"MAX GEODES: {most_geodes}")
+            print(f"*** ID: {self.id}")
+            print(current_state)
+            print(most_geodes)
             optimized_ore_robots = min(current_state.ore_robots, max_ore_cost)
             optimized_clay_robots = min(current_state.clay_robots, max_clay_cost)
             optimized_obsidian_robots = min(current_state.obsidian_robots, max_obsidian_cost)
@@ -106,7 +107,7 @@ class Blueprint:
             optimized_clay = min(current_state.clay, current_state.time * max_clay_cost - optimized_clay_robots * (current_state.time - 1))
             optimized_obsidian = min(current_state.obsidian, current_state.time * max_obsidian_cost - optimized_obsidian_robots * (current_state.time - 1))
             optimized_state = State(current_state.time, optimized_ore, optimized_clay, optimized_obsidian, current_state.geodes, optimized_ore_robots, optimized_clay_robots, optimized_obsidian_robots, current_state.geode_robots)
-            if optimized_state.time == 0 or optimized_state in tried_options:
+            if optimized_state.time == 0 or optimized_state in tried_options or (optimized_state.time <= 3 and optimized_state.geodes < most_geodes // 2) or (optimized_state.time <= 3 and optimized_state.geode_robots < 1) or (optimized_state.time <= 2 and optimized_state.geode_robots < 2) or (optimized_state.time <= 1 and optimized_state.geode_robots < 3):
                 continue
             else:
                 tried_options.add(optimized_state)
@@ -125,69 +126,11 @@ class Blueprint:
                     obsidian_state = State(optimized_state.time - 1, optimized_state.ore + optimized_state.ore_robots - self.robot_specs[3].requirements[0].amount, optimized_state.clay + optimized_state.clay_robots, optimized_state.obsidian + optimized_state.obsidian_robots - self.robot_specs[3].requirements[1].amount, optimized_state.geodes + optimized_state.geode_robots, optimized_state.ore_robots, optimized_state.clay_robots, optimized_state.obsidian_robots, optimized_state.geode_robots + 1)
                     queue.append(obsidian_state)
         return most_geodes
-        
-    def spend_one_minute(self):
-        geode_requirements = self.robot_specs[3].requirements
-        ore_needed_for_geode = geode_requirements[0].amount
-        obsidian_needed_for_geode = geode_requirements[1].amount
-        obsidian_requirements = self.robot_specs[2].requirements
-        ore_needed_for_obsidian = obsidian_requirements[0].amount
-        clay_needed_for_obsidian = obsidian_requirements[1].amount
-        clay_requirements = self.robot_specs[1].requirements
-        ore_needed_for_clay = clay_requirements[0].amount
-        ore_requirements = self.robot_specs[0].requirements
-        ore_needed_for_ore = ore_requirements[0].amount
-        should_geode = self.ore >= ore_needed_for_geode and self.obsidian >= obsidian_needed_for_geode
-        should_obsidian = self.ore >= ore_needed_for_obsidian and self.clay >= clay_needed_for_obsidian and self.obsidian + self.obsidian_robots * 2 < obsidian_needed_for_geode
-        should_clay = self.ore >= ore_needed_for_clay and self.clay + self.clay_robots * 2 < clay_needed_for_obsidian
-        should_ore = self.ore >= ore_needed_for_ore and self.ore + self.ore_robots * 2 < ore_needed_for_clay
-        if should_geode:
-            self.ore -= ore_needed_for_geode
-            self.obsidian -= obsidian_needed_for_geode
-        elif should_obsidian:
-            self.ore -= ore_needed_for_obsidian
-            self.clay -= clay_needed_for_obsidian
-        elif should_clay:
-            self.ore -= ore_needed_for_clay
-        elif should_ore:
-            self.ore -= ore_needed_for_ore
-        for _ in range(self.ore_robots):
-            self.ore += 1
-        for _ in range(self.clay_robots):
-            self.clay += 1
-        for _ in range(self.obsidian_robots):
-            self.obsidian += 1
-        for _ in range(self.geode_robots):
-            self.geodes += 1
-        if should_geode:
-            self.geode_robots += 1
-        elif should_obsidian:
-            self.obsidian_robots += 1
-        elif should_clay:
-            self.clay_robots += 1
-        elif should_ore:
-            self.ore_robots += 1
-
-    def spend_multiple_minutes(self, minutes):
-        for _ in range(minutes):
-            print("////////")
-            print(f"MINUTE: {_ + 1}")
-            self.spend_one_minute()
-            print(f"ORE: {self.ore}")
-            print(f"CLAY: {self.clay}")
-            print(f"OBSIDIAN: {self.obsidian}")
-            print(f"GEODES: {self.geodes}")
-            print("*********")
-            print(f"ORE ROBOTS: {self.ore_robots}")
-            print(f"CLAY ROBOTS: {self.clay_robots}")
-            print(f"OBSIDIAN ROBOTS: {self.obsidian_robots}")
-            print(f"GEODE ROBOTS: {self.geode_robots}")
     
     def calculate_quality_level_for_interval(self, minutes):
-        self.spend_multiple_minutes(minutes)
+        max_geodes = self.optimize_geodes(minutes)
         id_number = self.id
-        geodes = self.geodes
-        level = id_number * geodes
+        level = id_number * max_geodes
         return level
 
 class State:
@@ -239,11 +182,18 @@ class Selection:
             level = blueprint.calculate_quality_level_for_interval(minutes)
             total += level
         return total
+    
+    def calculate_product_of_geodes_from_first_three_blueprints(self, minutes):
+        product = 1
+        for blueprint in self.blueprints[0:3]:
+            geodes = blueprint.optimize_geodes(minutes)
+            product *= geodes
+        return product
 
 def solve_problem():
-    data = extract_data_from_file(19, False)
+    data = extract_data_from_file(19, True)
     selection = Selection(data)
-    total = selection.blueprints[0].optimize_geodes()
+    total = selection.calculate_product_of_geodes_from_first_three_blueprints(32)
     return total
 
 def extract_data_from_file(day_number, is_official):
@@ -258,3 +208,6 @@ def extract_data_from_file(day_number, is_official):
 
 result = solve_problem()
 print(result)
+
+# Idea for BFS approach and attendant optimizations:
+# https://aoc.just2good.co.uk/2022/19
