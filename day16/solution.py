@@ -32,7 +32,7 @@ class Valve:
 class Exploration:
     def __init__(self, data):
         self.descriptions = data.split("\n")
-        self.starting_valve = None
+        self.starting_valve = ""
         self.valves = self.create_valves()
 
     def __repr__(self):
@@ -44,15 +44,8 @@ class Exploration:
             new_valve = Valve(self.descriptions[i])
             valves[new_valve.name] = new_valve
             if i == 0:
-                self.starting_valve = new_valve
+                self.starting_valve = new_valve.name
         return valves
-    
-    def determine_all_valves_worth_opening(self):
-        worth_opening = []
-        for valve in self.valves.values():
-            if valve.flow_rate > 0:
-                worth_opening.append(valve.name)
-        return worth_opening
     
     def find_valve_by_name(self, name):
         try:
@@ -62,34 +55,29 @@ class Exploration:
             return None
 
     def find_maximum_pressure(self):
-        unopened_valves_worth_opening = self.determine_all_valves_worth_opening()
-        current_valve = self.starting_valve
-        current_pressure = 0
-        current_time = 30
-        paths = [(current_valve, current_pressure, current_time)]
-        tested_valves = []
-        while unopened_valves_worth_opening:
-            valve, pressure, time = paths[-1]
-            if valve.name in tested_valves:
+        starting_pressure = 0
+        time_remaining = 30
+        visited_valves = set()
+        queue = [(self.starting_valve, starting_pressure, time_remaining)]
+        maximal_pressures = []
+        while queue:
+            name, pressure, time = queue.pop(0)
+            if time == 0:
                 break
-            if valve.flow_rate != 0:
-                time -= 1
-                pressure += valve.calculate_current_cumulative_flow(time)
-                unopened_valves_worth_opening.remove(valve.name)
-            tested_valves.append(valve.name)
-            for tunnel in valve.tunnels:
-                if tunnel in unopened_valves_worth_opening:
+            elif name in visited_valves:
+                continue
+            else:
+                visited_valves.add(name)
+                valve = self.find_valve_by_name(name)
+                if valve.flow_rate > 0:
                     time -= 1
-                    new_valve = self.find_valve_by_name(tunnel)
-                    paths.append((new_valve, pressure, time))
-        viable_paths = []
-        for valve, pressure, time in paths:
-            if time >= 0:
-                viable_paths.append(pressure)
-        viable_paths.sort()
-        maximum_pressure = viable_paths[-1]
-        return maximum_pressure
-
+                    pressure += valve.calculate_current_cumulative_flow(time)
+                for tunnel in valve.tunnels:
+                    time -= 1
+                    queue.append((tunnel, pressure, time))
+                    maximal_pressures.append(pressure)
+        return max(maximal_pressures)
+        
 def solve_problem():
     data = extract_data_from_file(16, False)
     experience = Exploration(data)
