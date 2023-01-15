@@ -397,4 +397,4 @@ Don't worry about quality levels; instead, just determine the largest number of 
 
 ### Solution
 
-NOT YET SOLVED
+25056
