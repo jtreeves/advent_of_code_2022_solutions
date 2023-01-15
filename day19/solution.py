@@ -76,8 +76,21 @@ class Blueprint:
                 continue
             else:
                 tried_options.add(current_state)
-
-        return
+                new_state = State(current_state.time - 1, current_state.ore + current_state.ore_robots, current_state.clay + current_state.clay_robots, current_state.obsidian + current_state.obsidian_robots, current_state.geodes + current_state.geode_robots, current_state.ore_robots, current_state.clay_robots, current_state.obsidian_robots, current_state.geode_robots)
+                queue.append(new_state)
+                if current_state.ore >= self.robot_specs[0].requirements[0].amount:
+                    ore_state = State(current_state.time - 1, current_state.ore + current_state.ore_robots - self.robot_specs[0].requirements[0].amount, current_state.clay + current_state.clay_robots, current_state.obsidian + current_state.obsidian_robots, current_state.geodes + current_state.geode_robots, current_state.ore_robots, current_state.clay_robots, current_state.obsidian_robots, current_state.geode_robots)
+                    queue.append(ore_state)
+                if current_state.ore >= self.robot_specs[1].requirements[0].amount:
+                    clay_state = State(current_state.time - 1, current_state.ore + current_state.ore_robots - self.robot_specs[1].requirements[0].amount, current_state.clay + current_state.clay_robots, current_state.obsidian + current_state.obsidian_robots, current_state.geodes + current_state.geode_robots, current_state.ore_robots, current_state.clay_robots, current_state.obsidian_robots, current_state.geode_robots)
+                    queue.append(clay_state)
+                if current_state.ore >= self.robot_specs[2].requirements[0].amount and current_state.clay >= self.robot_specs[2].requirements[1].amount:
+                    obsidian_state = State(current_state.time - 1, current_state.ore + current_state.ore_robots - self.robot_specs[2].requirements[0].amount, current_state.clay + current_state.clay_robots - self.robot_specs[2].requirements[1].amount, current_state.obsidian + current_state.obsidian_robots, current_state.geodes + current_state.geode_robots, current_state.ore_robots, current_state.clay_robots, current_state.obsidian_robots, current_state.geode_robots)
+                    queue.append(obsidian_state)
+                if current_state.ore >= self.robot_specs[3].requirements[0].amount and current_state.obsidian >= self.robot_specs[3].requirements[1].amount:
+                    obsidian_state = State(current_state.time - 1, current_state.ore + current_state.ore_robots - self.robot_specs[3].requirements[0].amount, current_state.clay + current_state.clay_robots, current_state.obsidian + current_state.obsidian_robots - self.robot_specs[3].requirements[1].amount, current_state.geodes + current_state.geode_robots, current_state.ore_robots, current_state.clay_robots, current_state.obsidian_robots, current_state.geode_robots)
+                    queue.append(obsidian_state)
+        return most_geodes
         
     def spend_one_minute(self):
         geode_requirements = self.robot_specs[3].requirements
