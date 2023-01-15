@@ -44,14 +44,6 @@ class Blueprint:
         self.id = self.extract_id()
         self.robot_descriptions = self.descriptions[1].split(". ")
         self.robot_specs = self.determine_all_robot_specs()
-        self.ore_robots = 1
-        self.clay_robots = 0
-        self.obsidian_robots = 0
-        self.geode_robots = 0
-        self.ore = 0
-        self.clay = 0
-        self.obsidian = 0
-        self.geodes = 0
     
     def __repr__(self):
         description = f"{self.id}: "
@@ -71,6 +63,21 @@ class Blueprint:
             new_spec = Robot(description)
             specs.append(new_spec)
         return specs
+    
+    def optimize_geodes(self):
+        most_geodes = 0
+        initial_state = State(24, 0, 0, 0, 0, 1, 0, 0, 0)
+        queue = [initial_state]
+        tried_options = set()
+        while queue:
+            current_state = queue.pop(0)
+            most_geodes = max(most_geodes, current_state.geodes)
+            if current_state.time == 0 or current_state in tried_options:
+                continue
+            else:
+                tried_options.add(current_state)
+
+        return
         
     def spend_one_minute(self):
         geode_requirements = self.robot_specs[3].requirements
@@ -136,6 +143,27 @@ class Blueprint:
         level = id_number * geodes
         return level
 
+class State:
+    def __init__(self, time, ore, clay, obsidian, geodes, ore_robots, clay_robots, obsidian_robots, geode_robots):
+        self.time = time
+        self.ore = ore
+        self.clay = clay
+        self.obsidian = obsidian
+        self.geodes = geodes
+        self.ore_robots = ore_robots
+        self.clay_robots = clay_robots
+        self.obsidian_robots = obsidian_robots
+        self.geode_robots = geode_robots
+
+    def __eq__(self, other):
+        if self.time == other.time and self.ore == other.ore and self.clay == other.clay and self.obsidian == other.obsidian and self.geodes == other.geodes and self.ore_robots == other.ore_robots and self.clay_robots == other.clay_robots and self.obsidian_robots == other.obsidian_robots and self.geode_robots == other.geode_robots:
+            return True
+        else:
+            return False
+    
+    def __hash__(self):
+        return hash((self.time, self.ore, self.clay, self.obsidian, self.geodes, self.ore_robots, self.clay_robots, self.obsidian_robots, self.geode_robots))
+
 class Selection:
     def __init__(self, description):
         self.options = description.split("\n")
@@ -154,7 +182,7 @@ class Selection:
             new_blueprint = Blueprint(option)
             blueprints.append(new_blueprint)
         return blueprints
-    
+
     def calculate_sum_of_quality_levels_on_interval(self, minutes):
         total = 0
         for blueprint in self.blueprints:
