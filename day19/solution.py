@@ -63,32 +63,66 @@ class Blueprint:
             new_spec = Robot(description)
             specs.append(new_spec)
         return specs
+
+    def find_max_ore_cost(self):
+        ore_for_ore = self.robot_specs[0].requirements[0].amount
+        ore_for_clay = self.robot_specs[1].requirements[0].amount
+        ore_for_obsidian = self.robot_specs[2].requirements[0].amount
+        ore_for_geode = self.robot_specs[3].requirements[0].amount
+        ore_options = [
+            ore_for_ore,
+            ore_for_clay,
+            ore_for_obsidian,
+            ore_for_geode
+        ]
+        ore_options.sort()
+        return ore_options[-1]
+
+    def find_max_clay_cost(self):
+        clay_for_obsidian = self.robot_specs[2].requirements[1].amount
+        return clay_for_obsidian
+
+    def find_max_obsidian_cost(self):
+        obsidian_for_geode = self.robot_specs[3].requirements[1].amount
+        return obsidian_for_geode
     
     def optimize_geodes(self):
         most_geodes = 0
         initial_state = State(24, 0, 0, 0, 0, 1, 0, 0, 0)
         queue = [initial_state]
         tried_options = set()
+        max_ore_cost = self.find_max_ore_cost()
+        max_clay_cost = self.find_max_clay_cost()
+        max_obsidian_cost = self.find_max_obsidian_cost()
         while queue:
             current_state = queue.pop(0)
             most_geodes = max(most_geodes, current_state.geodes)
-            if current_state.time == 0 or current_state in tried_options:
+            print(f"CURRENT STATE: {current_state}")
+            print(f"MAX GEODES: {most_geodes}")
+            optimized_ore_robots = min(current_state.ore_robots, max_ore_cost)
+            optimized_clay_robots = min(current_state.clay_robots, max_clay_cost)
+            optimized_obsidian_robots = min(current_state.obsidian_robots, max_obsidian_cost)
+            optimized_ore = min(current_state.ore, current_state.time * max_ore_cost - optimized_ore_robots * (current_state.time - 1))
+            optimized_clay = min(current_state.clay, current_state.time * max_clay_cost - optimized_clay_robots * (current_state.time - 1))
+            optimized_obsidian = min(current_state.obsidian, current_state.time * max_obsidian_cost - optimized_obsidian_robots * (current_state.time - 1))
+            optimized_state = State(current_state.time, optimized_ore, optimized_clay, optimized_obsidian, current_state.geodes, optimized_ore_robots, optimized_clay_robots, optimized_obsidian_robots, current_state.geode_robots)
+            if optimized_state.time == 0 or optimized_state in tried_options:
                 continue
             else:
-                tried_options.add(current_state)
-                new_state = State(current_state.time - 1, current_state.ore + current_state.ore_robots, current_state.clay + current_state.clay_robots, current_state.obsidian + current_state.obsidian_robots, current_state.geodes + current_state.geode_robots, current_state.ore_robots, current_state.clay_robots, current_state.obsidian_robots, current_state.geode_robots)
+                tried_options.add(optimized_state)
+                new_state = State(optimized_state.time - 1, optimized_state.ore + optimized_state.ore_robots, optimized_state.clay + optimized_state.clay_robots, optimized_state.obsidian + optimized_state.obsidian_robots, optimized_state.geodes + optimized_state.geode_robots, optimized_state.ore_robots, optimized_state.clay_robots, optimized_state.obsidian_robots, optimized_state.geode_robots)
                 queue.append(new_state)
-                if current_state.ore >= self.robot_specs[0].requirements[0].amount:
-                    ore_state = State(current_state.time - 1, current_state.ore + current_state.ore_robots - self.robot_specs[0].requirements[0].amount, current_state.clay + current_state.clay_robots, current_state.obsidian + current_state.obsidian_robots, current_state.geodes + current_state.geode_robots, current_state.ore_robots, current_state.clay_robots, current_state.obsidian_robots, current_state.geode_robots)
+                if optimized_state.ore >= self.robot_specs[0].requirements[0].amount:
+                    ore_state = State(optimized_state.time - 1, optimized_state.ore + optimized_state.ore_robots - self.robot_specs[0].requirements[0].amount, optimized_state.clay + optimized_state.clay_robots, optimized_state.obsidian + optimized_state.obsidian_robots, optimized_state.geodes + optimized_state.geode_robots, optimized_state.ore_robots + 1, optimized_state.clay_robots, optimized_state.obsidian_robots, optimized_state.geode_robots)
                     queue.append(ore_state)
-                if current_state.ore >= self.robot_specs[1].requirements[0].amount:
-                    clay_state = State(current_state.time - 1, current_state.ore + current_state.ore_robots - self.robot_specs[1].requirements[0].amount, current_state.clay + current_state.clay_robots, current_state.obsidian + current_state.obsidian_robots, current_state.geodes + current_state.geode_robots, current_state.ore_robots, current_state.clay_robots, current_state.obsidian_robots, current_state.geode_robots)
+                if optimized_state.ore >= self.robot_specs[1].requirements[0].amount:
+                    clay_state = State(optimized_state.time - 1, optimized_state.ore + optimized_state.ore_robots - self.robot_specs[1].requirements[0].amount, optimized_state.clay + optimized_state.clay_robots, optimized_state.obsidian + optimized_state.obsidian_robots, optimized_state.geodes + optimized_state.geode_robots, optimized_state.ore_robots, optimized_state.clay_robots + 1, optimized_state.obsidian_robots, optimized_state.geode_robots)
                     queue.append(clay_state)
-                if current_state.ore >= self.robot_specs[2].requirements[0].amount and current_state.clay >= self.robot_specs[2].requirements[1].amount:
-                    obsidian_state = State(current_state.time - 1, current_state.ore + current_state.ore_robots - self.robot_specs[2].requirements[0].amount, current_state.clay + current_state.clay_robots - self.robot_specs[2].requirements[1].amount, current_state.obsidian + current_state.obsidian_robots, current_state.geodes + current_state.geode_robots, current_state.ore_robots, current_state.clay_robots, current_state.obsidian_robots, current_state.geode_robots)
+                if optimized_state.ore >= self.robot_specs[2].requirements[0].amount and optimized_state.clay >= self.robot_specs[2].requirements[1].amount:
+                    obsidian_state = State(optimized_state.time - 1, optimized_state.ore + optimized_state.ore_robots - self.robot_specs[2].requirements[0].amount, optimized_state.clay + optimized_state.clay_robots - self.robot_specs[2].requirements[1].amount, optimized_state.obsidian + optimized_state.obsidian_robots, optimized_state.geodes + optimized_state.geode_robots, optimized_state.ore_robots, optimized_state.clay_robots, optimized_state.obsidian_robots + 1, optimized_state.geode_robots)
                     queue.append(obsidian_state)
-                if current_state.ore >= self.robot_specs[3].requirements[0].amount and current_state.obsidian >= self.robot_specs[3].requirements[1].amount:
-                    obsidian_state = State(current_state.time - 1, current_state.ore + current_state.ore_robots - self.robot_specs[3].requirements[0].amount, current_state.clay + current_state.clay_robots, current_state.obsidian + current_state.obsidian_robots - self.robot_specs[3].requirements[1].amount, current_state.geodes + current_state.geode_robots, current_state.ore_robots, current_state.clay_robots, current_state.obsidian_robots, current_state.geode_robots)
+                if optimized_state.ore >= self.robot_specs[3].requirements[0].amount and optimized_state.obsidian >= self.robot_specs[3].requirements[1].amount:
+                    obsidian_state = State(optimized_state.time - 1, optimized_state.ore + optimized_state.ore_robots - self.robot_specs[3].requirements[0].amount, optimized_state.clay + optimized_state.clay_robots, optimized_state.obsidian + optimized_state.obsidian_robots - self.robot_specs[3].requirements[1].amount, optimized_state.geodes + optimized_state.geode_robots, optimized_state.ore_robots, optimized_state.clay_robots, optimized_state.obsidian_robots, optimized_state.geode_robots + 1)
                     queue.append(obsidian_state)
         return most_geodes
         
@@ -168,6 +202,9 @@ class State:
         self.obsidian_robots = obsidian_robots
         self.geode_robots = geode_robots
 
+    def __repr__(self):
+        return f"TIME REMAINING: {self.time}\nORE: {self.ore_robots} -> {self.ore}\nCLAY: {self.clay_robots} -> {self.clay}\nOBSIDIAN: {self.obsidian_robots} -> {self.obsidian}\nGEODES: {self.geode_robots} -> {self.geodes}"
+
     def __eq__(self, other):
         if self.time == other.time and self.ore == other.ore and self.clay == other.clay and self.obsidian == other.obsidian and self.geodes == other.geodes and self.ore_robots == other.ore_robots and self.clay_robots == other.clay_robots and self.obsidian_robots == other.obsidian_robots and self.geode_robots == other.geode_robots:
             return True
@@ -204,9 +241,9 @@ class Selection:
         return total
 
 def solve_problem():
-    data = extract_data_from_file(19, True)
+    data = extract_data_from_file(19, False)
     selection = Selection(data)
-    total = selection.calculate_sum_of_quality_levels_on_interval(24)
+    total = selection.blueprints[0].optimize_geodes()
     return total
 
 def extract_data_from_file(day_number, is_official):
