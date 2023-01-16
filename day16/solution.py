@@ -133,23 +133,29 @@ class Exploration:
             else:
                 attempted_configurations.add(current_state)
                 if current_state.current_valve.flow_rate > 0 and current_state.current_valve.name not in current_state.opened_valves:
-                    opening_state = State(current_state.current_valve, current_state.pressure, current_state.time, current_state.visited_valves, current_state.opened_valves)
-                    opening_state.opened_valves.add(opening_state.current_valve.name)
-                    opening_state.time += 1
-                    opening_state.pressure += opening_state.current_valve.calculate_current_cumulative_flow(30 - opening_state.time)
-                    queue.append(opening_state)
+                    opening_states_copy = current_state.create_divergent_copy()
+                    current_valve = opening_states_copy["current_valve"]
+                    pressure = opening_states_copy["pressure"]
+                    time = opening_states_copy["time"]
+                    visited_valves = opening_states_copy["visited_valves"]
+                    opened_valves = opening_states_copy["opened_valves"]
+                    updated_time = time + 1
+                    updated_pressure = pressure + current_valve.calculate_current_cumulative_flow(30 - updated_time)
+                    updated_opened_valves = opened_valves.add(current_valve.name)
+                    opened_state = State(current_valve, updated_pressure, updated_time, visited_valves, updated_opened_valves)
+                    queue.append(opened_state)
                 for tunnel in current_state.current_valve.tunnels:
-                    tunnel_state = State(current_state.current_valve, current_state.pressure, current_state.time, current_state.visited_valves, current_state.opened_valves)
-                    tunnel_state.visited_valves.add(tunnel)
-                    tunnel_state.current_valve = self.find_valve_by_name(tunnel)
-                    tunnel_state.time += 1
-                    queue.append(tunnel_state)
-                    # if tunnel_state.current_valve.flow_rate > 0 and tunnel_state.current_valve.name not in tunnel_state.opened_valves:
-                    #     updated_state = State(tunnel_state.current_valve, tunnel_state.pressure, tunnel_state.time, tunnel_state.visited_valves, tunnel_state.opened_valves)
-                    #     updated_state.opened_valves.add(updated_state.current_valve.name)
-                    #     updated_state.time += 1
-                    #     updated_state.pressure += updated_state.current_valve.calculate_current_cumulative_flow(30 - updated_state.time)
-                    #     queue.append(updated_state)
+                    visiting_states_copy = current_state.create_divergent_copy()
+                    current_valve = visiting_states_copy["current_valve"]
+                    pressure = visiting_states_copy["pressure"]
+                    time = visiting_states_copy["time"]
+                    visited_valves = visiting_states_copy["visited_valves"]
+                    opened_valves = visiting_states_copy["opened_valves"]
+                    updated_current_valve = self.find_valve_by_name(tunnel)
+                    updated_time = time + 1
+                    updated_visited_valves = visited_valves.add(updated_current_valve.name)
+                    visited_state = State(updated_current_valve, pressure, updated_time, updated_visited_valves, opened_valves)
+                    queue.append(visited_state)
         return max_pressure
 
 def solve_problem():
