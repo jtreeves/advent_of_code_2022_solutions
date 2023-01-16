@@ -41,6 +41,28 @@ class Valve:
         total_flow = self.flow_rate * time
         return total_flow
 
+    def calculate_shortest_distance_to_other_valve(self, other, all_valves):
+        optional_distances = []
+        maximum_distance = len(all_valves.keys())
+        visited_valves = set()
+        queue = [(self.name, 0)]
+        while queue:
+            name, distance = queue.pop(0)
+            if name == other:
+                optional_distances.append(distance)
+            elif name in visited_valves:
+                continue
+            elif len(optional_distances) >= maximum_distance:
+                break
+            else:
+                visited_valves.add(name)
+                current_valve = all_valves[name]
+                for tunnel in current_valve.tunnels:
+                    queue.append((tunnel, distance + 1))
+        optional_distances.sort()
+        shortest_distance = optional_distances[0]
+        return shortest_distance
+
 class State:
     def __init__(self, current_valve, pressure, time, visited_valves, opened_valves):
         self.current_valve = current_valve
@@ -159,10 +181,12 @@ class Exploration:
         return max_pressure
 
 def solve_problem():
-    data = extract_data_from_file(16, True)
+    data = extract_data_from_file(16, False)
     experience = Exploration(data)
-    max_pressure = experience.find_maximum_pressure(30)
-    return max_pressure
+    distance = experience.valves["AA"].calculate_shortest_distance_to_other_valve("FF", experience.valves)
+    return distance
+    # max_pressure = experience.find_maximum_pressure(30)
+    # return max_pressure
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
