@@ -117,7 +117,7 @@ class Exploration:
         current_valve = self.starting_valve
         pressure = 0
         time = 0
-        visited_valves = set(current_valve.name)
+        visited_valves = set([current_valve.name])
         opened_valves = set()
         initial_state = State(current_valve, pressure, time, visited_valves, opened_valves)
         queue = [initial_state]
@@ -128,7 +128,7 @@ class Exploration:
             print(f"CURRENT STATE:\n{current_state}")
             max_pressure = max(max_pressure, current_state.pressure)
             print(f"/// MAX PRESSURE: {max_pressure}")
-            if current_state.time == 30 or current_state in attempted_configurations:
+            if current_state.time == 30 or current_state in attempted_configurations or len(current_state.opened_valves) == len(valves_worth_opening):
                 continue
             else:
                 attempted_configurations.add(current_state)
@@ -139,10 +139,10 @@ class Exploration:
                     time = opening_states_copy["time"]
                     visited_valves = opening_states_copy["visited_valves"]
                     opened_valves = opening_states_copy["opened_valves"]
-                    updated_time = time + 1
-                    updated_pressure = pressure + current_valve.calculate_current_cumulative_flow(30 - updated_time)
-                    updated_opened_valves = opened_valves.add(current_valve.name)
-                    opened_state = State(current_valve, updated_pressure, updated_time, visited_valves, updated_opened_valves)
+                    time += + 1
+                    pressure += current_valve.calculate_current_cumulative_flow(30 - time)
+                    opened_valves.add(current_valve.name)
+                    opened_state = State(current_valve, pressure, time, visited_valves, opened_valves)
                     queue.append(opened_state)
                 for tunnel in current_state.current_valve.tunnels:
                     visiting_states_copy = current_state.create_divergent_copy()
@@ -151,10 +151,10 @@ class Exploration:
                     time = visiting_states_copy["time"]
                     visited_valves = visiting_states_copy["visited_valves"]
                     opened_valves = visiting_states_copy["opened_valves"]
-                    updated_current_valve = self.find_valve_by_name(tunnel)
-                    updated_time = time + 1
-                    updated_visited_valves = visited_valves.add(updated_current_valve.name)
-                    visited_state = State(updated_current_valve, pressure, updated_time, updated_visited_valves, opened_valves)
+                    current_valve = self.find_valve_by_name(tunnel)
+                    time += + 1
+                    visited_valves.add(current_valve.name)
+                    visited_state = State(current_valve, pressure, time, visited_valves, opened_valves)
                     queue.append(visited_state)
         return max_pressure
 
