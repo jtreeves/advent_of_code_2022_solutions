@@ -116,6 +116,7 @@ class Exploration:
         self.descriptions = data.split("\n")
         self.starting_valve = None
         self.valves = self.create_valves()
+        self.distances = self.create_distances_hash_table()
 
     def __repr__(self):
         return f"{self.valves}"
@@ -128,6 +129,13 @@ class Exploration:
             if new_valve.name == "AA":
                 self.starting_valve = new_valve
         return valves
+    
+    def create_distances_hash_table(self):
+        all_distances = {}
+        for key, value in self.valves.items():
+            distances = value.determine_shortest_distances_to_all_other_valves(self.valves)
+            all_distances[key] = distances
+        return all_distances
     
     def determine_valves_worth_opening(self):
         worth_opening = []
