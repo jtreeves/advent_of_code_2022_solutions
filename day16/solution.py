@@ -62,6 +62,16 @@ class Valve:
         optional_distances.sort()
         shortest_distance = optional_distances[0]
         return shortest_distance
+    
+    def determine_shortest_distances_to_all_other_valves(self, all_valves):
+        distances = {}
+        for name in all_valves.keys():
+            if name == self.name:
+                continue
+            else:
+                distance = self.calculate_shortest_distance_to_other_valve(name, all_valves)
+                distances[name] = distance
+        return distances
 
 class State:
     def __init__(self, current_valve, pressure, time, visited_valves, opened_valves):
