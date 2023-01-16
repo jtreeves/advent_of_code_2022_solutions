@@ -42,18 +42,18 @@ class Valve:
         return total_flow
 
 class State:
-    def __init__(self, current_location, pressure, time, open_valves):
-        self.current_location = current_location
+    def __init__(self, current_valve, pressure, time, opened_valves):
+        self.current_valve = current_valve
         self.pressure = pressure
         self.time = time
-        self.open_valves = open_valves
+        self.opened_valves = opened_valves
 
     def __repr__(self):
-        return f"{self.current_location.name}: {self.pressure} psi, {self.time} min -> {self.open_valves}"
+        return f"{self.current_valve.name}: {self.pressure} psi, {self.time} min -> {self.opened_valves}"
 
     def __eq__(self, other):
         if isinstance(other, State):
-            if self.current_location == other.current_location and self.pressure == other.pressure and self.time == other.time and self.open_valves == other.open_valves:
+            if self.current_location == other.current_location and self.pressure == other.pressure and self.time == other.time and self.opened_valves == other.opened_valves:
                 return True
             else:
                 return False
@@ -96,35 +96,44 @@ class Exploration:
             return None
 
     def find_maximum_pressure(self):
-        worth_opening = self.determine_valves_worth_opening()
-        starting_pressure = 0
-        starting_time = 0
-        queue = [(self.starting_valve, starting_pressure, time_remaining)]
-        opened_valves = set()
-        maximal_pressures = []
-        while queue and len(opened_valves) != len(worth_opening):
-            name, pressure, time = queue.pop(0)
-            print(f"NAME: {name}")
-            print(f"PRESSURE: {pressure}")
-            print(f"TIME: {time}")
-            if time <= 0:
+        max_pressure = 0
+        valves_worth_opening = self.determine_valves_worth_opening()
+        current_valve = self.starting_valve
+        pressure = 0
+        time = 0
+        opened_valves = []
+        initial_state = State(current_valve, pressure, time, opened_valves)
+        queue = [initial_state]
+        attempted_configurations = set()
+        while queue and len(opened_valves) != len(valves_worth_opening):
+            print(f"***** QUEUE LENGTH: {len(queue)}")
+            current_state = queue.pop(0)
+            print(f"CURRENT STATE:\n{current_state}")
+            max_pressure = max(max_pressure, current_state.pressure)
+            print(f"/// MAX PRESSURE: {max_pressure}")
+            if current_state.time == 30 or current_state in attempted_configurations:
                 continue
             else:
-                valve = self.find_valve_by_name(name)
-                if valve.flow_rate > 0 and name not in opened_valves:
-                    opened_valves.add(name)
-                    time -= 1
-                    pressure += valve.calculate_current_cumulative_flow(time)
-                for tunnel in valve.tunnels:
-                    time -= 1
-                    queue.append((tunnel, pressure, time))
-                    maximal_pressures.append(pressure)
-        return max(maximal_pressures)
+                attempted_configurations.add(current_state)
+                if current_state.current_valve.flow_rate > 0 and current_state.current_valve.name not in current_state.opened_valves:
+                    current_state.opened_valves.append(current_state.current_valve.name)
+                    current_state.time -= 1
+                    current_state.pressure += current_state.current_valve.calculate_current_cumulative_flow(30 - current_state.time)
+                for tunnel in current_state.current_valve.tunnels:
+                    current_state.current_valve = self.find_valve_by_name(tunnel)
+                    current_state.time -= 1
+                    if current_state.current_valve.flow_rate > 0 and current_state.current_valve.name not in current_state.opened_valves:
+                        current_state.opened_valves.append(current_state.current_valve.name)
+                        current_state.time -= 1
+                        current_state.pressure += current_state.current_valve.calculate_current_cumulative_flow(30 - current_state.time)
+                    new_state = State(current_state.current_valve, current_state.pressure, current_state.time, current_state.opened_valves)
+                    queue.append(new_state)
+        return max_pressure
 
 def solve_problem():
     data = extract_data_from_file(16, False)
     experience = Exploration(data)
-    max_pressure = experience.calc_max_relief([], 30, experience.starting_valve)
+    max_pressure = experience.find_maximum_pressure()
     return max_pressure
 
 def extract_data_from_file(day_number, is_official):
@@ -139,3 +148,6 @@ def extract_data_from_file(day_number, is_official):
 
 result = solve_problem()
 print(result)
+
+# Idea for BFS approach from day 19 of same blog:
+# https://aoc.just2good.co.uk/2022/19
