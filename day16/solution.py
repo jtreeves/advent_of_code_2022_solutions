@@ -144,18 +144,19 @@ class Exploration:
                     opened_valves.add(current_valve.name)
                     opened_state = State(current_valve, pressure, time, visited_valves, opened_valves)
                     queue.append(opened_state)
-                for tunnel in current_state.current_valve.tunnels and tunnel not in current_state.visited_valves:
-                    visiting_states_copy = current_state.create_divergent_copy()
-                    current_valve = visiting_states_copy["current_valve"]
-                    pressure = visiting_states_copy["pressure"]
-                    time = visiting_states_copy["time"]
-                    visited_valves = visiting_states_copy["visited_valves"]
-                    opened_valves = visiting_states_copy["opened_valves"]
-                    current_valve = self.find_valve_by_name(tunnel)
-                    time += 1
-                    visited_valves.add(current_valve.name)
-                    visited_state = State(current_valve, pressure, time, visited_valves, opened_valves)
-                    queue.append(visited_state)
+                for tunnel in current_state.current_valve.tunnels:
+                    if tunnel not in current_state.visited_valves:
+                        visiting_states_copy = current_state.create_divergent_copy()
+                        current_valve = visiting_states_copy["current_valve"]
+                        pressure = visiting_states_copy["pressure"]
+                        time = visiting_states_copy["time"]
+                        visited_valves = visiting_states_copy["visited_valves"]
+                        opened_valves = visiting_states_copy["opened_valves"]
+                        current_valve = self.find_valve_by_name(tunnel)
+                        time += 1
+                        visited_valves.add(current_valve.name)
+                        visited_state = State(current_valve, pressure, time, visited_valves, opened_valves)
+                        queue.append(visited_state)
         return max_pressure
 
 def solve_problem():
