@@ -18,7 +18,7 @@ class Valve:
             False
     
     def __hash__(self):
-        return hash((self.name, self.flow_rate, self.tunnels))
+        return hash((self.name, self.flow_rate, str(self.tunnels)))
 
     def extract_name(self):
         name = self.description[6:8]
@@ -42,10 +42,11 @@ class Valve:
         return total_flow
 
 class State:
-    def __init__(self, current_valve, pressure, time, opened_valves):
+    def __init__(self, current_valve, pressure, time, visited_valves, opened_valves):
         self.current_valve = current_valve
         self.pressure = pressure
         self.time = time
+        self.visited_valves = visited_valves
         self.opened_valves = opened_valves
 
     def __repr__(self):
@@ -53,7 +54,7 @@ class State:
 
     def __eq__(self, other):
         if isinstance(other, State):
-            if self.current_location == other.current_location and self.pressure == other.pressure and self.time == other.time and self.opened_valves == other.opened_valves:
+            if self.current_valve == other.current_valve and self.pressure == other.pressure and self.time == other.time and self.visited_valves == other.visited_valves and self.opened_valves == other.opened_valves:
                 return True
             else:
                 return False
@@ -61,7 +62,7 @@ class State:
             False
     
     def __hash__(self):
-        return hash((self.current_location, self.pressure, self.time, self.open_valves))
+        return hash((self.current_valve, self.pressure, self.time, str(self.visited_valves), str(self.opened_valves)))
 
 class Exploration:
     def __init__(self, data):
@@ -101,11 +102,12 @@ class Exploration:
         current_valve = self.starting_valve
         pressure = 0
         time = 0
-        opened_valves = []
-        initial_state = State(current_valve, pressure, time, opened_valves)
+        visited_valves = set(current_valve.name)
+        opened_valves = set()
+        initial_state = State(current_valve, pressure, time, visited_valves, opened_valves)
         queue = [initial_state]
         attempted_configurations = set()
-        while queue and len(opened_valves) != len(valves_worth_opening):
+        while queue:
             print(f"***** QUEUE LENGTH: {len(queue)}")
             current_state = queue.pop(0)
             print(f"CURRENT STATE:\n{current_state}")
@@ -116,18 +118,23 @@ class Exploration:
             else:
                 attempted_configurations.add(current_state)
                 if current_state.current_valve.flow_rate > 0 and current_state.current_valve.name not in current_state.opened_valves:
-                    current_state.opened_valves.append(current_state.current_valve.name)
-                    current_state.time -= 1
-                    current_state.pressure += current_state.current_valve.calculate_current_cumulative_flow(30 - current_state.time)
+                    opening_state = State(current_state.current_valve, current_state.pressure, current_state.time, current_state.visited_valves, current_state.opened_valves)
+                    opening_state.opened_valves.add(opening_state.current_valve.name)
+                    opening_state.time += 1
+                    opening_state.pressure += opening_state.current_valve.calculate_current_cumulative_flow(30 - opening_state.time)
+                    queue.append(opening_state)
                 for tunnel in current_state.current_valve.tunnels:
-                    current_state.current_valve = self.find_valve_by_name(tunnel)
-                    current_state.time -= 1
-                    if current_state.current_valve.flow_rate > 0 and current_state.current_valve.name not in current_state.opened_valves:
-                        current_state.opened_valves.append(current_state.current_valve.name)
-                        current_state.time -= 1
-                        current_state.pressure += current_state.current_valve.calculate_current_cumulative_flow(30 - current_state.time)
-                    new_state = State(current_state.current_valve, current_state.pressure, current_state.time, current_state.opened_valves)
-                    queue.append(new_state)
+                    tunnel_state = State(current_state.current_valve, current_state.pressure, current_state.time, current_state.visited_valves, current_state.opened_valves)
+                    tunnel_state.visited_valves.add(tunnel)
+                    tunnel_state.current_valve = self.find_valve_by_name(tunnel)
+                    tunnel_state.time += 1
+                    queue.append(tunnel_state)
+                    if tunnel_state.current_valve.flow_rate > 0 and tunnel_state.current_valve.name not in tunnel_state.opened_valves:
+                        updated_state = State(tunnel_state.current_valve, tunnel_state.pressure, tunnel_state.time, tunnel_state.visited_valves, tunnel_state.opened_valves)
+                        updated_state.opened_valves.add(updated_state.current_valve.name)
+                        updated_state.time += 1
+                        updated_state.pressure += updated_state.current_valve.calculate_current_cumulative_flow(30 - updated_state.time)
+                        queue.append(updated_state)
         return max_pressure
 
 def solve_problem():
