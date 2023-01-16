@@ -128,7 +128,7 @@ class Exploration:
             print(f"CURRENT STATE:\n{current_state}")
             max_pressure = max(max_pressure, current_state.pressure)
             print(f"/// MAX PRESSURE: {max_pressure}")
-            if current_state.time == time_limit or current_state in attempted_configurations or len(current_state.opened_valves) == len(valves_worth_opening) or (time_limit - current_state.time <= time_limit // 3 and current_state.pressure < max_pressure // 3):
+            if current_state.time == time_limit or current_state in attempted_configurations or len(current_state.opened_valves) == len(valves_worth_opening) or (time_limit - current_state.time <= time_limit // 3 and current_state.pressure < max_pressure // 3) or (time_limit - current_state.time <= time_limit // 3 and len(current_state.opened_valves) < len(valves_worth_opening) // 3):
                 continue
             else:
                 attempted_configurations.add(current_state)
