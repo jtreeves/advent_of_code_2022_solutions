@@ -111,7 +111,7 @@ class Exploration:
         except KeyError:
             return None
 
-    def find_maximum_pressure(self):
+    def find_maximum_pressure(self, time_limit):
         max_pressure = 0
         valves_worth_opening = self.determine_valves_worth_opening()
         current_valve = self.starting_valve
@@ -128,7 +128,7 @@ class Exploration:
             print(f"CURRENT STATE:\n{current_state}")
             max_pressure = max(max_pressure, current_state.pressure)
             print(f"/// MAX PRESSURE: {max_pressure}")
-            if current_state.time == 30 or current_state in attempted_configurations or len(current_state.opened_valves) == len(valves_worth_opening):
+            if current_state.time == time_limit or current_state in attempted_configurations or len(current_state.opened_valves) == len(valves_worth_opening):
                 continue
             else:
                 attempted_configurations.add(current_state)
@@ -140,7 +140,7 @@ class Exploration:
                     visited_valves = opening_states_copy["visited_valves"]
                     opened_valves = opening_states_copy["opened_valves"]
                     time += 1
-                    pressure += current_valve.calculate_current_cumulative_flow(30 - time)
+                    pressure += current_valve.calculate_current_cumulative_flow(time_limit - time)
                     opened_valves.add(current_valve.name)
                     opened_state = State(current_valve, pressure, time, visited_valves, opened_valves)
                     queue.append(opened_state)
@@ -161,7 +161,7 @@ class Exploration:
 def solve_problem():
     data = extract_data_from_file(16, False)
     experience = Exploration(data)
-    max_pressure = experience.find_maximum_pressure()
+    max_pressure = experience.find_maximum_pressure(30)
     return max_pressure
 
 def extract_data_from_file(day_number, is_official):
