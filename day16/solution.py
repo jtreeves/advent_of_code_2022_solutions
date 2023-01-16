@@ -63,6 +63,21 @@ class State:
     
     def __hash__(self):
         return hash((self.current_valve, self.pressure, self.time, str(self.visited_valves), str(self.opened_valves)))
+    
+    def create_divergent_copy(self):
+        current_valve = self.current_valve
+        pressure = self.pressure
+        time = self.time
+        visited_valves = set([x for x in self.visited_valves])
+        opened_valves = set([x for x in self.opened_valves])
+        divergent_copy = {
+            "current_valve": current_valve,
+            "pressure": pressure,
+            "time": time,
+            "visited_valves": visited_valves,
+            "opened_valves": opened_valves
+        }
+        return divergent_copy
 
 class Exploration:
     def __init__(self, data):
@@ -129,12 +144,12 @@ class Exploration:
                     tunnel_state.current_valve = self.find_valve_by_name(tunnel)
                     tunnel_state.time += 1
                     queue.append(tunnel_state)
-                    if tunnel_state.current_valve.flow_rate > 0 and tunnel_state.current_valve.name not in tunnel_state.opened_valves:
-                        updated_state = State(tunnel_state.current_valve, tunnel_state.pressure, tunnel_state.time, tunnel_state.visited_valves, tunnel_state.opened_valves)
-                        updated_state.opened_valves.add(updated_state.current_valve.name)
-                        updated_state.time += 1
-                        updated_state.pressure += updated_state.current_valve.calculate_current_cumulative_flow(30 - updated_state.time)
-                        queue.append(updated_state)
+                    # if tunnel_state.current_valve.flow_rate > 0 and tunnel_state.current_valve.name not in tunnel_state.opened_valves:
+                    #     updated_state = State(tunnel_state.current_valve, tunnel_state.pressure, tunnel_state.time, tunnel_state.visited_valves, tunnel_state.opened_valves)
+                    #     updated_state.opened_valves.add(updated_state.current_valve.name)
+                    #     updated_state.time += 1
+                    #     updated_state.pressure += updated_state.current_valve.calculate_current_cumulative_flow(30 - updated_state.time)
+                    #     queue.append(updated_state)
         return max_pressure
 
 def solve_problem():
