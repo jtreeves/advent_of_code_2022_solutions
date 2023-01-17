@@ -192,7 +192,7 @@ class Exploration:
             print(f"CURRENT STATE:\n{current_state}")
             max_pressure = max(max_pressure, current_state.pressure)
             print(f"/// MAX PRESSURE: {max_pressure}")
-            if current_state.time == time_limit or len(current_state.opened_valves) == len(self.valves_worth_opening):
+            if current_state.time >= time_limit or len(current_state.opened_valves) == len(self.valves_worth_opening):
                 continue
             else:
                 current_name = current_state.path[-1]
@@ -222,7 +222,7 @@ class Exploration:
         return max_pressure
 
 def solve_problem():
-    data = extract_data_from_file(16, False)
+    data = extract_data_from_file(16, True)
     experience = Exploration(data)
     max_pressure = experience.find_maximum_pressure(30)
     return max_pressure
