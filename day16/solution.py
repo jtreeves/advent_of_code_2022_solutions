@@ -67,7 +67,7 @@ class Valve:
         distances = {}
         for name in all_valves.keys():
             if name == self.name:
-                distance[name] = 0
+                distances[name] = 0
             else:
                 distance = self.calculate_shortest_distance_to_other_valve(name, all_valves)
                 distances[name] = distance
