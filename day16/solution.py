@@ -67,26 +67,33 @@ class Valve:
         distances = {}
         for name in all_valves.keys():
             if name == self.name:
-                continue
+                distance[name] = 0
             else:
                 distance = self.calculate_shortest_distance_to_other_valve(name, all_valves)
                 distances[name] = distance
         return distances
 
 class State:
-    def __init__(self, current_valve, pressure, time, visited_valves, opened_valves):
-        self.current_valve = current_valve
+    def __init__(self, path, pressure, time, opened_valves):
+        self.path = path
         self.pressure = pressure
         self.time = time
-        self.visited_valves = visited_valves
         self.opened_valves = opened_valves
 
     def __repr__(self):
-        return f"{self.current_valve.name}: {self.pressure} psi, {self.time} min -> {self.opened_valves}"
+        representation = ""
+        for valve in self.path:
+            representation += f"{valve}"
+            if valve in self.opened_valves:
+                representation += "*"
+            representation += "-> "
+        representation[:-3]
+        representation += f": {self.pressure} psi, {self.time} min"
+        return representation
 
     def __eq__(self, other):
         if isinstance(other, State):
-            if self.current_valve == other.current_valve and self.pressure == other.pressure and self.time == other.time and self.visited_valves == other.visited_valves and self.opened_valves == other.opened_valves:
+            if self.path == other.path and self.pressure == other.pressure and self.time == other.time and self.opened_valves == other.opened_valves:
                 return True
             else:
                 return False
@@ -94,19 +101,17 @@ class State:
             False
     
     def __hash__(self):
-        return hash((self.current_valve, self.pressure, self.time, str(self.visited_valves), str(self.opened_valves)))
+        return hash((self.path, self.pressure, self.time, str(self.opened_valves)))
     
     def create_divergent_copy(self):
-        current_valve = self.current_valve
+        path = [x for x in self.path]
         pressure = self.pressure
         time = self.time
-        visited_valves = set([x for x in self.visited_valves])
         opened_valves = set([x for x in self.opened_valves])
         divergent_copy = {
-            "current_valve": current_valve,
+            "path": path,
             "pressure": pressure,
             "time": time,
-            "visited_valves": visited_valves,
             "opened_valves": opened_valves
         }
         return divergent_copy
@@ -137,74 +142,57 @@ class Exploration:
             all_distances[key] = distances
         return all_distances
     
+    def find_distance_between_valves(self, first_valve, second_valve):
+        return self.distances[first_valve][second_valve]
+    
     def determine_valves_worth_opening(self):
         worth_opening = []
         for valve in self.valves.values():
             if valve.flow_rate > 0:
                 worth_opening.append(valve.name)
         return worth_opening
-    
-    def find_valve_by_name(self, name):
-        try:
-            valve = self.valves[name]
-            return valve
-        except KeyError:
-            return None
 
     def find_maximum_pressure(self, time_limit):
         max_pressure = 0
         valves_worth_opening = self.determine_valves_worth_opening()
-        current_valve = self.starting_valve
+        path = [self.starting_valve.name]
         pressure = 0
         time = 0
-        visited_valves = set([current_valve.name])
         opened_valves = set()
-        initial_state = State(current_valve, pressure, time, visited_valves, opened_valves)
-        queue = [initial_state]
-        attempted_configurations = set()
-        while queue:
-            print(f"***** QUEUE LENGTH: {len(queue)}")
-            current_state = queue.pop(0)
+        initial_state = State(path, pressure, time, opened_valves)
+        stack = [initial_state]
+        while stack:
+            print(f"***** STACK LENGTH: {len(stack)}")
+            current_state = stack.pop()
             print(f"CURRENT STATE:\n{current_state}")
             max_pressure = max(max_pressure, current_state.pressure)
             print(f"/// MAX PRESSURE: {max_pressure}")
-            if current_state.time == time_limit or current_state in attempted_configurations or len(current_state.opened_valves) == len(valves_worth_opening) or (time_limit - current_state.time <= time_limit // 2 and current_state.pressure < max_pressure // 2) or (time_limit - current_state.time <= time_limit // 2 and len(current_state.opened_valves) < len(valves_worth_opening) // 2):
+            if current_state.time == time_limit or len(current_state.opened_valves) == len(valves_worth_opening):
                 continue
             else:
-                attempted_configurations.add(current_state)
-                if current_state.current_valve.flow_rate > 0 and current_state.current_valve.name not in current_state.opened_valves:
-                    opening_states_copy = current_state.create_divergent_copy()
-                    current_valve = opening_states_copy["current_valve"]
-                    pressure = opening_states_copy["pressure"]
-                    time = opening_states_copy["time"]
-                    visited_valves = opening_states_copy["visited_valves"]
-                    opened_valves = opening_states_copy["opened_valves"]
-                    time += 1
-                    pressure += current_valve.calculate_current_cumulative_flow(time_limit - time)
-                    opened_valves.add(current_valve.name)
-                    opened_state = State(current_valve, pressure, time, visited_valves, opened_valves)
-                    queue.append(opened_state)
-                for tunnel in current_state.current_valve.tunnels:
-                    visiting_states_copy = current_state.create_divergent_copy()
-                    current_valve = visiting_states_copy["current_valve"]
-                    pressure = visiting_states_copy["pressure"]
-                    time = visiting_states_copy["time"]
-                    visited_valves = visiting_states_copy["visited_valves"]
-                    opened_valves = visiting_states_copy["opened_valves"]
-                    current_valve = self.find_valve_by_name(tunnel)
-                    time += 1
-                    visited_valves.add(current_valve.name)
-                    visited_state = State(current_valve, pressure, time, visited_valves, opened_valves)
-                    queue.append(visited_state)
+                for valve_to_open in valves_worth_opening:
+                    if valve_to_open not in current_state.opened_valves:
+                        travel_open_copy = current_state.create_divergent_copy()
+                        path = travel_open_copy["path"]
+                        pressure = travel_open_copy["pressure"]
+                        time = travel_open_copy["time"]
+                        opened_valves = travel_open_copy["opened_valves"]
+                        current_valve = self.valves[path[-1]]
+                        travel_time = self.find_distance_between_valves(current_valve.name, valve_to_open)
+                        time_to_open_valve = 1
+                        updated_time = time + travel_time + time_to_open_valve
+                        updated_pressure = pressure + current_valve.calculate_current_cumulative_flow(time_limit - updated_time)
+                        updated_path = path.append(valve_to_open) if current_valve.name != valve_to_open else path
+                        opened_valves.add(valve_to_open)
+                        updated_state = State(updated_path, updated_pressure, updated_time, opened_valves)
+                        stack.append(updated_state)
         return max_pressure
 
 def solve_problem():
     data = extract_data_from_file(16, False)
     experience = Exploration(data)
-    distance = experience.valves["AA"].calculate_shortest_distance_to_other_valve("FF", experience.valves)
-    return distance
-    # max_pressure = experience.find_maximum_pressure(30)
-    # return max_pressure
+    max_pressure = experience.find_maximum_pressure(30)
+    return max_pressure
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
