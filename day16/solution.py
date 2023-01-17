@@ -87,7 +87,7 @@ class State:
             if valve in self.opened_valves:
                 representation += "*"
             representation += "-> "
-        representation[:-3]
+        representation = representation[:-3]
         representation += f": {self.pressure} psi, {self.time} min"
         return representation
 
@@ -182,9 +182,10 @@ class Exploration:
                         time_to_open_valve = 1
                         updated_time = time + travel_time + time_to_open_valve
                         updated_pressure = pressure + current_valve.calculate_current_cumulative_flow(time_limit - updated_time)
-                        updated_path = path.append(valve_to_open) if current_valve.name != valve_to_open else path
+                        if current_valve.name != valve_to_open:
+                            path.append(valve_to_open)
                         opened_valves.add(valve_to_open)
-                        updated_state = State(updated_path, updated_pressure, updated_time, opened_valves)
+                        updated_state = State(path, updated_pressure, updated_time, opened_valves)
                         stack.append(updated_state)
         return max_pressure
 
