@@ -1,10 +1,3 @@
-def solve_problem():
-    data = extract_data_from_file(20, False)
-    numbers = list_all_numbers(data)
-    numbers = mix_list(numbers)
-    summed = sum_key_values(numbers)
-    return summed
-
 def sum_key_values(mixed_list):
     key_values = determine_values_at_key_indices_after_zero(mixed_list)
     total = 0
@@ -39,35 +32,26 @@ def mix_list(list):
     for i in range(len(list)):
         value = find_value_based_on_original_index(i, list)
         current_index = find_current_index_of_value_based_on_original_index(i, list)
-        print(f"VALUE: {value}")
         list = move_element(value, current_index, i, list)
-        for element in list:
-            print(element["value"])
     return list
 
 def move_element(value, current_index, original_index, list):
     length = len(list)
     new_index = value + current_index
-    # abs_index = abs(new_index)
-    # if abs_index >= length:
-    if new_index > 0:
-        new_index %= length
-        # new_index += 1
-    elif new_index < 0:
-        new_index %= (-1 * length)
-        # new_index -= 1
-    # else:
-    #     if value != 0:
-    #         new_index = -1
+    abs_index = abs(new_index)
+    if abs_index >= length:
+        if new_index > 0:
+            new_index %= length
+            new_index += 1
+        else:
+            new_index %= (-1 * length)
+            new_index -= 1
     updated_details = {
         "original_index": original_index,
         "value": value
     }
     del list[current_index]
-    if new_index == 0 and value != 0:
-        list.append(updated_details)
-    else:
-        list.insert(new_index, updated_details)
+    list.insert(new_index, updated_details)
     return list
 
 def find_current_index_of_value_based_on_original_index(original_index, list):
@@ -91,6 +75,13 @@ def list_all_numbers(data):
         }
         numbers_data.append(details)
     return numbers_data
+
+def solve_problem():
+    data = extract_data_from_file(20, True)
+    numbers = list_all_numbers(data)
+    numbers = mix_list(numbers)
+    summed = sum_key_values(numbers)
+    return summed
 
 def extract_data_from_file(day_number, is_official):
     if is_official:

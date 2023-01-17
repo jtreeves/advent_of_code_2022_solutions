@@ -265,7 +265,7 @@ class Exploration:
             print(f"CURRENT STATE:\n{current_state}")
             max_pressure = max(max_pressure, current_state.pressure)
             print(f"/// MAX PRESSURE: {max_pressure}")
-            if (current_state.main_state.time >= time_limit and current_state.helper_state.time >= time_limit) or len(current_state.opened_valves) == len(self.valves_worth_opening):
+            if (current_state.main_state.time >= time_limit and current_state.helper_state.time >= time_limit) or len(all_opened_valves) == len(self.valves_worth_opening):
                 continue
             else:
                 main_name = current_state.main_state.path[-1]
