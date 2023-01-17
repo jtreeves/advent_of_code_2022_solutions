@@ -255,8 +255,8 @@ class Exploration:
         path = [self.starting_valve.name]
         pressure = 0
         time = 0
-        opened_valves = set()
-        initial_state = State(path, pressure, time, opened_valves)
+        all_opened_valves = set()
+        initial_state = State(path, pressure, time, all_opened_valves)
         conjoined_state = TandemState(initial_state, initial_state)
         stack = [conjoined_state]
         while stack:
@@ -276,43 +276,40 @@ class Exploration:
                 helper_distances = self.distances[helper_name]
                 main_time = current_state.main_state.time
                 helper_time = current_state.helper_state.time
-                opened_valves = current_state.opened_valves
-                unopened_valves = self.determine_unopened_valves_worth_opening(opened_valves)
+                unopened_valves = self.determine_unopened_valves_worth_opening(all_opened_valves)
                 main_time_remaining = time_limit - main_time
                 helper_time_remaining = time_limit - helper_time
                 main_options = main_valve.find_best_next_valves(unopened_valves, self.valves, main_distances, main_time_remaining)
                 helper_options = helper_valve.find_best_next_valves(unopened_valves, self.valves, helper_distances, helper_time_remaining)
                 for main_option in main_options:
                     for helper_option in helper_options:
-                        if main_option["valve"] != helper_option["valve"]:
+                        if main_option["valve"] != helper_option["valve"] and main_option["valve"] not in all_opened_valves and helper_option["valve"] not in all_opened_valves:
                             main_option_valve = main_option["valve"]
-                            helper_option_valve = helper_option["valve"]
                             main_option_pressure = main_option["pressure"]
-                            helper_option_pressure = helper_option["pressure"]
                             main_option_time = main_option["time"]
-                            helper_option_time = helper_option["time"]
                             main_copy = current_state.main_state.create_divergent_copy()
-                            helper_copy = current_state.helper_state.create_divergent_copy()
                             main_path = main_copy["path"]
-                            helper_path = helper_copy["path"]
                             main_pressure = main_copy["pressure"]
-                            helper_pressure = helper_copy["pressure"]
                             main_time = main_copy["time"]
-                            helper_time = helper_copy["time"]
-                            main_opened_valves = main_copy["opened_valves"]
-                            helper_opened_valves = helper_copy["opened_valves"]
                             updated_main_time = main_time + main_option_time
-                            updated_helper_time = helper_time + helper_option_time
                             updated_main_pressure = main_pressure + main_option_pressure
-                            updated_helper_pressure = helper_pressure + helper_option_pressure
                             if main_option_valve != main_name:
                                 main_path.append(main_option_valve)
+                            all_opened_valves.add(main_option_valve)
+                            main_state = State(main_path, updated_main_pressure, updated_main_time, all_opened_valves)
+                            helper_option_valve = helper_option["valve"]
+                            helper_option_pressure = helper_option["pressure"]
+                            helper_option_time = helper_option["time"]
+                            helper_copy = current_state.helper_state.create_divergent_copy()
+                            helper_path = helper_copy["path"]
+                            helper_pressure = helper_copy["pressure"]
+                            helper_time = helper_copy["time"]
+                            updated_helper_time = helper_time + helper_option_time
+                            updated_helper_pressure = helper_pressure + helper_option_pressure
                             if helper_option_valve != helper_name:
                                 helper_path.append(helper_option_valve)
-                            main_opened_valves.add(main_option_valve)
-                            helper_opened_valves.add(helper_option_valve)
-                            main_state = State(main_path, updated_main_pressure, updated_main_time, opened_valves)
-                            helper_state = State(helper_path, updated_helper_pressure, updated_helper_time, opened_valves)
+                            all_opened_valves.add(helper_option_valve)
+                            helper_state = State(helper_path, updated_helper_pressure, updated_helper_time, all_opened_valves)
                             updated_tandem = TandemState(main_state, helper_state)
                             stack.append(updated_tandem)
         return max_pressure
