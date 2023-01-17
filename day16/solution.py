@@ -207,5 +207,5 @@ def extract_data_from_file(day_number, is_official):
 result = solve_problem()
 print(result)
 
-# Idea for BFS approach from day 19 of same blog:
-# https://aoc.just2good.co.uk/2022/19
+# Idea for DFS approach:
+# https://github.com/ChrisWojcik/advent-of-code-2022/blob/main/16/1.py
