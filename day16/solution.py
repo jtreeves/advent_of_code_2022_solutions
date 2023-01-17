@@ -73,22 +73,23 @@ class Valve:
                 distances[name] = distance
         return distances
     
-    def find_best_next_valve(self, unopened_valves, all_valves, distances, time_remaining):
-        maximum_pressure = 0
-        best_option = None
+    def find_best_next_valves(self, unopened_valves, all_valves, distances, time_remaining):
+        options = []
         for valve in unopened_valves:
             full_valve = all_valves[valve]
             travel_distance = distances[valve]
             time_to_open = 1
-            time_for_pressure = time_remaining - travel_distance - time_to_open
+            total_time = travel_distance + time_to_open
+            time_for_pressure = time_remaining - total_time
             potential_pressure = full_valve.calculate_current_cumulative_flow(time_for_pressure)
-            if potential_pressure > maximum_pressure:
-                maximum_pressure = potential_pressure
-                best_option = {
-                    "valve": valve,
-                    "pressure": potential_pressure
-                }
-        return best_option
+            option = {
+                "valve": valve,
+                "pressure": potential_pressure,
+                "time": total_time
+            }
+            options.append(option)
+        options.sort(key=lambda d: d["pressure"])
+        return options
 
 class State:
     def __init__(self, path, pressure, time, opened_valves):
@@ -138,6 +139,7 @@ class Exploration:
         self.descriptions = data.split("\n")
         self.starting_valve = None
         self.valves = self.create_valves()
+        self.valves_worth_opening = self.determine_valves_worth_opening()
         self.distances = self.create_distances_hash_table()
 
     def __repr__(self):
@@ -168,10 +170,16 @@ class Exploration:
             if valve.flow_rate > 0:
                 worth_opening.append(valve.name)
         return worth_opening
+    
+    def determine_unopened_valves_worth_opening(self, opened_valves):
+        unopened_worth_opening = []
+        for valve in self.valves_worth_opening:
+            if valve not in opened_valves:
+                unopened_worth_opening.append(valve)
+        return unopened_worth_opening
 
     def find_maximum_pressure(self, time_limit):
         max_pressure = 0
-        valves_worth_opening = self.determine_valves_worth_opening()
         path = [self.starting_valve.name]
         pressure = 0
         time = 0
@@ -184,32 +192,32 @@ class Exploration:
             print(f"CURRENT STATE:\n{current_state}")
             max_pressure = max(max_pressure, current_state.pressure)
             print(f"/// MAX PRESSURE: {max_pressure}")
-            if current_state.time == time_limit or len(current_state.opened_valves) == len(valves_worth_opening):
+            if current_state.time == time_limit or len(current_state.opened_valves) == len(self.valves_worth_opening):
                 continue
             else:
-                for valve_to_open in valves_worth_opening:
-                    if valve_to_open not in current_state.opened_valves:
-                        travel_open_copy = current_state.create_divergent_copy()
-                        path = travel_open_copy["path"]
-                        pressure = travel_open_copy["pressure"]
-                        time = travel_open_copy["time"]
-                        opened_valves = travel_open_copy["opened_valves"]
-                        current_valve = self.valves[path[-1]]
-                        travel_time = self.find_distance_between_valves(current_valve.name, valve_to_open)
-                        time_to_open_valve = 1
-                        updated_time = time + travel_time + time_to_open_valve
-                        updated_pressure = pressure + current_valve.calculate_current_cumulative_flow(time_limit - updated_time)
-                        if current_valve.name != valve_to_open:
-                            path.append(valve_to_open)
-                        opened_valves.add(valve_to_open)
-                        updated_state = State(path, updated_pressure, updated_time, opened_valves)
-                        stack.append(updated_state)
-                    else:
-                        new_copy = current_state.create_divergent_copy()
-                        path = new_copy["path"]
-                        pressure = new_copy["pressure"]
-                        time = new_copy["time"]
-                        opened_valves = new_copy["opened_valves"]
+                current_name = current_state.path[-1]
+                current_valve = self.valves[current_name]
+                opened_valves = current_state.opened_valves
+                unopened_valves = self.determine_unopened_valves_worth_opening(opened_valves)
+                valve_distances = self.distances[current_name]
+                time_remaining = time_limit - time
+                options = current_valve.find_best_next_valves(unopened_valves, self.valves, valve_distances, time_remaining)
+                for option in options:
+                    travel_open_copy = current_state.create_divergent_copy()
+                    path = travel_open_copy["path"]
+                    pressure = travel_open_copy["pressure"]
+                    time = travel_open_copy["time"]
+                    opened_valves = travel_open_copy["opened_valves"]
+                    option_valve = option["valve"]
+                    option_pressure = option["pressure"]
+                    option_time = option["time"]
+                    updated_time = time + option_time
+                    updated_pressure = pressure + option_pressure
+                    if option_valve != current_name:
+                        path.append(option_valve)
+                    opened_valves.add(option_valve)
+                    updated_state = State(path, updated_pressure, updated_time, opened_valves)
+                    stack.append(updated_state)
         return max_pressure
 
 def solve_problem():
