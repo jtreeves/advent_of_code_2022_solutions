@@ -274,10 +274,53 @@ class Exploration:
                     stack.append(updated_state)
         return max_pressure
 
+    def find_maximum_pressure_with_help(self, time_limit):
+        max_pressure = 0
+        path = [self.starting_valve.name]
+        pressure = 0
+        time = 0
+        opened_valves = set()
+        initial_state = State(path, pressure, time, opened_valves)
+        stack = [initial_state]
+        while stack:
+            print(f"***** STACK LENGTH: {len(stack)}")
+            current_state = stack.pop()
+            print(f"CURRENT STATE:\n{current_state}")
+            max_pressure = max(max_pressure, current_state.pressure)
+            print(f"/// MAX PRESSURE: {max_pressure}")
+            if current_state.time >= time_limit or len(current_state.opened_valves) == len(self.valves_worth_opening):
+                continue
+            else:
+                current_name = current_state.path[-1]
+                current_valve = self.valves[current_name]
+                opened_valves = current_state.opened_valves
+                unopened_valves = self.determine_unopened_valves_worth_opening(opened_valves)
+                current_time = current_state.time
+                valve_distances = self.distances[current_name]
+                time_remaining = time_limit - current_time
+                options = current_valve.find_best_next_valves(unopened_valves, self.valves, valve_distances, time_remaining)
+                for option in options:
+                    travel_open_copy = current_state.create_divergent_copy()
+                    path = travel_open_copy["path"]
+                    pressure = travel_open_copy["pressure"]
+                    time = travel_open_copy["time"]
+                    opened_valves = travel_open_copy["opened_valves"]
+                    option_valve = option["valve"]
+                    option_pressure = option["pressure"]
+                    option_time = option["time"]
+                    updated_time = time + option_time
+                    updated_pressure = pressure + option_pressure
+                    if option_valve != current_name:
+                        path.append(option_valve)
+                    opened_valves.add(option_valve)
+                    updated_state = State(path, updated_pressure, updated_time, opened_valves)
+                    stack.append(updated_state)
+        return max_pressure
+
 def solve_problem():
     data = extract_data_from_file(16, False)
     experience = Exploration(data)
-    max_pressure = experience.find_maximum_pressure(26)
+    max_pressure = experience.find_maximum_pressure_with_help(26)
     return max_pressure
 
 def extract_data_from_file(day_number, is_official):
