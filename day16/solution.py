@@ -199,8 +199,9 @@ class Exploration:
                 current_valve = self.valves[current_name]
                 opened_valves = current_state.opened_valves
                 unopened_valves = self.determine_unopened_valves_worth_opening(opened_valves)
+                current_time = current_state.time
                 valve_distances = self.distances[current_name]
-                time_remaining = time_limit - time
+                time_remaining = time_limit - current_time
                 options = current_valve.find_best_next_valves(unopened_valves, self.valves, valve_distances, time_remaining)
                 for option in options:
                     travel_open_copy = current_state.create_divergent_copy()
