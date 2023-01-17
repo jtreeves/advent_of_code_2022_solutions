@@ -72,6 +72,23 @@ class Valve:
                 distance = self.calculate_shortest_distance_to_other_valve(name, all_valves)
                 distances[name] = distance
         return distances
+    
+    def find_best_next_valve(self, unopened_valves, all_valves, distances, time_remaining):
+        maximum_pressure = 0
+        best_option = None
+        for valve in unopened_valves:
+            full_valve = all_valves[valve]
+            travel_distance = distances[valve]
+            time_to_open = 1
+            time_for_pressure = time_remaining - travel_distance - time_to_open
+            potential_pressure = full_valve.calculate_current_cumulative_flow(time_for_pressure)
+            if potential_pressure > maximum_pressure:
+                maximum_pressure = potential_pressure
+                best_option = {
+                    "valve": valve,
+                    "pressure": potential_pressure
+                }
+        return best_option
 
 class State:
     def __init__(self, path, pressure, time, opened_valves):
@@ -86,8 +103,8 @@ class State:
             representation += f"{valve}"
             if valve in self.opened_valves:
                 representation += "*"
-            representation += "-> "
-        representation = representation[:-3]
+            representation += " -> "
+        representation = representation[:-4]
         representation += f": {self.pressure} psi, {self.time} min"
         return representation
 
@@ -187,6 +204,12 @@ class Exploration:
                         opened_valves.add(valve_to_open)
                         updated_state = State(path, updated_pressure, updated_time, opened_valves)
                         stack.append(updated_state)
+                    else:
+                        new_copy = current_state.create_divergent_copy()
+                        path = new_copy["path"]
+                        pressure = new_copy["pressure"]
+                        time = new_copy["time"]
+                        opened_valves = new_copy["opened_valves"]
         return max_pressure
 
 def solve_problem():
