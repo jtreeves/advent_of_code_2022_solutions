@@ -134,58 +134,37 @@ class State:
         }
         return divergent_copy
 
-class HelperState:
-    def __init__(self, main_path, helper_path, pressure, time, opened_valves):
-        self.main_path = main_path
-        self.helper_path = helper_path
-        self.pressure = pressure
-        self.time = time
-        self.opened_valves = opened_valves
+class TandemState:
+    def __init__(self, main_state, helper_state):
+        self.main_state = main_state
+        self.helper_state = helper_state
+        self.pressure = self.calculate_total_pressure()
+        self.opened_valves = self.determine_all_opened_valves()
+        self.maximum_time = self.determine_maximum_time()
 
     def __repr__(self):
-        representation = ""
-        for valve in self.main_path:
-            representation += f"{valve}"
-            if valve in self.opened_valves:
-                representation += "*"
-            representation += " -> "
-        representation = representation[:-4]
-        representation += "; "
-        for valve in self.helper_path:
-            representation += f"{valve}"
-            if valve in self.opened_valves:
-                representation += "*"
-            representation += " -> "
-        representation = representation[:-4]
-        representation += f": {self.pressure} psi, {self.time} min"
-        return representation
+        return f"{self.main_state.path}; {self.helper_state.path}: {self.pressure} psi, {self.maximum_time} min"
 
     def __eq__(self, other):
-        if isinstance(other, HelperState):
-            if self.main_path == other.main_path and self.helper_path == other.helper_path and self.pressure == other.pressure and self.time == other.time and self.opened_valves == other.opened_valves:
+        if isinstance(other, TandemState):
+            if self.main_state == other.main_state and self.helper_state == other.helper_state:
                 return True
             else:
                 return False
         else:
             False
     
-    def __hash__(self):
-        return hash((self.main_path, self.helper_path, self.pressure, self.time, str(self.opened_valves)))
+    def calculate_total_pressure(self):
+        return self.main_state.pressure + self.helper_state.pressure
     
-    def create_divergent_copy(self):
-        main_path = [x for x in self.main_path]
-        helper_path = [x for x in self.helper_path]
-        pressure = self.pressure
-        time = self.time
-        opened_valves = set([x for x in self.opened_valves])
-        divergent_copy = {
-            "main_path": main_path,
-            "helper_path": helper_path,
-            "pressure": pressure,
-            "time": time,
-            "opened_valves": opened_valves
-        }
-        return divergent_copy
+    def determine_all_opened_valves(self):
+        return self.main_state.opened_valves.union(self.helper_state.opened_valves)
+    
+    def determine_maximum_time(self):
+        return max(self.main_state.time, self.helper_state.time)
+    
+    def __hash__(self):
+        return hash((self.main_state, self.helper_state))
 
 class Exploration:
     def __init__(self, data):
@@ -240,11 +219,8 @@ class Exploration:
         initial_state = State(path, pressure, time, opened_valves)
         stack = [initial_state]
         while stack:
-            print(f"***** STACK LENGTH: {len(stack)}")
             current_state = stack.pop()
-            print(f"CURRENT STATE:\n{current_state}")
             max_pressure = max(max_pressure, current_state.pressure)
-            print(f"/// MAX PRESSURE: {max_pressure}")
             if current_state.time >= time_limit or len(current_state.opened_valves) == len(self.valves_worth_opening):
                 continue
             else:
@@ -276,13 +252,16 @@ class Exploration:
 
     def find_maximum_pressure_with_help(self, time_limit):
         max_pressure = 0
+        iteration = 0
         path = [self.starting_valve.name]
         pressure = 0
         time = 0
         opened_valves = set()
         initial_state = State(path, pressure, time, opened_valves)
-        stack = [initial_state]
+        conjoined_state = TandemState(initial_state, initial_state)
+        stack = [conjoined_state]
         while stack:
+            iteration += 1
             print(f"***** STACK LENGTH: {len(stack)}")
             current_state = stack.pop()
             print(f"CURRENT STATE:\n{current_state}")
@@ -299,6 +278,35 @@ class Exploration:
                 valve_distances = self.distances[current_name]
                 time_remaining = time_limit - current_time
                 options = current_valve.find_best_next_valves(unopened_valves, self.valves, valve_distances, time_remaining)
+                if iteration == 1:
+                    new_copy = current_state.create_divergent_copy()
+                    main_path = new_copy["path"]
+                    helper_path = new_copy["path"]
+                    pressure = new_copy["pressure"]
+                    time = new_copy["time"]
+                    opened_valves = new_copy["opened_valves"]
+                    main_option_valve = options[0]["valve"]
+                    main_option_pressure = options[0]["pressure"]
+                    main_option_time = options[0]["time"]
+                    helper_option_valve = options[1]["valve"]
+                    helper_option_pressure = options[1]["pressure"]
+                    helper_option_time = options[1]["time"]
+                    updated_main_time = time + main_option_time
+                    updated_helper_time = time + helper_option_time
+                    updated_main_pressure = pressure + main_option_pressure
+                    updated_helper_pressure = pressure + helper_option_pressure
+                    if main_option_valve != current_name:
+                        main_path.append(main_option_valve)
+                    if helper_option_valve != current_name:
+                        helper_path.append(helper_option_valve)
+                    opened_valves.add(main_option_valve)
+                    opened_valves.add(helper_option_valve)
+                    main_state = State(main_path, updated_main_pressure, updated_main_time, opened_valves)
+                    helper_state = State(helper_path, updated_helper_pressure, updated_helper_time, opened_valves)
+                    stack.append(main_state)
+                    stack.append(helper_state)
+                else:
+
                 for option in options:
                     travel_open_copy = current_state.create_divergent_copy()
                     path = travel_open_copy["path"]
