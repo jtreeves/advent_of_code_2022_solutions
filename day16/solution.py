@@ -280,8 +280,8 @@ class Exploration:
                 unopened_valves = self.determine_unopened_valves_worth_opening(opened_valves)
                 main_time_remaining = time_limit - main_time
                 helper_time_remaining = time_limit - helper_time
-                main_options = main_valve.find_next_best_valves(unopened_valves, self.valves, main_distances, main_time_remaining)
-                helper_options = helper_valve.find_next_best_valves(unopened_valves, self.valves, helper_distances, helper_time_remaining)
+                main_options = main_valve.find_best_next_valves(unopened_valves, self.valves, main_distances, main_time_remaining)
+                helper_options = helper_valve.find_best_next_valves(unopened_valves, self.valves, helper_distances, helper_time_remaining)
                 for main_option in main_options:
                     for helper_option in helper_options:
                         if main_option["valve"] != helper_option["valve"]:
