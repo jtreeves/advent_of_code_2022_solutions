@@ -134,6 +134,59 @@ class State:
         }
         return divergent_copy
 
+class HelperState:
+    def __init__(self, main_path, helper_path, pressure, time, opened_valves):
+        self.main_path = main_path
+        self.helper_path = helper_path
+        self.pressure = pressure
+        self.time = time
+        self.opened_valves = opened_valves
+
+    def __repr__(self):
+        representation = ""
+        for valve in self.main_path:
+            representation += f"{valve}"
+            if valve in self.opened_valves:
+                representation += "*"
+            representation += " -> "
+        representation = representation[:-4]
+        representation += "; "
+        for valve in self.helper_path:
+            representation += f"{valve}"
+            if valve in self.opened_valves:
+                representation += "*"
+            representation += " -> "
+        representation = representation[:-4]
+        representation += f": {self.pressure} psi, {self.time} min"
+        return representation
+
+    def __eq__(self, other):
+        if isinstance(other, HelperState):
+            if self.main_path == other.main_path and self.helper_path == other.helper_path and self.pressure == other.pressure and self.time == other.time and self.opened_valves == other.opened_valves:
+                return True
+            else:
+                return False
+        else:
+            False
+    
+    def __hash__(self):
+        return hash((self.main_path, self.helper_path, self.pressure, self.time, str(self.opened_valves)))
+    
+    def create_divergent_copy(self):
+        main_path = [x for x in self.main_path]
+        helper_path = [x for x in self.helper_path]
+        pressure = self.pressure
+        time = self.time
+        opened_valves = set([x for x in self.opened_valves])
+        divergent_copy = {
+            "main_path": main_path,
+            "helper_path": helper_path,
+            "pressure": pressure,
+            "time": time,
+            "opened_valves": opened_valves
+        }
+        return divergent_copy
+
 class Exploration:
     def __init__(self, data):
         self.descriptions = data.split("\n")
@@ -222,9 +275,9 @@ class Exploration:
         return max_pressure
 
 def solve_problem():
-    data = extract_data_from_file(16, True)
+    data = extract_data_from_file(16, False)
     experience = Exploration(data)
-    max_pressure = experience.find_maximum_pressure(30)
+    max_pressure = experience.find_maximum_pressure(26)
     return max_pressure
 
 def extract_data_from_file(day_number, is_official):
