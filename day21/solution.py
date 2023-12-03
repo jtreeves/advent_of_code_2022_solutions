@@ -1,5 +1,6 @@
 from sympy import symbols, solve
 
+
 class Description:
     def __init__(self, text):
         self.text = text
@@ -7,15 +8,15 @@ class Description:
         self.extract_name()
         self.extract_value_and_expression()
         self.extract_operation_and_dependencies()
-    
+
     def separate_parts(self):
         parts = self.text.split(": ")
         self.parts = parts
-    
+
     def extract_name(self):
         name = self.parts[0]
         self.name = name
-    
+
     def extract_value_and_expression(self):
         value_or_expression = self.parts[1]
         try:
@@ -36,6 +37,7 @@ class Description:
             self.operation = None
             self.dependencies = []
 
+
 class Monkey:
     def __init__(self, text):
         description = Description(text)
@@ -43,10 +45,10 @@ class Monkey:
         self.value = description.value
         self.operation = description.operation
         self.dependencies = description.dependencies
-    
+
     def __repr__(self):
         return f"Monkey {self.name}: {self.value}"
-    
+
     def determine_final_value(self, other_monkeys):
         if self.value is None:
             dependency_monkey_values = []
@@ -119,13 +121,13 @@ class Monkey:
             return Monkey.execute_all_necessary_rounds_to_get_root_value(monkeys)
         else:
             return root_monkey.value
-        
+
     @staticmethod
     def find_root_monkey(monkeys):
         for monkey in monkeys:
             if monkey.name == "root":
                 return monkey
-    
+
     @staticmethod
     def create_all_monkeys(descriptions):
         monkeys = []
@@ -153,6 +155,7 @@ class Monkey:
         humn_value = Monkey.find_needed_humn_value(monkeys)
         return humn_value
 
+
 def solve_problem():
     data = extract_data_from_file(21, True)
     root_value = Monkey.determine_root_monkey_value(data)
@@ -161,6 +164,7 @@ def solve_problem():
         "part1": root_value,
         "part2": humn_value
     }
+
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
@@ -171,6 +175,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)

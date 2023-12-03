@@ -2,16 +2,17 @@ class Cost:
     def __init__(self, mineral, amount):
         self.mineral = mineral
         self.amount = amount
-    
+
     def __repr__(self):
         return f"{self.amount} {self.mineral}"
+
 
 class Robot:
     def __init__(self, description):
         self.descriptions = description.split(" costs ")
         self.type = self.extract_type()
         self.requirements = self.extract_requirements()
-    
+
     def __repr__(self):
         description = ""
         for cost in self.requirements:
@@ -38,13 +39,14 @@ class Robot:
             requirements.append(new_cost)
         return requirements
 
+
 class Blueprint:
     def __init__(self, description):
         self.descriptions = description.split(": ")
         self.id = self.extract_id()
         self.robot_descriptions = self.descriptions[1].split(". ")
         self.robot_specs = self.determine_all_robot_specs()
-    
+
     def __repr__(self):
         description = f"{self.id}: "
         for spec in self.robot_specs:
@@ -56,7 +58,7 @@ class Blueprint:
         id_parts = self.descriptions[0].split(" ")
         id_number = int(id_parts[1])
         return id_number
-    
+
     def determine_all_robot_specs(self):
         specs = []
         for description in self.robot_descriptions:
@@ -97,7 +99,7 @@ class Blueprint:
     def find_max_obsidian_cost(self):
         obsidian_for_geode = self.robot_specs[3].requirements[1].amount
         return obsidian_for_geode
-    
+
     def optimize_geodes(self, minutes):
         most_geodes = 0
         initial_state = State(minutes, 0, 0, 0, 0, 1, 0, 0, 0)
@@ -135,12 +137,13 @@ class Blueprint:
                     geode_state = State(optimized_state.time - 1, optimized_state.ore + optimized_state.ore_robots - self.robot_specs[3].requirements[0].amount, optimized_state.clay + optimized_state.clay_robots, optimized_state.obsidian + optimized_state.obsidian_robots - self.robot_specs[3].requirements[1].amount, optimized_state.geodes + optimized_state.geode_robots, optimized_state.ore_robots, optimized_state.clay_robots, optimized_state.obsidian_robots, optimized_state.geode_robots + 1)
                     queue.append(geode_state)
         return most_geodes
-    
+
     def calculate_quality_level_for_interval(self, minutes):
         max_geodes = self.optimize_geodes(minutes)
         id_number = self.id
         level = id_number * max_geodes
         return level
+
 
 class State:
     def __init__(self, time, ore, clay, obsidian, geodes, ore_robots, clay_robots, obsidian_robots, geode_robots):
@@ -162,15 +165,16 @@ class State:
             return True
         else:
             return False
-    
+
     def __hash__(self):
         return hash((self.time, self.ore, self.clay, self.obsidian, self.geodes, self.ore_robots, self.clay_robots, self.obsidian_robots, self.geode_robots))
+
 
 class Selection:
     def __init__(self, description):
         self.options = description.split("\n")
         self.blueprints = self.create_blueprints()
-    
+
     def __repr__(self):
         description = ""
         for blueprint in self.blueprints:
@@ -191,13 +195,14 @@ class Selection:
             level = blueprint.calculate_quality_level_for_interval(minutes)
             total += level
         return total
-    
+
     def calculate_product_of_geodes_from_first_three_blueprints(self, minutes):
         product = 1
         for blueprint in self.blueprints[0:3]:
             geodes = blueprint.optimize_geodes(minutes)
             product *= geodes
         return product
+
 
 def solve_problem():
     data = extract_data_from_file(19, True)
@@ -209,6 +214,7 @@ def solve_problem():
         "part2": geode_product
     }
 
+
 def extract_data_from_file(day_number, is_official):
     if is_official:
         name = "data"
@@ -218,6 +224,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)

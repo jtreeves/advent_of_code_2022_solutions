@@ -7,7 +7,7 @@ class Cell:
         self.neighbors = neighbors
         self.visited = False
         self.value = self.convert_letter_to_number()
-    
+
     def __repr__(self):
         return f"({self.x}, {self.y}): {self.letter}"
 
@@ -47,19 +47,20 @@ class Cell:
                 filtered.append(neighbor)
         self.neighbors = filtered
 
+
 class Grid:
     def __init__(self, description):
         self.description = description.split("\n")
         self.height = self.calculate_height()
         self.width = self.calculate_width()
         self.cells = self.create_cells()
-    
+
     def calculate_height(self):
         return len(self.description)
-    
+
     def calculate_width(self):
         return len(self.description[0])
-    
+
     def create_cells(self):
         cells = {}
         for row in range(self.height):
@@ -105,7 +106,7 @@ class Grid:
         for cell in self.cells.values():
             if cell.name == name:
                 return cell
-    
+
     def find_cell_names_by_value(self, value):
         selected_cells = []
         for cell in self.cells.values():
@@ -126,12 +127,13 @@ class Grid:
         self.mark_all_cells_unvisited()
         self.repopulate_original_neighbors_for_all_cells()
 
+
 class Traveler:
     def __init__(self, grid):
         self.grid = grid
         self.starting_position = self.grid.find_starting_position()
         self.ending_position = self.grid.find_ending_position()
-    
+
     def __repr__(self):
         return f"{self.current_position}"
 
@@ -171,6 +173,7 @@ class Traveler:
                     queue.append((new_position, distance + 1))
         return minimum_distance
 
+
 def solve_problem():
     data = extract_data_from_file(12, True)
     grid = Grid(data)
@@ -182,6 +185,7 @@ def solve_problem():
         "part2": part2
     }
 
+
 def extract_data_from_file(day_number, is_official):
     if is_official:
         name = "data"
@@ -191,6 +195,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)

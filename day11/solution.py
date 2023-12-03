@@ -1,5 +1,6 @@
 import math
 
+
 class Description:
     def __init__(self, text):
         self.bullets = text.split("\n")
@@ -9,13 +10,13 @@ class Description:
         self.divisible = self.extract_divisible()
         self.true_throw_name = self.extract_true_throw_name()
         self.false_throw_name = self.extract_false_throw_name()
-    
+
     def extract_name(self):
         name_bullet = self.bullets[0]
         index = name_bullet[-2:-1]
         name = "m" + index
         return name
-    
+
     def extract_items(self):
         items_bullet = self.bullets[1]
         stringed_items = items_bullet.split(": ")[1]
@@ -33,7 +34,7 @@ class Description:
             "sign": sign,
             "element": final_element
         }
-    
+
     def extract_divisible(self):
         divisibility_bullet = self.bullets[3]
         number_to_test = divisibility_bullet[21:]
@@ -50,6 +51,7 @@ class Description:
         index = false_throw_bullet[-1]
         name = "m" + index
         return name
+
 
 class Monkey:
     def __init__(self, text):
@@ -124,21 +126,26 @@ class Monkey:
         while len(self.current_items):
             self.inspect_element_with_alternative(other_monkeys, lcm)
 
+
 def execute_full_round(monkeys):
     for monkey in monkeys.values():
         monkey.inspect_all_elements_in_round(monkeys)
+
 
 def execute_multiple_rounds(rounds, monkeys):
     for _ in range(rounds):
         execute_full_round(monkeys)
 
+
 def execute_full_round_with_alternative(monkeys, lcm):
     for monkey in monkeys.values():
         monkey.inspect_all_elements_in_round_with_alternative(monkeys, lcm)
 
+
 def execute_multiple_rounds_with_alternative(rounds, monkeys, lcm):
     for _ in range(rounds):
         execute_full_round_with_alternative(monkeys, lcm)
+
 
 def calculate_monkey_business(monkeys):
     inspections = []
@@ -151,12 +158,14 @@ def calculate_monkey_business(monkeys):
         product *= inspection
     return product
 
+
 def find_lowest_common_multiple(monkeys):
     multiple = 1
     for monkey in monkeys.values():
         divisor = monkey.divisible
         multiple *= divisor
     return multiple
+
 
 def solve_problem():
     data = extract_data_from_file(11, True)
@@ -167,6 +176,7 @@ def solve_problem():
     business = calculate_monkey_business(monkeys)
     return business
 
+
 def create_all_monkeys(descriptions):
     monkeys = {}
     for description in descriptions:
@@ -174,9 +184,11 @@ def create_all_monkeys(descriptions):
         monkeys[new_monkey.name] = new_monkey
     return monkeys
 
+
 def list_all_monkey_descriptions(instructions):
     monkeys = instructions.split("\n\n")
     return monkeys
+
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
@@ -187,6 +199,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)

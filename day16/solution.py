@@ -4,7 +4,7 @@ class Valve:
         self.name = self.extract_name()
         self.flow_rate = self.extract_flow_rate()
         self.tunnels = self.extract_tunnels()
-    
+
     def __repr__(self):
         return f"{self.name}: {self.flow_rate} -> {self.tunnels}"
 
@@ -16,27 +16,27 @@ class Valve:
                 return False
         else:
             False
-    
+
     def __hash__(self):
         return hash((self.name, self.flow_rate, str(self.tunnels)))
 
     def extract_name(self):
         name = self.description[6:8]
         return name
-    
+
     def extract_flow_rate(self):
         index_equal = self.description.find("=")
         index_semicolon = self.description.find(";")
         flow_rate = int(self.description[index_equal + 1:index_semicolon])
         return flow_rate
-    
+
     def extract_tunnels(self):
         partitioned_description = self.description.split(";")
         tunnels_half = partitioned_description[1]
         tunnels = tunnels_half.split(", ")
         tunnels[0] = tunnels[0][-2:]
         return tunnels
-    
+
     def calculate_current_cumulative_flow(self, time):
         total_flow = self.flow_rate * time
         return total_flow
@@ -62,7 +62,7 @@ class Valve:
         optional_distances.sort()
         shortest_distance = optional_distances[0]
         return shortest_distance
-    
+
     def determine_shortest_distances_to_all_other_valves(self, all_valves):
         distances = {}
         for name in all_valves.keys():
@@ -72,7 +72,7 @@ class Valve:
                 distance = self.calculate_shortest_distance_to_other_valve(name, all_valves)
                 distances[name] = distance
         return distances
-    
+
     def find_best_next_valves(self, unopened_valves, all_valves, distances, time_remaining):
         options = []
         for valve in unopened_valves:
@@ -90,6 +90,7 @@ class Valve:
             options.append(option)
         options.sort(key=lambda d: d["pressure"])
         return options
+
 
 class State:
     def __init__(self, path, pressure, time, opened_valves):
@@ -117,10 +118,10 @@ class State:
                 return False
         else:
             False
-    
+
     def __hash__(self):
         return hash((self.path, self.pressure, self.time, str(self.opened_valves)))
-    
+
     def create_divergent_copy(self):
         path = [x for x in self.path]
         pressure = self.pressure
@@ -133,6 +134,7 @@ class State:
             "opened_valves": opened_valves
         }
         return divergent_copy
+
 
 class TandemState:
     def __init__(self, main_state, helper_state):
@@ -153,18 +155,19 @@ class TandemState:
                 return False
         else:
             False
-    
+
     def calculate_total_pressure(self):
         return self.main_state.pressure + self.helper_state.pressure
-    
+
     def determine_all_opened_valves(self):
         return self.main_state.opened_valves.union(self.helper_state.opened_valves)
-    
+
     def determine_maximum_time(self):
         return max(self.main_state.time, self.helper_state.time)
-    
+
     def __hash__(self):
         return hash((self.main_state, self.helper_state))
+
 
 class Exploration:
     def __init__(self, data):
@@ -176,7 +179,7 @@ class Exploration:
 
     def __repr__(self):
         return f"{self.valves}"
-    
+
     def create_valves(self):
         valves = {}
         for description in self.descriptions:
@@ -185,24 +188,24 @@ class Exploration:
             if new_valve.name == "AA":
                 self.starting_valve = new_valve
         return valves
-    
+
     def create_distances_hash_table(self):
         all_distances = {}
         for key, value in self.valves.items():
             distances = value.determine_shortest_distances_to_all_other_valves(self.valves)
             all_distances[key] = distances
         return all_distances
-    
+
     def find_distance_between_valves(self, first_valve, second_valve):
         return self.distances[first_valve][second_valve]
-    
+
     def determine_valves_worth_opening(self):
         worth_opening = []
         for valve in self.valves.values():
             if valve.flow_rate > 0:
                 worth_opening.append(valve.name)
         return worth_opening
-    
+
     def determine_unopened_valves_worth_opening(self, opened_valves):
         unopened_worth_opening = []
         for valve in self.valves_worth_opening:
@@ -314,11 +317,13 @@ class Exploration:
                             stack.append(updated_tandem)
         return max_pressure
 
+
 def solve_problem():
     data = extract_data_from_file(16, False)
     experience = Exploration(data)
     max_pressure = experience.find_maximum_pressure_with_help(26)
     return max_pressure
+
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
@@ -329,6 +334,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)

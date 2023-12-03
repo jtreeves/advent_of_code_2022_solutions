@@ -2,13 +2,13 @@ class Coordinate:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-    
+
     def move_left(self):
         self.x = self.x - 1
-    
+
     def move_right(self):
         self.x = self.x + 1
-    
+
     def move_down(self):
         self.y = self.y - 1
 
@@ -30,6 +30,7 @@ class Coordinate:
         else:
             return False
 
+
 class Floor:
     def __init__(self):
         self.a = 0
@@ -39,10 +40,10 @@ class Floor:
         self.e = 0
         self.f = 0
         self.g = 0
-    
+
     def __repr__(self):
         return f"a{self.a}b{self.b}c{self.c}d{self.d}e{self.e}f{self.f}g{self.g}"
-    
+
     def hash_columns(self, main_height):
         a_diff = main_height - self.a
         b_diff = main_height - self.b
@@ -52,6 +53,7 @@ class Floor:
         f_diff = main_height - self.f
         g_diff = main_height - self.g
         return f"a{a_diff}b{b_diff}c{c_diff}d{d_diff}e{e_diff}f{f_diff}g{g_diff}"
+
 
 class Chamber:
     def __init__(self, pattern):
@@ -64,7 +66,7 @@ class Chamber:
         self.floor = Floor()
         for i in range(7):
             self.spaces.append(Coordinate(i + 1, 0))
-    
+
     def predict_height_for_rocks(self, rocks, period, amplitude, starting, history):
         starting_rocks = history[starting]["rocks"]
         starting_height = history[starting]["height"]
@@ -139,7 +141,7 @@ class Chamber:
 
     def blow_rock_right(self, rock):
         rock.blown_right(self.spaces)
-    
+
     def increment_pattern(self, rock):
         if self.next_jet_blow == "<":
             self.blow_rock_left(rock)
@@ -155,7 +157,7 @@ class Chamber:
             self.next_rock_type += 1
         else:
             self.next_rock_type = 1
-    
+
     def update_height(self, rock):
         for point in rock.shape:
             if point.y > self.height:
@@ -182,6 +184,7 @@ class Chamber:
                     self.floor.f += 1
                 case 7:
                     self.floor.g += 1
+
 
 class Rock:
     def __init__(self, type, height):
@@ -265,6 +268,7 @@ class Rock:
                     return True
         return False
 
+
 def solve_problem():
     data = extract_data_from_file(17, False)
     chamber = Chamber(data)
@@ -272,6 +276,7 @@ def solve_problem():
     print(f"CYCLE: {cycle}")
     height = chamber.predict_height_for_rocks(2022, cycle["period"], cycle["amplitude"], cycle["starting"], cycle["history"])
     return height
+
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
@@ -282,6 +287,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)

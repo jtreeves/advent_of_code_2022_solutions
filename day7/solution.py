@@ -2,7 +2,7 @@ class File:
     def __init__(self, name, size):
         self.name = name
         self.size = size
-    
+
     def __repr__(self):
         return f"{self.name}: {self.size}"
 
@@ -11,9 +11,10 @@ class File:
             return True
         else:
             return False
-    
+
     def __hash__(self):
         return hash((self.name, self.size))
+
 
 class Directory:
     def __init__(self, name):
@@ -21,7 +22,7 @@ class Directory:
         self.files = set()
         self.directories = set()
         self.parent_directory = None
-    
+
     def __repr__(self):
         hierarchy = f"- {self.name} (dir)\n"
         for file in self.files:
@@ -30,7 +31,7 @@ class Directory:
             hierarchy += f"  {directory}\n"
         hierarchy = hierarchy[:-1]
         return hierarchy
-    
+
     def __eq__(self, other):
         if isinstance(other, Directory):
             if self.name == other.name:
@@ -39,22 +40,22 @@ class Directory:
                 return False
         else:
             return False
-    
+
     def __hash__(self):
         return hash((self.name, self.parent_directory))
 
     def add_file(self, file):
         self.files.add(file)
-    
+
     def add_directory(self, other_directory):
         self.directories.add(other_directory)
         other_directory.parent_directory = self
-    
+
     def find_subdirectory_by_name(self, name):
         for directory in self.directories:
             if directory.name == name:
                 return directory
-    
+
     def list_all_subdirectories(self):
         subdirectories = []
         for directory in self.directories:
@@ -64,7 +65,7 @@ class Directory:
             if directory.directories:
                 subdirectories.extend(directory.list_all_subdirectories())
         return subdirectories
-    
+
     def calculate_size(self):
         total = 0
         for file in self.files:
@@ -73,18 +74,19 @@ class Directory:
             total += directory.calculate_size()
         return total
 
+
 class Terminal:
     def __init__(self, history):
         self.output = history.split("\n")
         self.root_directory = None
         self.current_directory = None
-    
+
     def __repr__(self):
         return f"{self.root_directory}"
-    
+
     def set_current_directory(self, directory):
         self.current_directory = directory
-    
+
     def read_output_to_create_directories(self):
         for line in self.output:
             parts = line.split(" ")
@@ -111,7 +113,7 @@ class Terminal:
                 name = parts[1]
                 new_file = File(name, size)
                 self.current_directory.add_file(new_file)
-    
+
     def list_all_directories(self):
         root_directory_name = self.root_directory.name
         root_directory_size = self.root_directory.calculate_size()
@@ -119,7 +121,7 @@ class Terminal:
         all_directories = self.root_directory.list_all_subdirectories()
         all_directories.append(root)
         return all_directories
-    
+
     def trim_excessive_directories(self):
         directories = self.list_all_directories()
         trimmed = []
@@ -127,14 +129,14 @@ class Terminal:
             if size <= 100000:
                 trimmed.append(size)
         return trimmed
-    
+
     def calculate_total_size_of_small_directories(self):
         sizes = self.trim_excessive_directories()
         total = 0
         for size in sizes:
             total += size
         return total
-    
+
     def calculate_space_to_delete_in_order_to_upgrade(self):
         total_diskspace = 70000000
         required_space = 30000000
@@ -151,11 +153,12 @@ class Terminal:
             if size >= needed_space:
                 large_enough_directories.append(size)
         return large_enough_directories
-    
+
     def determine_smallest_directory_to_delete_to_upgrade(self):
         directories = self.determine_directories_large_enough_to_free_up_enough_space_for_upgrade()
         directories.sort()
         return directories[0]
+
 
 def solve_problem():
     data = extract_data_from_file(7, True)
@@ -168,6 +171,7 @@ def solve_problem():
         "part2": smallest_to_upgrade
     }
 
+
 def extract_data_from_file(day_number, is_official):
     if is_official:
         name = "data"
@@ -177,6 +181,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)

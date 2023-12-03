@@ -11,6 +11,7 @@ def solve_problem(part):
     else:
         return image
 
+
 def sum_key_signal_strengths(statuses):
     pairs = find_main_register_cycle_pairs(statuses)
     total = 0
@@ -20,6 +21,7 @@ def sum_key_signal_strengths(statuses):
         strength = calculate_signal_strength(register, cycles)
         total += strength
     return total
+
 
 def find_main_register_cycle_pairs(statuses):
     key_cycles = [20, 60, 100, 140, 180, 220]
@@ -32,9 +34,11 @@ def find_main_register_cycle_pairs(statuses):
         })
     return pairs
 
+
 def calculate_signal_strength(register, cycle):
     strength = register * cycle
     return strength
+
 
 def find_register_at_cycle_from_statuses(statuses, cycle_number):
     register_before = None
@@ -48,6 +52,7 @@ def find_register_at_cycle_from_statuses(statuses, cycle_number):
         return register_at
     else:
         return register_before
+
 
 def determine_register_statuses_at_key_cycles(moves):
     increments = list_all_cycle_and_register_increments(moves)
@@ -69,6 +74,7 @@ def determine_register_statuses_at_key_cycles(moves):
         })
     return key_values
 
+
 def list_all_cycle_and_register_increments(moves):
     increments = []
     for move in moves:
@@ -80,6 +86,7 @@ def list_all_cycle_and_register_increments(moves):
         })
     return increments
 
+
 def determine_register_increment(move):
     is_noop = move == "noop"
     if is_noop:
@@ -89,12 +96,14 @@ def determine_register_increment(move):
         increment = int(partitioned[1])
         return increment
 
+
 def determine_cycles_increment(move):
     is_noop = move == "noop"
     if is_noop:
         return 1
     else:
         return 2
+
 
 def draw_pixels(statuses):
     lit = "#"
@@ -134,17 +143,19 @@ def draw_pixels(statuses):
                 pixels += dark
     return pixels
 
+
 def fill_in_all_statuses(key_statuses):
     full_statuses = []
     for i in range(len(key_statuses)):
-        if key_statuses[i]["cycles"] != 1 and key_statuses[i]["cycles"] != key_statuses[i-1]["cycles"] + 1:
+        if key_statuses[i]["cycles"] != 1 and key_statuses[i]["cycles"] != key_statuses[i - 1]["cycles"] + 1:
             intermediary_status = {
-                "cycles": key_statuses[i-1]["cycles"] + 1,
-                "register": key_statuses[i-1]["register"]
+                "cycles": key_statuses[i - 1]["cycles"] + 1,
+                "register": key_statuses[i - 1]["register"]
             }
             full_statuses.append(intermediary_status)
         full_statuses.append(key_statuses[i])
     return full_statuses
+
 
 def convert_string_to_screen(data):
     first_line = data[0:40]
@@ -156,15 +167,18 @@ def convert_string_to_screen(data):
     screen = first_line + "\n" + second_line + "\n" + third_line + "\n" + fourth_line + "\n" + fifth_line + "\n" + sixth_line
     return screen
 
+
 def list_all_moves(instructions):
     moves = instructions.split("\n")
     return moves
+
 
 def extract_data_from_file(day_number):
     file = open(f"day{day_number}/data.txt", "r")
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem(2)
 print(result)

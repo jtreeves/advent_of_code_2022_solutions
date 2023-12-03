@@ -5,6 +5,7 @@ def sum_key_values(mixed_list):
         total += value
     return total
 
+
 def determine_values_at_key_indices_after_zero(mixed_list):
     length = len(mixed_list)
     index = find_index_of_zero(mixed_list)
@@ -23,17 +24,21 @@ def determine_values_at_key_indices_after_zero(mixed_list):
         third_value
     ]
 
+
 def find_index_of_zero(mixed_list):
     for i in range(len(mixed_list)):
         if mixed_list[i]["value"] == 0:
             return i
 
+
 def mix_list(list):
     for i in range(len(list)):
         value = find_value_based_on_original_index(i, list)
-        current_index = find_current_index_of_value_based_on_original_index(i, list)
+        current_index = find_current_index_of_value_based_on_original_index(
+            i, list)
         list = move_element(value, current_index, i, list)
     return list
+
 
 def move_element(value, current_index, original_index, list):
     length = len(list)
@@ -54,15 +59,18 @@ def move_element(value, current_index, original_index, list):
     list.insert(new_index, updated_details)
     return list
 
+
 def find_current_index_of_value_based_on_original_index(original_index, list):
     for i in range(len(list)):
         if list[i]["original_index"] == original_index:
             return i
 
+
 def find_value_based_on_original_index(original_index, list):
     for i in range(len(list)):
         if list[i]["original_index"] == original_index:
             return list[i]["value"]
+
 
 def list_all_numbers(data):
     string_numbers = data.split("\n")
@@ -76,12 +84,14 @@ def list_all_numbers(data):
         numbers_data.append(details)
     return numbers_data
 
+
 def solve_problem():
     data = extract_data_from_file(20, True)
     numbers = list_all_numbers(data)
     numbers = mix_list(numbers)
     summed = sum_key_values(numbers)
     return summed
+
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
@@ -92,6 +102,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)

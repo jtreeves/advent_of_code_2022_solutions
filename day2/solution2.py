@@ -6,17 +6,20 @@ def solve_problem():
     total = calculate_total_score(rows)
     return total
 
+
 def calculate_total_score(rows):
     total = 0
     for row in rows:
         total += score_row(row)
     return total
 
+
 def score_row(row):
     opponent_move = row[0]
     player_guide = row[2]
     score = score_round(opponent_move, player_guide)
     return score
+
 
 def score_round(opponent_move, player_guide):
     opponent_points = convert_move_to_points(opponent_move)
@@ -36,6 +39,7 @@ def score_round(opponent_move, player_guide):
             score += opponent_points + 1
     return score
 
+
 def convert_move_to_points(move):
     if move == "A":
         return 1
@@ -43,6 +47,7 @@ def convert_move_to_points(move):
         return 2
     else:
         return 3
+
 
 def convert_guide_to_points(guide):
     if guide == "X":
@@ -52,6 +57,7 @@ def convert_guide_to_points(guide):
     else:
         return 6
 
+
 def convert_multiline_string_to_array(multiline_string):
     rows = []
     while len(multiline_string):
@@ -59,11 +65,12 @@ def convert_multiline_string_to_array(multiline_string):
         if first_line_break != -1:
             content_before = multiline_string[0:first_line_break]
             rows.append(content_before)
-            multiline_string = multiline_string[first_line_break+1:]
+            multiline_string = multiline_string[first_line_break + 1:]
         else:
             rows.append(multiline_string)
             multiline_string = ""
     return rows
+
 
 result = solve_problem()
 print(result)

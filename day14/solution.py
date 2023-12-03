@@ -25,34 +25,35 @@ class Point:
                 return False
         else:
             return False
-    
+
     def __hash__(self):
         return hash((self.x, self.y))
-    
+
     def has_identical_x(self, other):
         return self.x == other.x
-    
+
     def has_identical_y(self, other):
         return self.y == other.y
+
 
 class Sand:
     def __init__(self):
         self.location = Point(500, 0)
         self.is_falling = True
         self.is_in_cave = True
-    
+
     def __repr__(self):
         return f"{self.location}"
-    
+
     def fall_until_stopped(self, other_points):
         while self.is_falling:
             self.fall_down_one_unit(other_points)
-    
+
     def fall_until_stopped_or_out_of_cave(self, other_points, min_x, min_y, max_x, max_y):
         while self.is_falling and self.is_in_cave:
             self.fall_down_one_unit(other_points)
             self.check_if_still_in_cave(min_x, min_y, max_x, max_y)
-    
+
     def fall_down_one_unit(self, other_points):
         new_x = self.location.x
         new_y = self.location.y + 1
@@ -74,12 +75,13 @@ class Sand:
                 self.location = Point(new_x, new_y)
         except KeyError:
             self.location = Point(new_x, new_y)
-    
+
     def check_if_still_in_cave(self, min_x, min_y, max_x, max_y):
         x = self.location.x
         y = self.location.y
         if x < min_x or x > max_x or y < min_y or y > max_y:
             self.is_in_cave = False
+
 
 class Path:
     def __init__(self, description):
@@ -125,6 +127,7 @@ class Path:
                     points.add(new_point)
         return sorted(points)
 
+
 class Cave:
     def __init__(self, description):
         self.descriptions = description.split("\n")
@@ -137,7 +140,7 @@ class Cave:
         self.min_y = 0
         self.max_y = self.find_max_y()
         self.floor = self.create_floor()
-    
+
     def __repr__(self):
         diagram = ""
         for y in range(self.min_y, self.max_y + 1):
@@ -148,27 +151,27 @@ class Cave:
                     diagram += "."
             diagram += "\n"
         return diagram
-    
+
     def calculate_total_sand_units_fallen_until_out_of_cave(self):
         units = len(self.sand_points) - 1
         return units
-    
+
     def calculate_total_sand_units_fallen_until_reach_top(self):
         units = len(self.sand_points)
         return units
-    
+
     def add_sand_until_first_out_of_cave(self):
         while len(self.sand_points) == 0 or self.sand_points[-1].is_in_cave:
             new_sand = Sand()
             new_sand.fall_until_stopped_or_out_of_cave(self.occupied_points, self.min_x, self.min_y, self.max_x, self.max_y)
             self.append_sand_to_both_points_trackers(new_sand)
-    
+
     def add_sand_until_first_hits_top(self):
         while len(self.sand_points) == 0 or self.sand_points[-1].location != Point(500, 0):
             new_sand = Sand()
             new_sand.fall_until_stopped(self.occupied_points)
             self.append_sand_to_both_points_trackers(new_sand)
-    
+
     def append_sand_to_both_points_trackers(self, sand):
         name = f"x{sand.location.x}y{sand.location.y}"
         self.occupied_points[name] = sand.location
@@ -180,7 +183,7 @@ class Cave:
             new_path = Path(description)
             paths.append(new_path)
         return paths
-    
+
     def create_floor(self):
         floor_y = self.max_y + 2
         x_range_incr = (self.max_x - self.min_x) * 10
@@ -191,32 +194,33 @@ class Cave:
             new_point = Point(x, floor_y)
             floor.append(new_point)
         return floor
-    
+
     def add_floor_to_occupied_points(self):
         for point in self.floor:
             name = f"x{point.x}y{point.y}"
             self.occupied_points[name] = point
-    
+
     def determine_rock_points(self):
         points = set()
         for path in self.paths:
             for point in path.all_points:
                 points.add(point)
         return sorted(points)
-    
+
     def create_occupied_points(self):
         points = {}
         for point in self.rock_points:
             name = f"x{point.x}y{point.y}"
             points[name] = point
         return points
-    
+
     def find_max_y(self):
         y_values = []
         for point in self.rock_points:
             y_values.append(point.y)
         sorted_y = sorted(y_values)
         return sorted_y[-1]
+
 
 def solve_problem(part):
     data = extract_data_from_file(14, True)
@@ -230,6 +234,7 @@ def solve_problem(part):
         sands = cave.calculate_total_sand_units_fallen_until_reach_top()
     return sands
 
+
 def extract_data_from_file(day_number, is_official):
     if is_official:
         name = "data"
@@ -239,6 +244,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem(2)
 print(result)

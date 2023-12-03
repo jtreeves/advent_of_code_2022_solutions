@@ -7,6 +7,7 @@ def solve_problem():
         "message": message_marker
     }
 
+
 def find_first_message_marker_after_uniques(characters):
     marker = 14
     first_fourteen_characters = extract_first_fourteen_characters(characters)
@@ -17,6 +18,7 @@ def find_first_message_marker_after_uniques(characters):
         first_fourteen_characters = extract_first_fourteen_characters(characters)
         checked_characters = check_no_characters_repeat(first_fourteen_characters)
     return marker
+
 
 def find_first_packet_marker_after_uniques(characters):
     marker = 4
@@ -29,11 +31,14 @@ def find_first_packet_marker_after_uniques(characters):
         checked_characters = check_no_characters_repeat(first_four_characters)
     return marker
 
+
 def extract_first_fourteen_characters(characters):
     return characters[0:14]
 
+
 def extract_first_four_characters(characters):
     return characters[0:4]
+
 
 def check_no_characters_repeat(characters):
     for character in characters:
@@ -42,11 +47,13 @@ def check_no_characters_repeat(characters):
             return False
     return True
 
+
 def extract_data_from_file(day_number):
     file = open(f"day{day_number}/data.txt", "r")
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)

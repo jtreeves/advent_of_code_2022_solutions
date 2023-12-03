@@ -4,7 +4,7 @@ class CoordinatePair:
         self.y = y
         self.proposed_x = None
         self.proposed_y = None
-    
+
     def __repr__(self):
         return f"({self.x}, {self.y})"
 
@@ -182,6 +182,7 @@ class CoordinatePair:
         self.x = self.proposed_x
         self.y = self.proposed_y
 
+
 class Grid:
     def __init__(self, description):
         self.round = 1
@@ -191,7 +192,7 @@ class Grid:
         self.original_width = len(self.lines[0])
         self.pairs = self.create_pairs()
         self.amount_of_pairs = len(self.pairs)
-    
+
     def create_lines(self):
         lines = self.description.split("\n")
         lines.reverse()
@@ -205,10 +206,10 @@ class Grid:
                     new_pair = CoordinatePair(column, row)
                     pairs.append(new_pair)
         return pairs
-    
+
     def increment_round(self):
         self.round += 1
-    
+
     def execute_full_round(self):
         for pair in self.pairs:
             pair.find_new_location_to_propose(self.pairs, self.round)
@@ -217,11 +218,11 @@ class Grid:
                 pair.move_to_new_location()
         self.increment_round()
         print(self.pairs)
-    
+
     def execute_multiple_rounds(self, amount_of_rounds):
         for _ in range(amount_of_rounds):
             self.execute_full_round()
-    
+
     def determine_current_dimensions(self):
         x_max = self.pairs[0].x
         x_min = self.pairs[0].x
@@ -250,12 +251,14 @@ class Grid:
         blanks = area - self.amount_of_pairs
         return blanks
 
+
 def solve_problem():
     data = extract_data_from_file(23, False)
     grid = Grid(data)
     grid.execute_multiple_rounds(10)
     blanks = grid.calculate_blank_spaces()
     return blanks
+
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
@@ -266,6 +269,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)

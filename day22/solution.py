@@ -5,15 +5,16 @@ class Cell:
         self.character = character
         self.name = name
         self.open = self.check_if_open()
-    
+
     def __repr__(self):
         return f"({self.x}, {self.y}) -> {self.open}"
-    
+
     def check_if_open(self):
         if self.character == ".":
             return True
         else:
             return False
+
 
 class Board:
     def __init__(self, description):
@@ -22,14 +23,14 @@ class Board:
         self.width = self.calculate_width()
         self.cells = self.create_cells()
         self.starting_position = self.determine_starting_position()
-    
+
     def __repr__(self):
         return f"{self.starting_position.name} >>> {self.cells}"
-    
+
     def calculate_height(self):
         height = len(self.description)
         return height
-    
+
     def calculate_width(self):
         rows = self.description
         widths = []
@@ -55,7 +56,7 @@ class Board:
                 except IndexError:
                     continue
         return cells
-    
+
     def determine_starting_position(self):
         open_tops = []
         for cell in self.cells.values():
@@ -66,7 +67,7 @@ class Board:
         starting_name = f"x{first_x}y1"
         starting_cell = self.find_cell_by_name(starting_name)
         return starting_cell
-    
+
     def find_cell_by_name(self, name):
         try:
             cell = self.cells[name]
@@ -149,6 +150,7 @@ class Board:
         opposite_cell = self.find_opposite_cell(current_cell, "y", -1)
         return opposite_cell
 
+
 class Step:
     def __init__(self, characters):
         self.characters = characters
@@ -163,7 +165,7 @@ class Step:
             return 0
         else:
             return int(self.characters)
-    
+
     def determine_direction(self):
         if self.characters == "R":
             return 1
@@ -172,6 +174,7 @@ class Step:
         else:
             return 0
 
+
 class Instructions:
     def __init__(self, notes):
         self.notes = notes
@@ -179,7 +182,7 @@ class Instructions:
 
     def __repr__(self):
         return f"{self.steps}"
-    
+
     def create_steps(self):
         steps = []
         characters = self.notes
@@ -197,6 +200,7 @@ class Instructions:
             steps.append(new_step)
         return steps
 
+
 class Traveler:
     def __init__(self, board, instructions):
         self.board = board
@@ -207,7 +211,7 @@ class Traveler:
 
     def __repr__(self):
         return f"{self.current_position} >>> {self.facing}"
-    
+
     def update_facing(self, direction):
         new_direction = self.facing + direction
         if new_direction == 4:
@@ -215,7 +219,7 @@ class Traveler:
         elif new_direction == -1:
             new_direction = 3
         self.facing = new_direction
-    
+
     def update_position(self, distance):
         while distance > 0:
             self.move_to_position()
@@ -259,11 +263,11 @@ class Traveler:
         self.update_facing(next_step.direction)
         self.update_position(next_step.distance)
         self.step_index += 1
-    
+
     def complete_all_steps(self):
         while self.step_index < len(self.instructions.steps):
             self.execute_next_step()
-    
+
     def determine_password(self):
         self.complete_all_steps()
         row = self.current_position.y
@@ -271,6 +275,7 @@ class Traveler:
         facing = self.facing
         password = 1000 * row + 4 * column + facing
         return password
+
 
 def solve_problem():
     data = extract_data_from_file(22, True)
@@ -281,6 +286,7 @@ def solve_problem():
     password = traveler.determine_password()
     return password
 
+
 def extract_data_from_file(day_number, is_official):
     if is_official:
         name = "data"
@@ -290,6 +296,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)

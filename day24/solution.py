@@ -2,7 +2,7 @@ class Position:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-    
+
     def __repr__(self):
         return f"({self.x}, {self.y})"
 
@@ -14,18 +14,19 @@ class Position:
                 return False
         else:
             return False
-    
+
     def __hash__(self):
         return hash((self.x, self.y))
+
 
 class Blizzard(Position):
     def __init__(self, x, y, direction):
         super().__init__(x, y)
         self.direction = direction
-    
+
     def __repr__(self):
         return f"({self.x}, {self.y}): {self.direction}"
-    
+
     def update_position(self, height, width):
         match self.direction:
             case ">":
@@ -42,6 +43,7 @@ class Blizzard(Position):
                 new_y = self.y - 1 if self.y - 1 > 0 else height - 2
         self.x = new_x
         self.y = new_y
+
 
 class Traveler(Position):
     def __init__(self, x, y):
@@ -66,6 +68,7 @@ class Traveler(Position):
         self.y = new_y
         self.moves += 1
 
+
 class Valley:
     def __init__(self, description):
         self.description = description.split("\n")
@@ -73,7 +76,7 @@ class Valley:
         self.width = len(self.description[0])
         self.blizzards = []
         self.create_positions()
-    
+
     def __repr__(self):
         diagram = ""
         for y in range(self.height):
@@ -93,7 +96,7 @@ class Valley:
             diagram += "\n"
         diagram = diagram[:-1]
         return diagram
-    
+
     def create_positions(self):
         for row in range(self.height):
             for column in range(self.width):
@@ -124,7 +127,7 @@ class Valley:
 
     def update_traveler(self):
         self.traveler.update_position(self.height, self.width, self.blizzards, self.ending_position)
-    
+
     def check_if_traveler_exited(self):
         traveler_position = f"x{self.traveler.x}y{self.traveler.y}"
         if traveler_position == self.ending_position:
@@ -132,11 +135,13 @@ class Valley:
         else:
             return False
 
+
 def solve_problem():
     data = extract_data_from_file(24, False)
     valley = Valley(data)
     moves = valley.determine_how_long_for_traveler_to_exit()
     return moves
+
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
@@ -147,6 +152,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)

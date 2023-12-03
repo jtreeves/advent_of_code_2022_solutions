@@ -3,18 +3,19 @@ class Cube:
         self.x = x
         self.y = y
         self.z = z
-    
+
     def __repr__(self):
         return f"({self.x}, {self.y}, {self.z})"
-    
+
     def __eq__(self, other):
         if self.x == other.x and self.y == other.y and self.z == other.z:
             return True
         else:
             return False
-    
+
     def __hash__(self):
         return hash((self.x, self.y, self.z))
+
 
 def solve_problem():
     data = extract_data_from_file(18, True)
@@ -27,12 +28,14 @@ def solve_problem():
         "part2": outer_area
     }
 
+
 def calculate_total_surface_area(cubes):
     surface_area = 0
     for cube in cubes:
         visible_faces = determine_visible_faces_on_cube(cube, cubes)
         surface_area += visible_faces
     return surface_area
+
 
 def determine_visible_faces_on_cube(main_cube, other_cubes):
     visible_faces = 6
@@ -42,12 +45,14 @@ def determine_visible_faces_on_cube(main_cube, other_cubes):
             visible_faces -= 1
     return visible_faces
 
+
 def check_if_cubes_touching(first_cube, second_cube):
     distance = calculate_distance_between_cubes(first_cube, second_cube)
     if distance == 1:
         return True
     else:
         return False
+
 
 def calculate_outer_surface_area(cubes):
     outer_area = 0
@@ -67,6 +72,7 @@ def calculate_outer_surface_area(cubes):
                 if check_if_in_scope(neighbor, extrema):
                     queue.append(neighbor)
     return outer_area
+
 
 def find_neighbors(cube):
     x = cube.x
@@ -88,11 +94,13 @@ def find_neighbors(cube):
     ]
     return neighbors
 
+
 def check_if_in_scope(cube, extrema):
     if extrema["min"].x <= cube.x <= extrema["max"].x and extrema["min"].y <= cube.y <= extrema["max"].y and extrema["min"].z <= cube.z <= extrema["max"].z:
         return True
     else:
         return False
+
 
 def find_maxima_and_minima(cubes):
     max_x = -float('inf')
@@ -115,12 +123,13 @@ def find_maxima_and_minima(cubes):
         if cube.z < min_z:
             min_z = cube.z
     maximum = Cube(max_x + 1, max_y + 1, max_z + 1)
-    minimum = Cube(min_x - 1, min_y -1 , min_z - 1)
+    minimum = Cube(min_x - 1, min_y - 1, min_z - 1)
     extrema = {
         "max": maximum,
         "min": minimum
     }
     return extrema
+
 
 def calculate_distance_between_cubes(first_cube, second_cube):
     x_delta = first_cube.x - second_cube.x
@@ -130,8 +139,9 @@ def calculate_distance_between_cubes(first_cube, second_cube):
     z_delta = first_cube.z - second_cube.z
     z_squared = z_delta ** 2
     summed_squares = x_squared + y_squared + z_squared
-    distance = summed_squares ** (1/2)
+    distance = summed_squares ** (1 / 2)
     return distance
+
 
 def generate_all_cubes(instructions):
     cubes = []
@@ -139,6 +149,7 @@ def generate_all_cubes(instructions):
         center = convert_string_coordinates(instruction)
         cubes.append(center)
     return cubes
+
 
 def convert_string_coordinates(string_coordinates):
     coordinates = string_coordinates.split(",")
@@ -148,9 +159,11 @@ def convert_string_coordinates(string_coordinates):
         final_coordinates.append(numbered_coordinate)
     return Cube(final_coordinates[0], final_coordinates[1], final_coordinates[2])
 
+
 def list_all_cube_central_coordinates(data):
     partitioned = data.split("\n")
     return partitioned
+
 
 def extract_data_from_file(day_number, is_official):
     if is_official:
@@ -161,6 +174,7 @@ def extract_data_from_file(day_number, is_official):
     data = file.read()
     file.close()
     return data
+
 
 result = solve_problem()
 print(result)
